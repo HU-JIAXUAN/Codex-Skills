@@ -1,17 +1,25 @@
 # 架构决策矩阵
 
-## 1. 不按固定层名判断，按职责判断
+本文件只回答“何时抽象、何时不抽象、怎样使用参考仓库”。层级判定不在此处定义，使用[语义层级模型](semantic_layer_model_zh.md)；边界约束不在此处定义，使用[依赖规则与门禁](dependency_rules_and_gates_zh.md)。
 
-| 语义层 | STM32 可能命名 | TI C2000 可能命名 | 飞控/机器人可能命名 | 判断标准 |
+## 1. 不按固定层名判断
+
+按 [DR-014](dependency_rules_and_gates_zh.md#DR-014)，层级由职责、变化原因、掌握的知识、依赖方向和资源所有权判断，目录名不授予语义。下表只是常见命名的入口线索，不是判定依据；每一行都必须回到[语义层级模型](semantic_layer_model_zh.md)重新确认角色 ID。
+
+| 语义角色 | STM32 常见命名 | TI C2000 常见命名 | 飞控/机器人常见命名 | 真正的判断标准 |
 |---|---|---|---|---|
-| App | UserApp / app | app | modules / vehicle / user_app | 是否只表达产品行为 |
-| Service | Robot / service | control_service / protocol | commander / estimator / controller | 是否封装状态机/协议/策略 |
-| Algorithm Core | algorithm / math | control / DCL / foc | control / estimator | 是否能脱离硬件单测 |
-| Platform/API | bsp_api / driver_if | hal / board_if | device / driver api | 是否可 fake/mock/stub |
-| Impl/Board | Drivers / BSP | driverlib / device | boards / target | 是否允许出现寄存器/厂商 API |
-| Vendor | HAL/LL/CMSIS | C2000Ware/DriverLib | NuttX/ChibiOS/vendor SDK | 是否为第三方/厂商依赖 |
+| [SL-001](semantic_layer_model_zh.md#SL-001)／[SL-002](semantic_layer_model_zh.md#SL-002) | UserApp / app | app | modules / vehicle / user_app | 是否只表达产品行为与用例顺序 |
+| [SL-003](semantic_layer_model_zh.md#SL-003) | algorithm / math / service | control / DCL / foc | commander / estimator / controller | 是否能脱离硬件单测 |
+| [SL-004](semantic_layer_model_zh.md#SL-004) | bsp_api / driver_if / port | hal / board_if | device / driver api | 是否可 fake/mock/stub，公共类型是否稳定 |
+| [SL-005](semantic_layer_model_zh.md#SL-005)／[SL-006](semantic_layer_model_zh.md#SL-006) | Drivers / BSP | device / board | boards / target | 器件寄存器与板级绑定是否分开 |
+| [SL-007](semantic_layer_model_zh.md#SL-007)／[SL-008](semantic_layer_model_zh.md#SL-008) | HAL/LL 适配、osal | driverlib 适配 | AP_HAL / hal 适配 | 是否只把环境能力转成契约 |
+| [SL-010](semantic_layer_model_zh.md#SL-010) | HAL/LL/CMSIS/FreeRTOS | C2000Ware/DriverLib | NuttX/ChibiOS/vendor SDK | 是否为第三方或可重新生成代码 |
+
+同一目录出现多个角色时按模块或构建目标分别映射。
 
 ## 2. 何时抽象
+
+判据是 [AP-006](architecture_principles_zh.md#AP-006) 的成本公式和 [DR-012](dependency_rules_and_gates_zh.md#DR-012) 的准入问题。
 
 需要抽象：
 
@@ -33,6 +41,8 @@
 不会迁移且不影响测试的 bring-up 代码
 ```
 
+无法指出第二实现或测试替身时，保持直接依赖并记录未来触发条件。
+
 ## 3. 参考仓库使用方式
 
 不要照搬目录名。先判断：
@@ -44,3 +54,5 @@
 当前主控是否匹配？
 许可证、实时性、安全性是否允许复刻？
 ```
+
+确认后再区分四种使用方式：借鉴架构思想、行为重实现、代码参考、明确不建议照搬。未经用户确认，不复制参考工程的目录或功能。

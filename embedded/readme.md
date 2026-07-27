@@ -21,6 +21,7 @@
 | RTOS、裸机 superloop、任务、队列、互斥锁 | `os` | 实现时加 `c99-standard-c`，评审时加 `review` | 不要默认调用 `arm`，除非涉及 NVIC/平台 |
 | FOC、PID、SVPWM、电流/速度/位置环 | `motorcontrol` | 数值细节加 `dsp`，实现加 `c99-standard-c` | 不要默认调用 `ethercat`，除非 setpoint/现场总线相关 |
 | 滤波器、FFT、定点、采样、数值稳定性 | `dsp` | 实现加 `c99-standard-c`，评审加 `review` | 不要默认调用 `motorcontrol`，除非任务属于电机控制 |
+| 检查架构分层、依赖方向、公共头泄漏、是否过度抽象、目录/边界重构、平台化、OTA/量产门禁 | `architecture` | 落到 C 实现时加 `c99-standard-c`；涉及启动/中断/cache 加 `arm` | 不要用 `review` 代替架构检查；控制算法归 `motorcontrol` |
 | 嵌入式优先的 Git 分支、提交、PR、Tag、Release、README、CHANGELOG、版本文件、固件制品、测试/生产基线 | `aicoding-git-governance`（路径 `platform/aicoding-git-governance/`） | 修改 C 代码时加 `c99-standard-c`；评审代码风险时加 `review` | 不要用通用 GitHub plugin skill 替代 AiCoding 发布治理；PR 元数据/评论/CI 可交给 GitHub plugin/MCP |
 
 ## 优先级

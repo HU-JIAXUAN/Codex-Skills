@@ -16,7 +16,7 @@ description: 嵌入式系统一级入口 skill，覆盖 C99、DSP、ARM、EtherC
 - `ethercat`：PDO/SDO/CoE/FoE、DC、ESI、对象字典、ESC/PDI 和状态机。
 - `os`：RTOS 任务、调度、中断交接、队列、互斥锁、定时器和裸机 superloop。
 - `motorcontrol`：FOC、SVPWM、控制环、PWM/ADC/Encoder 同步、保护和多轴控制算法。
-- `architecture`：系统分层、目录结构、平台抽象、Bootloader、OTA、量产交付及发布门禁。
+- `architecture`：架构分层检查、语义角色归一、依赖方向与公共头纯度、解耦但不过度抽象的边界设计、平台抽象、Bootloader、OTA、量产交付及发布门禁。
 - `aicoding-git-governance`（路径 `platform/aicoding-git-governance/`）：嵌入式优先、可通用的 Git、GitHub、分支、提交、PR、合并、Tag、Release、README、CHANGELOG、版本文件、固件制品、测试基线、生产基线和客户交付治理。
 
 ## 组合规则
