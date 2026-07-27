@@ -3,6 +3,7 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从干净的 `2a4a67c` canonical 源树重新生成 AiCoding Plugin，纳入架构 Skill 新增的规范、模板、检查脚本、治理章节与嵌入式路由更新，并将 `BUILDINFO.json` 固化为 `dirtySource=false`；regenerate the official AiCoding package from the clean canonical source tree and record clean build metadata.
 - **fix(embedded-architecture)**：将门禁规则与人工反馈确认拆为独立治理章节，使 standard/workflow Skill 契约可由 `skill_gate.py validate` 阻断验证；split gate rules and human confirmation into independently verifiable governance sections.
 - **feat(embedded-architecture)**：把架构 skill 重建为按 ID 引用的规范体系（`AP-*` 原则、`SL-*` 语义角色、`DR-*`/`GATE-*` 规则门禁、`AM-*` 方法、`PAT-*` 模式、`SYN-*` 成熟度、`SIG-*` 泄漏信号），新增 `document-architecture.json` 与自校验脚本强制单一所有权、依赖无环、链接与声明一致、锚点有效和 ID 唯一归属；rebuild the embedded architecture skill around a self-validating ID system.
 - **feat(embedded-architecture)**：新增 `check_layering.ps1` 分层检查器，按语义角色而非目录名校验依赖方向、公共头环境纯度、组合根可见性，并给出过度抽象（`DR-012`）与"一条映射盖住契约+实现两个角色"（`DR-014`）警告；配置来自项目自身，脚本不含任何仓库路径；add a project-decoupled layering checker driven by the project's own role map.

@@ -1,5 +1,7 @@
 # 固件生产与量产约束
 
+本文件只收集量产与升级场景的提问、最低要求和策略对比。门禁的规范定义见[依赖规则与门禁](dependency_rules_and_gates_zh.md)，本节内容由 [GATE-010](dependency_rules_and_gates_zh.md#GATE-010) 统一阻塞。
+
 ## 1. 必问问题
 
 ```text

@@ -1,0 +1,65 @@
+{
+  "_comment": "架构分层检查配置示例。本文件是 AM-011 分析的产物，不是分析的替代品：每条规则的 role 都是人读代码后的判断，工具只负责按它复核。所有 path_pattern 都是正则，按顺序匹配，先匹配先生效。请按本项目实际目录填写，不要照抄示例值。",
+
+  "_analysis_note": "analysis_confirmed_by 缺失时脚本拒绝给出结论。填写实际确认人与确认日期，未经确认的映射不得作为门禁依据。",
+  "analysis_confirmed_by": "<确认人> <YYYY-MM-DD>",
+
+  "source_extensions": [".c", ".h"],
+
+  "exclude_patterns": [
+    "^build/",
+    "^third_party/",
+    "_generated\\.[ch]$"
+  ],
+
+  "_language_note": "language_include_patterns 命中的头不承担架构角色，任何层都可用。省略时使用内置的 C 标准库头列表。",
+  "language_include_patterns": null,
+
+  "_external_note": "external_include_patterns 命中的头一律按 SL-010 处理（厂商 SDK、RTOS 内核、生成代码）。为空时脚本拒绝运行——不声明厂商头长什么样，环境接触面就无法判定，任何 0 违规都不成立。",
+  "external_include_patterns": [
+    "^VENDOR_SDK_PREFIX",
+    "^RTOS_HEADER_PREFIX"
+  ],
+
+  "_forbidden_note": "forbidden_public_types 为空时脚本同样拒绝运行。填写本项目 SDK 实际的句柄/错误码/寄存器类型。",
+  "forbidden_public_types": [
+    "\\bVENDOR_HandleTypeDef\\b",
+    "\\bVENDOR_err_t\\b",
+    "\\b[A-Z0-9_]+_TypeDef\\b"
+  ],
+
+  "port_roles": ["SL-004"],
+  "implementation_roles": ["SL-005", "SL-006", "SL-007", "SL-008"],
+  "composition_roles": ["SL-006", "SL-011"],
+  "public_header_roles": ["SL-001", "SL-002", "SL-003", "SL-004"],
+  "vendor_roles": ["SL-010"],
+  "test_double_patterns": ["fake", "stub", "mock", "/test/"],
+
+  "_modules_note": "每条规则必须写 evidence：该角色依据什么证据判定。随机抽一条，应能仅凭 evidence 复核出同样的角色。注意公共头与实现常常分处两个子目录，此时必须分开映射，不要整个父目录一刀切（见 SIG-010）。",
+  "modules": [
+    { "name": "product-intent",            "path_pattern": "^app/product/",   "role": "SL-001", "evidence": "只表达客户可见流程，不持有任何句柄" },
+    { "name": "application-orchestration", "path_pattern": "^app/usecases/",  "role": "SL-002", "evidence": "编排服务调用顺序，不选择具体实现" },
+    { "name": "domain-algorithm",          "path_pattern": "^domain/",        "role": "SL-003", "evidence": "公共头只含 stdint/stdbool，可脱离目标板测试" },
+    { "name": "capability-contracts",      "path_pattern": "^platform/inc/",  "role": "SL-004", "evidence": "公共头全部环境中立，接口由使用方语义定义" },
+    { "name": "platform-impl",             "path_pattern": "^platform/src/",  "role": "SL-007", "evidence": "直接 include 厂商 SDK 并操作外设控制器" },
+    { "name": "device-protocols",          "path_pattern": "^devices/",       "role": "SL-005", "evidence": "board 外器件寄存器与命令，依赖总线契约" },
+    { "name": "board-bindings",            "path_pattern": "^board/",         "role": "SL-006", "evidence": "只保存实例、地址、片选与供电绑定" },
+    { "name": "reusable-libs",             "path_pattern": "^lib/",           "role": "SL-009", "evidence": "可独立移植，不依赖 OS 与硬件" },
+    { "name": "vendor-generated",          "path_pattern": "^(vendor|generated)/", "role": "SL-010", "evidence": "厂商发布或工具生成，不手工改写" },
+    { "name": "composition",               "path_pattern": "^main/",          "role": "SL-011", "evidence": "唯一创建实例、注入依赖并启动生命周期的位置" }
+  ],
+
+  "allowed_dependencies": {
+    "_comment": "可选。省略时使用 DR-002 的默认矩阵。仅在项目有正式 ADR 时覆盖。"
+  },
+
+  "exceptions": [
+    {
+      "path_pattern": "^app/usecases/legacy_bring_up\\.c$",
+      "rule": "DR-002",
+      "reason": "bring-up 临时代码，ADR-0007 记录，迁移期限见架构说明",
+      "owner": "<填写>",
+      "expires": "<YYYY-MM-DD>"
+    }
+  ]
+}

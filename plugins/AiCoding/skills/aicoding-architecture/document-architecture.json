@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "entrypoint": "SKILL.md",
+  "root_markdown": [
+    "SKILL.md"
+  ],
+  "id_owners": {
+    "AP": "references/architecture_principles_zh.md",
+    "SL": "references/semantic_layer_model_zh.md",
+    "DR": "references/dependency_rules_and_gates_zh.md",
+    "GATE": "references/dependency_rules_and_gates_zh.md",
+    "AM": "references/architecture_methods_zh.md",
+    "PAT": "references/architecture_patterns_zh.md",
+    "SYN": "references/architecture_maturity_zh.md",
+    "SIG": "references/leak_signals_and_baseline_zh.md"
+  },
+  "documents": [
+    {
+      "path": "SKILL.md",
+      "title": "嵌入式架构平台化",
+      "owns": [
+        "skill-routing",
+        "workflow-contract",
+        "output-format"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md",
+        "references/reference_architecture_zh.md",
+        "references/architecture_maturity_zh.md",
+        "references/leak_signals_and_baseline_zh.md",
+        "references/layering_check_tool_zh.md",
+        "references/ai_architecture_workflow_zh.md",
+        "references/architecture_decision_matrix_zh.md",
+        "references/production_firmware_constraints_zh.md",
+        "references/testing_release_gate_zh.md",
+        "references/repository_reference_matrix_zh.md",
+        "references/customer_function_replicate_options_zh.md",
+        "references/customer_interview_checklist_zh.md",
+        "assets/project_architecture_template_zh.md",
+        "assets/module_contract_template_zh.md",
+        "assets/adr_template_zh.md",
+        "assets/ai_task_contract_template_zh.md",
+        "assets/architecture_review_template_zh.md",
+        "assets/architecture_review_checklist_zh.md",
+        "assets/customer_confirmation_template_zh.md"
+      ]
+    },
+    {
+      "path": "references/architecture_principles_zh.md",
+      "title": "嵌入式架构原则",
+      "owns": [
+        "architecture-principles",
+        "architecture-capability-model"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "references/semantic_layer_model_zh.md",
+      "title": "厂商命名无关的语义层级模型",
+      "owns": [
+        "semantic-roles",
+        "vendor-name-normalization"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md"
+      ]
+    },
+    {
+      "path": "references/dependency_rules_and_gates_zh.md",
+      "title": "嵌入式依赖规则与架构门禁",
+      "owns": [
+        "dependency-rules",
+        "architecture-gates",
+        "machine-enforcement-requirements"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md"
+      ]
+    },
+    {
+      "path": "references/architecture_patterns_zh.md",
+      "title": "嵌入式架构模式目录",
+      "owns": [
+        "structural-patterns",
+        "behavioral-patterns"
+      ],
+      "depends_on": [
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "references/architecture_methods_zh.md",
+      "title": "嵌入式架构设计方法",
+      "owns": [
+        "analysis-methods",
+        "migration-methods",
+        "baseline-measurement"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_patterns_zh.md"
+      ]
+    },
+    {
+      "path": "references/reference_architecture_zh.md",
+      "title": "通用嵌入式参考架构",
+      "owns": [
+        "role-assembly",
+        "three-view-model",
+        "device-chain-decomposition"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md"
+      ]
+    },
+    {
+      "path": "references/leak_signals_and_baseline_zh.md",
+      "title": "泄漏信号与基线测量",
+      "owns": [
+        "leak-signals",
+        "baseline-metrics",
+        "slice-selection"
+      ],
+      "depends_on": [
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md"
+      ]
+    },
+    {
+      "path": "references/layering_check_tool_zh.md",
+      "title": "分层检查器使用说明",
+      "owns": [
+        "checker-usage",
+        "checker-config-schema",
+        "checker-limits"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_maturity_zh.md",
+        "references/leak_signals_and_baseline_zh.md"
+      ]
+    },
+    {
+      "path": "references/architecture_maturity_zh.md",
+      "title": "架构成熟度与证据分级",
+      "owns": [
+        "maturity-ladder",
+        "evidence-grading"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md",
+        "references/leak_signals_and_baseline_zh.md"
+      ]
+    },
+    {
+      "path": "references/ai_architecture_workflow_zh.md",
+      "title": "AI 辅助架构工作流",
+      "owns": [
+        "ai-collaboration-loop",
+        "prompt-reference-convention"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_maturity_zh.md",
+        "assets/project_architecture_template_zh.md",
+        "assets/module_contract_template_zh.md",
+        "assets/adr_template_zh.md",
+        "assets/ai_task_contract_template_zh.md",
+        "assets/architecture_review_checklist_zh.md"
+      ]
+    },
+    {
+      "path": "references/architecture_decision_matrix_zh.md",
+      "title": "架构决策矩阵",
+      "owns": [
+        "abstraction-decision",
+        "reference-repo-usage"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "references/production_firmware_constraints_zh.md",
+      "title": "固件生产与量产约束",
+      "owns": [
+        "production-questions",
+        "upgrade-strategy-comparison"
+      ],
+      "depends_on": [
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "references/testing_release_gate_zh.md",
+      "title": "测试与发布门禁",
+      "owns": [
+        "per-role-test-matrix",
+        "gate-blocking-stages"
+      ],
+      "depends_on": [
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "references/repository_reference_matrix_zh.md",
+      "title": "参考仓库矩阵：架构思想、主控/生态、可复刻能力",
+      "owns": [
+        "reference-repository-matrix"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "references/customer_function_replicate_options_zh.md",
+      "title": "客户功能复刻方案速查：嵌入式架构方向",
+      "owns": [
+        "function-replicate-options"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "references/customer_interview_checklist_zh.md",
+      "title": "客户访谈清单",
+      "owns": [
+        "customer-interview"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "assets/project_architecture_template_zh.md",
+      "title": "项目架构说明模板",
+      "owns": [
+        "template-project-architecture"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md"
+      ]
+    },
+    {
+      "path": "assets/module_contract_template_zh.md",
+      "title": "模块契约模板",
+      "owns": [
+        "template-module-contract"
+      ],
+      "depends_on": [
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "assets/adr_template_zh.md",
+      "title": "架构决策记录模板",
+      "owns": [
+        "template-adr"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_methods_zh.md",
+        "references/architecture_patterns_zh.md"
+      ]
+    },
+    {
+      "path": "assets/ai_task_contract_template_zh.md",
+      "title": "AI 架构任务契约模板",
+      "owns": [
+        "template-ai-task-contract"
+      ],
+      "depends_on": [
+        "references/dependency_rules_and_gates_zh.md"
+      ]
+    },
+    {
+      "path": "assets/architecture_review_checklist_zh.md",
+      "title": "架构评审检查表",
+      "owns": [
+        "review-checklist"
+      ],
+      "depends_on": [
+        "references/architecture_principles_zh.md",
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_maturity_zh.md"
+      ]
+    },
+    {
+      "path": "assets/architecture_review_template_zh.md",
+      "title": "嵌入式架构审查输出模板",
+      "owns": [
+        "review-output-template"
+      ],
+      "depends_on": [
+        "references/semantic_layer_model_zh.md",
+        "references/dependency_rules_and_gates_zh.md",
+        "references/architecture_maturity_zh.md"
+      ]
+    },
+    {
+      "path": "assets/customer_confirmation_template_zh.md",
+      "title": "客户确认模板",
+      "owns": [
+        "template-customer-confirmation"
+      ],
+      "depends_on": []
+    }
+  ]
+}
