@@ -7,6 +7,7 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从干净的 `8e15779` canonical source commit 重新生成 AiCoding Plugin，将共享外部仓库生命周期规则同步到 packaged `aicoding-kit-maintenance`，并记录 `dirtySource=false`；regenerate the package from the clean canonical source commit and preserve clean build metadata.
 - **fix(external-skill)**：外部 Skill 生命周期现在支持一个上游仓库承载多个 Skill；同步只抓取一次共享 submodule，移除单个 binding 时保留仍被其他 binding 使用的 `.gitmodules` section 和 gitlink，最后一个 binding 移除时再清理仓库链接；support shared-repository bindings without redundant fetches or premature submodule removal.
 
 ## 2026-07-27
