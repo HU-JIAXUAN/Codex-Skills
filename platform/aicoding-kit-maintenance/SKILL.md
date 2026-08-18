@@ -95,9 +95,10 @@ AiCoding gitlink -> Codex-Skills gitlink -> external Skill gitlink -> mapped SKI
 
 - Add the upstream repository as `external/<repository-name>` with a declared `.gitmodules` URL.
 - Record the runtime name, submodule path, nested Skill path, URL, `latest-stable-tag` update policy, and stable-tag pattern in `config/external-skill-bindings.json`.
+- When one upstream repository publishes multiple Skills, keep one shared gitlink and one binding entry per runtime Skill name.
 - Resolve the highest non-prerelease semantic-version tag and pin that release commit through the gitlink; do not follow an unreleased branch head, copy, vendor, or silently refresh external Skill files.
 - Use `scripts/manage-external-skills.ps1 -Action Sync` for a dry-run status/update plan and add `-Apply` only after review.
-- Removing an external Skill must use the same lifecycle command so the manifest entry, `.gitmodules` section, and gitlink disappear together; the paired AiCoding change removes the runtime registry mapping and managed junction.
+- Removing an external Skill must use the same lifecycle command. It always removes that binding; a shared `.gitmodules` section and gitlink remain until the final binding is removed. The paired AiCoding change removes the matching runtime registry mapping and managed junction.
 - If the repository root lacks `SKILL.md`, map the real nested directory rather than treating the root as installable.
 - Keep general-purpose external Skills standalone unless plugin packaging is separately approved.
 - Commit and verify Codex-Skills before updating the AiCoding parent submodule.

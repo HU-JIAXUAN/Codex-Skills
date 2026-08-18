@@ -1,4 +1,14 @@
 # 更新日志
+## 2026-08-18
+
+### 新增 / Added
+
+- **feat(external-skill)**：以共享 Git submodule 将 `mattpocock/skills` 最新稳定版本 `v1.2.3` 固定到 `external/mattpocock-skills`，并按其正式 plugin 清单映射 25 个 engineering/productivity Skills；pin the latest stable upstream release and expose only its published Skill set through explicit nested paths.
+
+### 更新 / Changed
+
+- **fix(external-skill)**：外部 Skill 生命周期现在支持一个上游仓库承载多个 Skill；同步只抓取一次共享 submodule，移除单个 binding 时保留仍被其他 binding 使用的 `.gitmodules` section 和 gitlink，最后一个 binding 移除时再清理仓库链接；support shared-repository bindings without redundant fetches or premature submodule removal.
+
 ## 2026-07-27
 
 ### 更新 / Changed

@@ -11,6 +11,7 @@ $repoRoot = (& git -C $PSScriptRoot rev-parse --show-toplevel).Trim()
 $configPath = Join-Path $repoRoot 'config/external-skill-bindings.json'
 $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
 $bindings = @($config.skills)
+$fetchedSubmodules = @{}
 
 function Assert-GitSuccess {
     param([string]$Operation)
@@ -43,33 +44,50 @@ foreach ($binding in $bindings) {
     $submoduleDir = Join-Path $repoRoot $submodule
 
     if ($Action -eq 'Remove') {
+        $remainingBindings = @($config.skills | Where-Object {
+            ([string]$_.name -ne [string]$binding.name) -and
+            ((([string]$_.submodule -replace '\\','/').TrimEnd('/')) -eq $submodule)
+        })
+        $removeSubmodule = $remainingBindings.Count -eq 0
         $results += [pscustomobject]@{
             name = $binding.name
             action = 'remove'
             apply = [bool]$Apply
             submodule = $submodule
-            removes = @('binding manifest entry', '.gitmodules section', 'tracked gitlink')
+            removes = if ($removeSubmodule) {
+                @('binding manifest entry', '.gitmodules section', 'tracked gitlink')
+            } else {
+                @('binding manifest entry')
+            }
         }
         if ($Apply) {
-            & git -C $repoRoot submodule deinit -f -- $submodule | Out-Null
-            Assert-GitSuccess "deinitialize $submodule"
-            & git -C $repoRoot rm -f -- $submodule | Out-Null
-            Assert-GitSuccess "remove gitlink $submodule"
-            $remainingModuleRow = @(& git -C $repoRoot config -f .gitmodules --get-regexp '^submodule\..*\.path$' | Where-Object { $_ -match ('\s' + [regex]::Escape($submodule) + '$') }) | Select-Object -First 1
-            if ($remainingModuleRow) { throw "Submodule declaration was not removed: $submodule" }
+            if ($removeSubmodule) {
+                & git -C $repoRoot submodule deinit -f -- $submodule | Out-Null
+                Assert-GitSuccess "deinitialize $submodule"
+                & git -C $repoRoot rm -f -- $submodule | Out-Null
+                Assert-GitSuccess "remove gitlink $submodule"
+                $remainingModuleRow = @(& git -C $repoRoot config -f .gitmodules --get-regexp '^submodule\..*\.path$' | Where-Object { $_ -match ('\s' + [regex]::Escape($submodule) + '$') }) | Select-Object -First 1
+                if ($remainingModuleRow) { throw "Submodule declaration was not removed: $submodule" }
+            }
             $config.skills = @($config.skills | Where-Object { $_.name -ne $binding.name })
             $text = ($config | ConvertTo-Json -Depth 10) + "`n"
             [System.IO.File]::WriteAllText($configPath, $text, (New-Object System.Text.UTF8Encoding $false))
-            & git -C $repoRoot add -- .gitmodules config/external-skill-bindings.json
+            if ($removeSubmodule) {
+                & git -C $repoRoot add -- .gitmodules config/external-skill-bindings.json
+            } else {
+                & git -C $repoRoot add -- config/external-skill-bindings.json
+            }
             Assert-GitSuccess 'stage external Skill binding removal'
         }
         continue
     }
 
     if (-not (Test-Path -LiteralPath $submoduleDir)) { throw "Submodule is not initialized: $submodule" }
-    if ($Action -eq 'Sync') {
+    $fetchKey = $submodule.ToLowerInvariant()
+    if ($Action -eq 'Sync' -and -not $fetchedSubmodules.ContainsKey($fetchKey)) {
         & git -C $submoduleDir fetch --tags --prune origin | Out-Null
         Assert-GitSuccess "fetch tags for $submodule"
+        $fetchedSubmodules[$fetchKey] = $true
     }
     $latestTag = Get-LatestStableTag -Repository $submoduleDir -Pattern ([string]$binding.tagPattern)
     $latestCommit = (& git -C $submoduleDir rev-list -n 1 $latestTag).Trim()

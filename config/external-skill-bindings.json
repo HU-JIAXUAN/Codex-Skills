@@ -7,6 +7,206 @@
       "url": "https://github.com/Agents365-ai/drawio-skill.git",
       "updatePolicy": "latest-stable-tag",
       "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "ask-matt",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/ask-matt",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "diagnosing-bugs",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/diagnosing-bugs",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "grill-with-docs",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/grill-with-docs",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "triage",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/triage",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/improve-codebase-architecture",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "setup-matt-pocock-skills",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/setup-matt-pocock-skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "tdd",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/tdd",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "to-spec",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/to-spec",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "to-tickets",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/to-tickets",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "wayfinder",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/wayfinder",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "implement",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/implement",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "prototype",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/prototype",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "research",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/research",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "domain-modeling",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/domain-modeling",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "codebase-design",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/codebase-design",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "code-review",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/code-review",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/resolving-merge-conflicts",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "wizard",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/engineering/wizard",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "grill-me",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/grill-me",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "grilling",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/grilling",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "handoff",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/handoff",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "teach",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/teach",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "to-questionnaire",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/to-questionnaire",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "wait-what",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/wait-what",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    {
+      "name": "writing-for-agents",
+      "submodule": "external/mattpocock-skills",
+      "skillPath": "skills/productivity/writing-for-agents",
+      "url": "https://github.com/mattpocock/skills.git",
+      "updatePolicy": "latest-stable-tag",
+      "tagPattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
     }
   ]
 }

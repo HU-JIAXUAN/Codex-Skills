@@ -56,9 +56,9 @@ Each external Skill must also have an entry in `config/external-skill-bindings.j
 - the path inside that repository that actually contains `SKILL.md`;
 - the upstream Git URL, `latest-stable-tag` update policy, and stable-tag pattern.
 
-Use the pinned gitlink as the reproducible version, but resolve it from the highest non-prerelease semantic-version tag rather than from an unreleased branch head. Run `scripts/manage-external-skills.ps1 -Action Sync` to inspect the latest stable tag and add `-Apply` to advance the gitlink. If the upstream repository root does not contain `SKILL.md`, bind the repository itself and map its real nested Skill path; never pretend the repository root is installable.
+Use the pinned gitlink as the reproducible version, but resolve it from the highest non-prerelease semantic-version tag rather than from an unreleased branch head. Run `scripts/manage-external-skills.ps1 -Action Sync` to inspect the latest stable tag and add `-Apply` to advance the gitlink. If the upstream repository root does not contain `SKILL.md`, bind the repository itself and map its real nested Skill path; never pretend the repository root is installable. When one upstream repository publishes multiple Skills, keep one shared gitlink and one binding entry per runtime Skill name.
 
-Removing an external Skill must delete its entry from `config/external-skill-bindings.json`, its `.gitmodules` section, and its tracked gitlink in the same change. Use `scripts/manage-external-skills.ps1 -Action Remove -Name <skill-name>` for a dry run and add `-Apply` only after reviewing the removal plan. The corresponding AiCoding runtime registry mapping and managed junction must be removed in the AiCoding platform change; never leave an orphaned URL binding or runtime link.
+Removing an external Skill must delete its entry from `config/external-skill-bindings.json`. Keep a shared `.gitmodules` section and tracked gitlink while another binding still uses that submodule; remove them with the final binding. Use `scripts/manage-external-skills.ps1 -Action Remove -Name <skill-name>` for a dry run and add `-Apply` only after reviewing the removal plan. The corresponding AiCoding runtime registry mapping and managed junction must be removed in the AiCoding platform change; never leave an orphaned URL binding or runtime link.
 
 ## Plugin Packaging
 
