@@ -6,6 +6,7 @@
 
 - **refactor(skills)**：将本地 standalone Skill 收敛到 `standalone/` 白名单，仅保留 JSON Canvas、MCP Builder、Obsidian Bases/CLI/Markdown、Visio Diagram 和 Webapp Testing；删除重复原生文件工作流、Anthropic 专用辅助、生成艺术及未采用的通用 Skill；converge local standalone Skills into one allowlisted directory and remove redundant or unused workflows.
 - **refactor(plugin)**：停止打包宽泛的 `aicoding-embedded` 总入口，仅保留职责明确的细分 `aicoding-*` Skill，避免路由器与具体领域 Skill 重复触发；remove the broad embedded umbrella from the plugin and retain focused leaf workflows.
+- **fix(build)**：生成 Skill 被删除时也按生成路径排除 Git dirty 判定，避免 plugin rebuild 将干净的 canonical source 误报为脏；ignore every generated-path status, including deletions, when computing plugin source dirtiness.
 - **docs(architecture)**：在中英文 README 目录导航和架构文档中明确 `standalone/`、`external/`、canonical source 与生成插件之间的边界；document the converged repository navigation and source/package boundaries.
 - **docs(c99)**：补强嵌入式 C99 函数命名、入参与函数/回调设计契约：新函数使用 `snake_case`，不超过 32 个字符、默认不超过两个下划线且每词不超过 12 个字符，多词模块使用统一短前缀；参数按上下文、输入、输出分组，超过 5 个进入设计审查而非机械封装；复杂度指标改为人工审查信号，并将可机器检查的名称形态与必须人工判断的职责、内聚性和生命周期明确分流；strengthen C99 naming, parameter, function, and callback contracts while keeping semantic design review human-owned.
 - **build(plugin)**：从干净的 `57f8e1e` canonical source 重新生成 AiCoding Plugin，同步 C99 函数接口规则并记录 `dirtySource=false`；regenerate the AiCoding package from the verified C99 source commit and preserve clean build metadata.

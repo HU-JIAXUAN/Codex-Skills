@@ -89,14 +89,13 @@ function Set-SkillName([string]$SkillDir, [string]$Name) {
 
 function Get-SourceDirty([string]$RepoRoot) {
     $lines = @(& git -C $RepoRoot status --porcelain)
-    $ignoredPrefixes = @('?? plugins/AiCoding/skills/', ' M plugins/AiCoding/skills/', '?? plugins/AiCoding/BUILDINFO.json', ' M plugins/AiCoding/BUILDINFO.json')
     foreach ($line in $lines) {
         $normalized = $line -replace '\\','/'
-        $ignore = $false
-        foreach ($prefix in $ignoredPrefixes) {
-            if ($normalized.StartsWith($prefix)) { $ignore = $true; break }
+        if ($normalized -match '^.. plugins/AiCoding/skills(?:/|$)' -or
+            $normalized -match '^.. plugins/AiCoding/BUILDINFO\.json$') {
+            continue
         }
-        if (-not $ignore) { return $true }
+        return $true
     }
     return $false
 }
