@@ -61,7 +61,7 @@ Exit criteria: boundaries were respected, canonical source was changed instead o
 
 ### Codex-Skills Owns
 
-- canonical skills under `embedded/`, `platform/`, and standalone root skill directories;
+- canonical skills under `embedded/`, `platform/`, and curated local Skill directories under `standalone/`;
 - declared external Skill submodules under `external/`, `.gitmodules`, and `config/external-skill-bindings.json`;
 - `plugins/AiCoding/.codex-plugin/`, `plugins/AiCoding/hooks/`, and plugin assets;
 - `config/aicoding-plugin-pack.json`;

@@ -13,7 +13,7 @@
 
 ## Project Positioning
 
-- Skill source repository for `embedded/`, `platform/`, and root-level standalone skills.
+- Skill source repository for `embedded/`, `platform/`, and curated standalone skills under `standalone/`.
 - Plugin source repository for generating `plugins/AiCoding` from `config/aicoding-plugin-pack.json`.
 - Governance source repository for `platform/aicoding-git-governance/references/aicoding-git-governance-standard.md`.
 - Runtime boundary: do not expose this whole repository as a long-term Skill Root; expose installed standalone skills or the installed AiCoding plugin.
@@ -43,6 +43,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 
 - `embedded/` contains embedded-domain skill sources.
 - `platform/` contains cross-domain platform workflow skills, including Git governance.
+- `standalone/` contains allowlisted local general-purpose skills that are not bundled into the AiCoding plugin.
 - `plugins/AiCoding/skills/` is generated from `config/aicoding-plugin-pack.json`; do not edit it by hand.
 - `plugins/AiCoding/hooks/` is manually maintained plugin hook source.
 - `.agents/plugins/marketplace.json` is the development marketplace for local plugin testing.
@@ -52,6 +53,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 | Path | Purpose |
 |---|---|
 | `embedded/` | Embedded firmware skill family. |
+| `standalone/` | Curated local Skills: JSON Canvas, MCP Builder, Obsidian Bases/CLI/Markdown, Visio Diagram, and Webapp Testing. |
 | `platform/aicoding-git-governance/` | Git-Skill source, canonical standard, governance templates, lint templates, and release validators. |
 | `platform/aicoding-kit-maintenance/` | Codex-Skills/AiCoding architecture, plugin packaging, submodule, hook, and completion-gate maintenance workflow. |
 | `platform/aicoding-user-skill-creator/` | Workflow for creating, validating, improving, and migrating AiCoding user skills. |

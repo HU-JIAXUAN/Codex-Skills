@@ -1,4 +1,0 @@
-interface:
-  display_name: "Anthropic DOCX Reference"
-  short_description: "Apply mature Anthropic DOCX formatting guidance"
-  default_prompt: "Use $anthropic-docx to apply the Anthropic DOCX workflow to this Word document task."

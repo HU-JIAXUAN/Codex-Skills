@@ -2,6 +2,8 @@
 
 AiCoding is the deployable Codex kit for JiaxI2 embedded development. It packages selected generated skills, Git-Skill repository governance, and Codex lifecycle hooks in one Codex plugin layout.
 
+The package exposes focused `aicoding-*` skills. The broad canonical `embedded` router is intentionally not packaged, avoiding overlapping triggers with the C99, architecture, ARM, DSP, EtherCAT, motor-control, OS, and review skills.
+
 ## Layout
 
 ```text

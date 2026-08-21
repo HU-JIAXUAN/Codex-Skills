@@ -5,12 +5,6 @@
   },
   "skills": [
     {
-      "source": "embedded",
-      "target": "aicoding-embedded",
-      "enabled": true,
-      "rootOnly": true
-    },
-    {
       "source": "embedded/C99",
       "target": "aicoding-c99-standard-c",
       "enabled": true

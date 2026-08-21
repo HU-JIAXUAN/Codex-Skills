@@ -1,4 +1,0 @@
-interface:
-  display_name: "Claude API Reference"
-  short_description: "Build with the Claude API and Anthropic SDKs"
-  default_prompt: "Use $claude-api to implement this task with the Claude API or an official Anthropic SDK."

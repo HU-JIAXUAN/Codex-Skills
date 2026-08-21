@@ -20,7 +20,7 @@ Human-maintained canonical sources:
 
 - `embedded/`
 - `platform/`
-- root standalone skills such as `obsidian-markdown/`
+- curated local standalone skills under `standalone/`
 - `.gitmodules`, `config/external-skill-bindings.json`, and Git gitlinks under `external/`
 - `plugins/AiCoding/.codex-plugin/`
 - `plugins/AiCoding/hooks/`
@@ -43,7 +43,7 @@ Use `embedded/` for skills directly related to firmware, MCU, DSP, motor control
 
 Use `platform/` for cross-domain engineering capabilities such as Git governance, repository governance, release workflows, CI, documentation standards, agent workflow governance, and general code review.
 
-Keep `obsidian-*` and other personal general-purpose skills as standalone root skills unless a separate plugin is explicitly approved. Do not package Obsidian skills into the AiCoding plugin.
+Keep approved personal general-purpose skills under `standalone/<skill-name>/`. Do not place standalone Skill directories at the repository root, and do not package Obsidian skills into the AiCoding plugin.
 
 ## External GitHub Skill Bindings
 

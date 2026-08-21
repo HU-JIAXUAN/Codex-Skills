@@ -77,6 +77,14 @@ $skillFiles = @(Get-ChildItem -LiteralPath $repoRoot -Recurse -Filter SKILL.md |
     $_.FullName -notmatch '\\.system\\' -and $_.FullName -notmatch '\\plugins\\AiCoding\\skills\\'
 })
 foreach ($file in $skillFiles) {
+    $relativePath = $file.FullName.Substring($repoRoot.TrimEnd('\').Length + 1).Replace('\', '/')
+    if ($relativePath -notmatch '^(embedded|platform|standalone|external)/') {
+        $errors.Add("Canonical SKILL.md is outside an approved source root: $relativePath") | Out-Null
+    }
+    if ($relativePath.StartsWith('standalone/', [System.StringComparison]::OrdinalIgnoreCase) -and
+        $relativePath -notmatch '^standalone/[^/]+/SKILL\.md$') {
+        $errors.Add("Local standalone Skill must use standalone/<skill-name>/SKILL.md: $relativePath") | Out-Null
+    }
     $text = ([System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)).TrimStart([char]0xFEFF)
     if ($text -notmatch '(?s)^---\s*\r?\n.*?\r?\n---') { $errors.Add("Missing frontmatter: $($file.FullName)") | Out-Null }
     if ($text -notmatch '(?m)^name:\s*[^\r\n]+') { $errors.Add("Missing name: $($file.FullName)") | Out-Null }

@@ -13,7 +13,7 @@
 
 ## 项目定位 / Project Positioning
 
-- Skill 源码仓库：维护 `embedded/`、`platform/` 和根目录 standalone skills 的 canonical source。
+- Skill 源码仓库：维护 `embedded/`、`platform/` 和 `standalone/` 下精选 standalone skills 的 canonical source。
 - Plugin 源码仓库：从 `config/aicoding-plugin-pack.json` 生成 `plugins/AiCoding`，作为可安装的 AiCoding Codex Plugin 包。
 - 治理标准源：`platform/aicoding-git-governance/references/aicoding-git-governance-standard.md` 是后续 Git 仓库治理的 canonical URL。
 - 运行边界：不把整个仓库作为长期 Skill Root；运行时只暴露明确安装的 standalone skill 或已安装 plugin 中的 `aicoding-*` skill。
@@ -43,6 +43,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 
 - `embedded/` 存放嵌入式领域 skill 源码。
 - `platform/` 存放跨领域平台 workflow skill，包括 Git 治理。
+- `standalone/` 存放经过白名单筛选的本地通用 skill，不进入 AiCoding Plugin。
 - `plugins/AiCoding/skills/` 由 `config/aicoding-plugin-pack.json` 生成，不手工编辑。
 - `plugins/AiCoding/hooks/` 是手工维护的 plugin hook 源码。
 - `.agents/plugins/marketplace.json` 是本地 plugin 测试用 development marketplace。
@@ -52,6 +53,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 | 路径 | 用途 |
 |---|---|
 | `embedded/` | 嵌入式固件 skill 族，包括 C99、架构、ARM、DSP、EtherCAT/CiA402、OS、电机控制和评审路由。 |
+| `standalone/` | 精选本地通用 Skill：JSON Canvas、MCP Builder、Obsidian Bases/CLI/Markdown、Visio Diagram 和 Webapp Testing。 |
 | `platform/aicoding-git-governance/` | Git-Skill 源码、canonical standard、配置模板、lint 模板和 Release 校验工具。 |
 | `platform/aicoding-kit-maintenance/` | Codex-Skills/AiCoding 架构、plugin packaging、submodule、hooks 和完成门禁维护 workflow。 |
 | `platform/aicoding-user-skill-creator/` | 创建、验证、改进和迁移 AiCoding user skills 的 workflow。 |

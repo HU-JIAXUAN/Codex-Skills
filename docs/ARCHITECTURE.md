@@ -23,6 +23,7 @@ Manual source:
 
 - `embedded/`
 - `platform/`
+- `standalone/`
 - `plugins/AiCoding/.codex-plugin/plugin.json`
 - `plugins/AiCoding/hooks/`
 - `plugins/AiCoding/README.md`
@@ -35,6 +36,10 @@ Generated output:
 - `plugins/AiCoding/BUILDINFO.json`
 
 Generated files are created by `scripts/build-plugin.ps1`. They must not be edited manually. The build writes `plugins/AiCoding/skills/.generated` as a local marker.
+
+## Local Standalone Skill Boundary
+
+Locally maintained general-purpose Skills live under `standalone/<skill-name>/`. They are canonical source, but they are not bundled into the AiCoding plugin. AiCoding exposes only the approved runtime allowlist through individual user-level junctions; the repository root and the whole `standalone/` directory are never registered as Skill roots. `scripts/verify-skills.ps1` rejects canonical Skill entrypoints outside `embedded/`, `platform/`, `standalone/`, or declared `external/` sources and keeps the local standalone layout flat.
 
 ## External Standalone Skill Bindings
 

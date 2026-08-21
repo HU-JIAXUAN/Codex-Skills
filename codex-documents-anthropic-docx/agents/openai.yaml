@@ -1,4 +1,0 @@
-interface:
-  display_name: "Codex Documents + Anthropic DOCX"
-  short_description: "Combine Codex document tooling with DOCX guidance"
-  default_prompt: "Use $codex-documents-anthropic-docx to create this Word document with Codex tooling and Anthropic formatting guidance."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Anthropic PPTX Reference"
-  short_description: "Apply the Anthropic presentation workflow"
-  default_prompt: "Use $anthropic-pptx to follow the Anthropic PPTX workflow for this presentation task."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Anthropic PDF Reference"
-  short_description: "Apply the Anthropic PDF processing workflow"
-  default_prompt: "Use $anthropic-pdf to follow the Anthropic PDF workflow for this task."
