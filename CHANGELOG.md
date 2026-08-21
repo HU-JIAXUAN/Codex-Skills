@@ -5,6 +5,7 @@
 ### 更新 / Changed
 
 - **docs(c99)**：补强嵌入式 C99 函数命名、入参与函数/回调设计契约：新函数使用 `snake_case`，不超过 32 个字符、默认不超过两个下划线且每词不超过 12 个字符，多词模块使用统一短前缀；参数按上下文、输入、输出分组，超过 5 个进入设计审查而非机械封装；复杂度指标改为人工审查信号，并将可机器检查的名称形态与必须人工判断的职责、内聚性和生命周期明确分流；strengthen C99 naming, parameter, function, and callback contracts while keeping semantic design review human-owned.
+- **build(plugin)**：从干净的 `57f8e1e` canonical source 重新生成 AiCoding Plugin，同步 C99 函数接口规则并记录 `dirtySource=false`；regenerate the AiCoding package from the verified C99 source commit and preserve clean build metadata.
 
 ## 2026-08-18
 
