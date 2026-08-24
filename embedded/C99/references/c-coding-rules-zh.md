@@ -41,7 +41,8 @@
 - 函数左大括号独占一行；
 - 控制语句左大括号放在语句行末；
 - 所有控制语句必须使用大括号；
-- `case/default` 缩进一级，并明确退出或 fallthrough；
+- 枚举定义中的每个枚举值必须逐项注释其具体含义；
+- `case/default` 缩进一级并明确 `break`、`return`；仅在有意 fallthrough 时允许省略退出语句，并在相邻 `case` 之间注明目标和原因；
 - 优先使用函数或 `static inline`，避免具有副作用的函数式宏。
 
 ```c
@@ -185,6 +186,8 @@ ResultCode i2c_set_callback(I2cContext *context,
 
 函数名长度、下划线数量、单词长度和原型参数数量可以作为后续 parser/lint 候选。本次规范不要求新增低可靠性的正则脚本；模块缩写、动作准确性、参数内聚性、单一职责、回调调用环境和生命周期继续由人工审查。
 
+项目编译器支持时，启用 `-Wimplicit-fallthrough` 或等效告警检测未标记贯穿；枚举值注释的语义准确性、贯穿必要性和注释目标/原因继续由人工审查。不得用只统计注释数量的正则检查冒充语义门禁。
+
 ## 文件组织
 
 新建或大幅重写项目自研 `.c` 文件时，优先采用：
@@ -201,6 +204,58 @@ ResultCode i2c_set_callback(I2cContext *context,
 不要写死年份、公司、作者或版权。新文件必须复用当前项目模板；没有模板时询问用户。
 
 ## 注释与修改记录
+
+### 注释位置
+
+注释应位于所说明代码的右侧，或紧邻放在其上方；不得把说明性注释放在代码下方。注释放在上方时，必须与更上方的代码空一行，并与下方被说明代码保持相同缩进。
+
+上方形式：
+
+```c
+/* Active statistic task number. */
+#define MAX_ACT_TASK_NUMBER 1000U
+```
+
+右侧形式：
+
+```c
+#define MAX_ACT_TASK_NUMBER 1000U /* Active statistic task number. */
+```
+
+### 枚举值
+
+枚举类型的整体注释不能替代枚举值的逐项说明。每个枚举值必须在右侧或紧邻上方注释其状态、事件、命令或错误语义；必要时补充进入条件、终态性质或副作用，禁止只重复枚举名。
+
+```c
+typedef enum
+{
+    MOTOR_STATE_IDLE = 0, /* Motor output is disabled and ready for a start request. */
+    MOTOR_STATE_RUN,      /* Closed-loop motor control is active. */
+    MOTOR_STATE_FAULT     /* Motor output is inhibited after a detected fault. */
+} MotorState;
+```
+
+### `switch` 有意贯穿
+
+`case` 默认必须以 `break`、`return` 或其他明确终止控制流的语句结束。仅在特殊处理后确需继续执行下一 `case` 时允许有意 fallthrough；注释必须位于当前 `case` 处理结束与下一 `case` 之间，紧邻下一 `case`，并明确写出有意贯穿、目标 `case` 和复用原因。
+
+```c
+switch (state) {
+    case MOTOR_STATE_RETRY:
+        motor_prepare_run();
+
+    /* Intentional fallthrough to MOTOR_STATE_RUN: reuse common run handling. */
+    case MOTOR_STATE_RUN:
+        motor_update();
+        break;
+
+    default:
+        motor_stop();
+        break;
+}
+```
+
+贯穿注释与下一 `case` 保持同级缩进，并通过与上一段处理代码之间的空行形成清晰边界。仅写 `/* fall through */` 而不说明目标和原因，不满足本规则。
 
 ### 函数头
 
@@ -272,6 +327,8 @@ if (command == NULL) {
 - 是否正确判断项目自研、自动生成或第三方代码；
 - 是否保持第三方和生成代码的实际编码及局部风格；
 - 项目自研新增或修改函数是否满足命名、4 空格和大括号规则；
+- 枚举定义是否逐项解释每个枚举值；注释是否位于代码右侧或紧邻上方，上方注释是否与前段代码空一行且同级缩进；
+- 每个 `case` 是否明确结束；有意 fallthrough 注释是否位于相邻 `case` 之间并写明目标和原因；
 - 新函数名是否不超过 32 个字符、默认不超过两个下划线、每个词不超过 12 个字符；模块短前缀是否统一且无歧义；
 - 动作词是否准确，是否误用禁用词或用模糊词掩盖多个职责；
 - 参数是否按上下文、输入、输出排列，缓冲区与长度相邻，输入指针正确使用 `const`，单位和生命周期明确；

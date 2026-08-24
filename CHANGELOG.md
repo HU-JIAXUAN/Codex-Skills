@@ -1,5 +1,12 @@
 # 更新日志
 
+## 2026-08-24
+
+### 更新 / Changed
+
+- **docs(c99)**：明确注释只能位于所说明代码的右侧或紧邻上方，上方注释须与前段代码空行并保持同级缩进；要求枚举值逐项说明具体含义，并要求有意 fallthrough 在相邻 `case` 之间注明目标和原因；clarify comment placement, per-enumerator meaning, and explicit target-and-reason documentation for intentional fallthrough.
+- **build(plugin)**：从已验证的干净 canonical source 重新生成 AiCoding Plugin，同步 C99 枚举与控制流注释规则并保持 `dirtySource=false`；regenerate the AiCoding package from the verified canonical source and preserve clean build metadata.
+
 ## 2026-08-21
 
 ### 更新 / Changed
