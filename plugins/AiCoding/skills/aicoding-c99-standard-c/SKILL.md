@@ -96,11 +96,16 @@ description: 编写、修改和评审 ISO C99 嵌入式固件模块、头文件�
 
 ### 函数命名
 
-- 函数名使用 `snake_case`。公共函数默认采用 `<module>_<verb>[_<object>]`，文件私有 `static` 函数可采用 `<verb>[_<object>]`；名称必须让首次阅读者能判断模块、动作和对象。
+- 函数名必须以要执行的动作命名，核心动作短语采用 `<verb>[_<object>]`；名称必须让首次阅读者能判断模块、动作和对象，不得写成英语长句或描述内部实现手段。
+- 函数名使用 `snake_case`。公共函数默认采用 `<module>_<verb>[_<object>]`，文件私有 `static` 函数可采用 `<verb>[_<object>]`；同一产品或项目必须保持统一命名风格。
+- 除常见通用缩写外使用完整英文单词，不得使用汉语拼音。常用单词的缩写必须统一，协议词汇的缩写与协议保持一致；系统专用缩写必须在项目命名表、模块文档或相邻注释中统一说明。
+- 通用缩写采用 `references/c-coding-rules-zh.md` 的统一表，包括 `arg/buff/clk/cmd/cmp/cfg/dev/err/hex/inc/init/max/msg/min/para/prev/reg/sem/stat/sync/tmp`；不得临时发明近义缩写或在同一接口族中混用不同写法。
 - 新函数名不得超过 32 个字符，默认不得超过两个下划线，每个下划线分隔词不得超过 12 个字符。多词模块需要动作和对象时，使用项目统一登记的短前缀，例如 `motor_control` 使用 `mc_set_target`，不得生成 `motor_control_set_target`；缩写必须稳定、无歧义且在同一模块内一致。
 - 优先使用 `init/cfg/get/set/read/write/check/clear/reset/start/stop/open/close/update/send/recv/parse/create/delete/save/load` 等常用动作。`finalize`、`commit`、`retrieve` 和 `instantiate` 不得用于新函数名；`manifest` 可作为 OTA、Bootloader 等领域中的正式名词使用。
 - `get` 表示取得模块已有值，`read` 表示主动读取硬件、存储或数据源，`peek` 表示查看但不消费；`set` 表示设置属性，`write` 表示写入硬件、存储或传输目标，`update` 表示按当前输入推进或重算状态。
 - 布尔查询使用 `is/has/can`；`process/handle/control/service/manager` 等模糊词不得单独充当动作，只有与明确模块或对象组合且不能使用更准确动作时才允许。
+- 互斥或相反动作使用统一的反义词组，例如 `add/remove`、`create/destroy`、`lock/unlock`、`open/close`、`start/stop` 和 `send/receive`；项目采用 `recv` 时在同一接口族中保持一致。
+- 函数指针除项目统一前缀或后缀外，动作和对象部分遵循函数命名规则；函数指针 `typedef` 作为类型时仍使用项目规定的类型命名风格。
 
 ### 函数入参
 
@@ -174,7 +179,7 @@ description: 编写、修改和评审 ISO C99 嵌入式固件模块、头文件�
 
 有意 fallthrough 应优先通过编译器的隐式贯穿告警（如 GCC/Clang `-Wimplicit-fallthrough` 或工具链等效项）阻断漏注释路径；枚举逐值注释是否准确、贯穿是否确有必要以及注释是否解释目标和原因，属于人工审查，不能仅凭注释存在性判定。
 
-函数名形态和原型参数数量可作为后续 parser/lint 候选；模块缩写是否清晰、动作词是否准确、参数是否内聚、职责是否单一、回调上下文和生命周期是否正确必须人工审查。项目尚无对应检查器时，明确记录为人工门禁，不得声称已由 CLI/Hook 自动阻塞。本 Skill 不要求为单次代码修改临时新增低可靠性的正则检查器。
+函数名形态和原型参数数量可作为后续 parser/lint 候选；动作词是否准确、缩写是否清晰、是否属于汉语拼音、协议或系统专用缩写是否一致，以及参数是否内聚、职责是否单一、回调上下文和生命周期是否正确，必须人工审查。项目尚无对应检查器时，明确记录为人工门禁，不得声称已由 CLI/Hook 自动阻塞。本 Skill 不要求为单次代码修改临时新增低可靠性的正则检查器。
 
 实现形式按项目现有工具优先选择：编译器 warning-as-error、`clang-tidy`、`cppcheck`、MISRA 工具、`pre-commit`、Git hook、构建脚本、自定义 Python/PowerShell/Ruby CLI 或 CI job。规则脚本必须有清晰的非零退出码、可读错误信息和最小复现输入；不能稳定自动判断的规则才保留为人工审查清单。
 

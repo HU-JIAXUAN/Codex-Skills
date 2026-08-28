@@ -5,6 +5,7 @@
 ### 更新 / Changed
 
 - **docs(c99)**：补充函数按动作命名、完整单词或统一缩写、禁止汉语拼音、协议与系统专用缩写治理、反义动作和函数指针命名规则，并加入 `arg/buff/clk/cmd/cmp/cfg/dev/err/hex/inc/init/max/msg/min/para/prev/reg/sem/stat/sync/tmp` 统一表；add action-oriented function naming, governed abbreviations, no-pinyin, protocol/system abbreviation, antonym, and function-pointer rules with one canonical abbreviation table.
+- **build(plugin)**：从已验证的干净 `7d095ec` canonical source commit 重新生成 AiCoding Plugin，同步函数动作命名与统一缩写规则并保持 `dirtySource=false`；regenerate the AiCoding package from the verified canonical source commit and preserve clean build metadata.
 
 ## 2026-08-24
 
