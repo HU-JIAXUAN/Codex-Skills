@@ -1,5 +1,11 @@
 # 更新日志
 
+## 2026-08-28
+
+### 更新 / Changed
+
+- **docs(c99)**：补充函数按动作命名、完整单词或统一缩写、禁止汉语拼音、协议与系统专用缩写治理、反义动作和函数指针命名规则，并加入 `arg/buff/clk/cmd/cmp/cfg/dev/err/hex/inc/init/max/msg/min/para/prev/reg/sem/stat/sync/tmp` 统一表；add action-oriented function naming, governed abbreviations, no-pinyin, protocol/system abbreviation, antonym, and function-pointer rules with one canonical abbreviation table.
+
 ## 2026-08-24
 
 ### 更新 / Changed

@@ -62,6 +62,41 @@ static ResultCode motor_control_start(MotorContext *context)
 
 ### 函数命名
 
+#### 清晰性与动作结构
+
+函数名必须清晰、明确，并以函数要执行的动作命名。移除可选模块前缀后，核心动作短语采用动词或“动词 + 名词”结构；不要为节约字符使用模糊字符，也不要把名称写成英语长句或内部实现步骤。
+
+公共函数默认采用 `<module>_<verb>[_<object>]`，文件私有 `static` 函数可采用 `<verb>[_<object>]`。同一产品或项目保持统一命名风格；本规范对项目自研新函数统一采用 `snake_case`。
+
+#### 缩写规则
+
+- 除常见通用缩写外使用完整英文单词，不得使用汉语拼音；
+- 较短的单词可以通过去掉元音形成缩写，较长的单词可以取开头若干字母；已有公认缩写时优先使用公认形式；
+- 同一完整单词在同一项目中只使用一种缩写，不得临时发明近义写法；
+- 协议词汇的缩写与协议保持一致，标识符大小写再按项目命名风格转换；
+- 系统专用缩写必须在项目命名表、模块文档或相邻注释中统一说明；
+- 稳定公共 API 不为套用新缩写表而批量重命名，迁移时单独评估兼容性。
+
+统一缩写表：
+
+| 完整单词 | 缩写 | 完整单词 | 缩写 |
+|---|---|---|---|
+| `argument` | `arg` | `buffer` | `buff` |
+| `clock` | `clk` | `command` | `cmd` |
+| `compare` | `cmp` | `configuration` | `cfg` |
+| `device` | `dev` | `error` | `err` |
+| `hexadecimal` | `hex` | `increment` | `inc` |
+| `initialize` | `init` | `maximum` | `max` |
+| `message` | `msg` | `minimum` | `min` |
+| `parameter` | `para` | `previous` | `prev` |
+| `register` | `reg` | `semaphore` | `sem` |
+| `statistic` | `stat` | `synchronize` | `sync` |
+| `temp` | `tmp` |  |  |
+
+本表是项目自研新代码的统一基线，优先于 `legacy-embedded-c99-skill.md` 中可能存在的历史多写法；稳定公共 API 仍按兼容性边界单独处理。
+
+#### 项目命名结构与长度
+
 新函数名同时满足：
 
 - 使用 `snake_case`；
@@ -98,6 +133,26 @@ static ResultCode motor_control_start(MotorContext *context)
 优先使用 `init/cfg/get/set/read/write/check/clear/reset/start/stop/open/close/update/send/recv/parse/create/delete/save/load` 等常用动作。新函数名不得使用 `finalize`、`commit`、`retrieve`、`instantiate`；分别选用语义更明确的 `end/close`、`save/write/apply`、`get/read`、`create/init`。`manifest` 是 OTA、Bootloader 等领域中的正式名词，可以在 `manifest_check` 等名称中使用。
 
 `process/handle/control/service/manager` 不得脱离明确模块或对象单独充当动作。若 `foe_process` 这类名称仍是项目内最准确的状态机入口，可以保留；不得用模糊词掩盖多个职责。
+
+#### 反义动作与函数指针
+
+互斥或相反动作使用统一的反义词组：
+
+| 动作 | 反向动作 | 动作 | 反向动作 |
+|---|---|---|---|
+| `add` | `remove` | `begin` | `end` |
+| `create` | `destroy` | `insert` | `delete` |
+| `first` | `last` | `get` | `release` |
+| `increment` | `decrement` | `put` | `get` |
+| `add` | `delete` | `lock` | `unlock` |
+| `open` | `close` | `min` | `max` |
+| `old` | `new` | `start` | `stop` |
+| `next` | `previous` | `source` | `target` |
+| `show` | `hide` | `send` | `receive` |
+| `source` | `destination` | `copy` | `paste` |
+| `up` | `down` |  |  |
+
+项目采用 `recv` 作为 `receive` 的缩写时，在同一接口族中保持一致。函数指针除项目统一前缀或后缀外，动作和对象部分遵循函数命名规则；函数指针 `typedef` 作为类型时仍按类型命名规则使用 `PascalCase`。
 
 ### 函数入参
 
@@ -184,7 +239,7 @@ ResultCode i2c_set_callback(I2cContext *context,
 
 ### 门禁边界
 
-函数名长度、下划线数量、单词长度和原型参数数量可以作为后续 parser/lint 候选。本次规范不要求新增低可靠性的正则脚本；模块缩写、动作准确性、参数内聚性、单一职责、回调调用环境和生命周期继续由人工审查。
+函数名长度、下划线数量、单词长度和原型参数数量可以作为后续 parser/lint 候选。本次规范不要求新增低可靠性的正则脚本；动作是否准确、缩写是否清晰、是否属于汉语拼音、协议或系统专用缩写是否一致，以及参数内聚性、单一职责、回调调用环境和生命周期，继续由人工审查。
 
 项目编译器支持时，启用 `-Wimplicit-fallthrough` 或等效告警检测未标记贯穿；枚举值注释的语义准确性、贯穿必要性和注释目标/原因继续由人工审查。不得用只统计注释数量的正则检查冒充语义门禁。
 
@@ -330,6 +385,9 @@ if (command == NULL) {
 - 枚举定义是否逐项解释每个枚举值；注释是否位于代码右侧或紧邻上方，上方注释是否与前段代码空一行且同级缩进；
 - 每个 `case` 是否明确结束；有意 fallthrough 注释是否位于相邻 `case` 之间并写明目标和原因；
 - 新函数名是否不超过 32 个字符、默认不超过两个下划线、每个词不超过 12 个字符；模块短前缀是否统一且无歧义；
+- 函数名是否采用动词或“动词 + 名词”的核心动作结构，是否避免英语长句和内部实现步骤；
+- 是否只使用完整英文单词或统一缩写，未使用汉语拼音；协议和系统专用缩写是否有一致依据；
+- 函数指针的动作和对象是否遵循函数命名规则，反向操作是否使用统一的反义词组；
 - 动作词是否准确，是否误用禁用词或用模糊词掩盖多个职责；
 - 参数是否按上下文、输入、输出排列，缓冲区与长度相邻，输入指针正确使用 `const`，单位和生命周期明确；
 - 超过 5 个参数时是否完成接口审查，结构体是否确实代表稳定内聚的参数组；
