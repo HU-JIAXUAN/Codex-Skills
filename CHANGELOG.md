@@ -1,5 +1,12 @@
 # 更新日志
 
+## 2026-09-14
+
+### 更新 / Changed
+
+- **docs(external-skill)**：核对 `mattpocock/skills` 上游最新稳定版仍为 `v1.2.3`（`6acc160e4e0cd062dbbbd7a1b26ae92855edf07e`），正式 plugin 清单的 25 个 engineering/productivity Skills 与 `config/external-skill-bindings.json` 完全一致；本次保留既有外部 gitlink、绑定和上游源码。 / Confirms the pinned stable release and all 25 published Skill bindings without changing the upstream source or gitlink.
+- **docs(runtime-skills)**：记录配套 AiCoding `config/codex-kit.json` 的 `profiles.full.standaloneSkills` 从 11 个 Matt Pocock Skill 扩展到全部 25 个，并通过 `runtime-skill` lifecycle 补齐 14 个独立 junction：`ask-matt`、`grill-with-docs`、`handoff`、`implement`、`improve-codebase-architecture`、`setup-matt-pocock-skills`、`teach`、`to-questionnaire`、`to-spec`、`to-tickets`、`triage`、`wait-what`、`wayfinder`、`wizard`。保留其他 standalone Skill，上游 `misc` / `in-progress` 不启用；严格运行时审计确认 25 个目标有效、无重复名称、无断链。 / Records the paired AiCoding runtime expansion from 11 to all 25 published Matt Pocock Skills, with 14 managed links added and unpublished directories excluded.
+
 ## 2026-08-28
 
 ### 更新 / Changed
