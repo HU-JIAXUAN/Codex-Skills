@@ -260,46 +260,63 @@ ResultCode i2c_set_callback(I2cContext *context,
 
 ## 注释与修改记录
 
-### 注释位置
+### 普通说明与分区标记
 
-注释应位于所说明代码的右侧，或紧邻放在其上方；不得把说明性注释放在代码下方。注释放在上方时，必须与更上方的代码空一行，并与下方被说明代码保持相同缩进。
-
-上方形式：
+普通说明使用 `/* 注释内容 */`，默认写直白中文，末尾不加句号。注释位于对应代码右侧或紧邻上方，上方注释与前一段代码空一行，并和下方代码保持同级缩进。
 
 ```c
-/* Active statistic task number. */
+/* 统计任务的数量上限 */
 #define MAX_ACT_TASK_NUMBER 1000U
+
+#define CURRENT_SAMPLE_HZ 20000U /* 电流采样频率，单位Hz */
 ```
 
-右侧形式：
+分区标题、重点代码段可以使用大块星号或星号分割线，不将它们与普通单行说明混用。分割线本身不能替代函数或参数的含义说明。
 
 ```c
-#define MAX_ACT_TASK_NUMBER 1000U /* Active statistic task number. */
+/************************ 电流环计算 ************************/
+/* 使用限幅后的总电压，避免积分继续向饱和方向增长 */
+current_update();
 ```
+
+默认不为普通说明添加Doxygen标记或格式标签。只有项目明确要求生成Doxygen文档时才使用相应格式；历史参考和旧模板不能覆盖用户当前要求。第三方、自动生成代码保持原有风格，不为统一注释而批量改写。
+
+### 参数和结构体字段
+
+先说明用途，再给单位和必要范围；用户设置与模块维护的运行数据要区分。容易误用的比例或尺度给一个填写例子，不用术语或变量名的中文翻译代替说明。
+
+```c
+typedef struct {
+    double periodS;    /* 调用周期，单位s；20kHz填0.00005 */
+    double amplitudeA; /* 电流变化峰值，单位A；填0.2表示最大变化0.2A */
+    double riseRatio;  /* 上升段占周期的比例；填0.2表示用周期的前20%上升 */
+} SignalConfig;
+```
+
+运行状态写清保存什么、何时更新、是否需要用户填写。例如“已经输出多少个点，由计算函数更新，用户不用赋值”。涉及多路或中断时说明具体访问方式，例如“两路分别使用两个变量，同一路不要同时在任务和中断中计算”。
 
 ### 枚举值
 
-枚举类型的整体注释不能替代枚举值的逐项说明。每个枚举值必须在右侧或紧邻上方注释其状态、事件、命令或错误语义；必要时补充进入条件、终态性质或副作用，禁止只重复枚举名。
+每个枚举值在右侧或紧邻上方说明具体含义。类型整体说明不能替代逐项解释，不只重复枚举名。
 
 ```c
-typedef enum
-{
-    MOTOR_STATE_IDLE = 0, /* Motor output is disabled and ready for a start request. */
-    MOTOR_STATE_RUN,      /* Closed-loop motor control is active. */
-    MOTOR_STATE_FAULT     /* Motor output is inhibited after a detected fault. */
+typedef enum {
+    MOTOR_STATE_IDLE = 0, /* 电机未使能，可以接收启动请求 */
+    MOTOR_STATE_RUN,      /* 正在运行闭环控制 */
+    MOTOR_STATE_FAULT     /* 已发生故障，禁止电机输出 */
 } MotorState;
 ```
 
 ### `switch` 有意贯穿
 
-`case` 默认必须以 `break`、`return` 或其他明确终止控制流的语句结束。仅在特殊处理后确需继续执行下一 `case` 时允许有意 fallthrough；注释必须位于当前 `case` 处理结束与下一 `case` 之间，紧邻下一 `case`，并明确写出有意贯穿、目标 `case` 和复用原因。
+`case`通常以`break`或`return`结束；有意继续执行下一`case`时，在两个`case`之间明确目标和原因，并与下一`case`同级缩进。
 
 ```c
 switch (state) {
     case MOTOR_STATE_RETRY:
         motor_prepare_run();
 
-    /* Intentional fallthrough to MOTOR_STATE_RUN: reuse common run handling. */
+    /* fall through：继续执行MOTOR_STATE_RUN，复用已准备好的运行处理 */
     case MOTOR_STATE_RUN:
         motor_update();
         break;
@@ -310,58 +327,38 @@ switch (state) {
 }
 ```
 
-贯穿注释与下一 `case` 保持同级缩进，并通过与上一段处理代码之间的空行形成清晰边界。仅写 `/* fall through */` 而不说明目标和原因，不满足本规则。
+纯粹的分割星号不能作为贯穿说明。编译器需要的`fall through`标识可以保留，后面补中文的目标和原因。
 
 ### 函数头
 
-项目自研代码中的所有函数必须有函数头注释。沿用项目现有 Doxygen 格式；没有格式时使用：
+简单函数用一句用途说明。参数、返回值或调用条件不直观时，用普通多行注释补充信息，不加每行星号或Doxygen标签。
 
 ```c
-/**
- * @brief Start motor control.
- * @param[in,out] context Motor context; must not be NULL.
- * @return RESULT_OK on success; an error code otherwise.
- * @note Callable from task context only.
- */
+/*
+    启动电机控制
+    context 保存电机运行数据，不能为NULL
+    返回0表示成功，负值表示参数或状态有误
+    只能从任务调用
+*/
+int motor_start(MotorContext *context);
 ```
 
 ### 函数内部
 
-每个函数内部必须包含有意义的注释，说明阶段、设计意图、边界条件、硬件时序、同步关系或非显然取舍。对简单函数可以用一条整体意图注释；复杂函数按逻辑块注释。禁止 `i++; /* i 加 1 */` 这类机械翻译。
+复杂逻辑说明关键步骤、计算依据、边界或硬件时序。简单函数若已能从名称和函数头看懂，不强制再放内部注释。禁止`i++; /* i加1 */`这类逐行翻译。
 
 ```c
-/* Validate the command before changing shared motor state. */
+/* 先检查命令，避免错误输入覆盖当前有效设置 */
 if (command == NULL) {
     return RESULT_INVALID_ARGUMENT;
 }
 ```
 
-### 新增或大幅修改函数
+### 修改与问题追溯
 
-补充可追溯记录，作者必须来自用户、仓库配置或既有记录；无法确定时询问。
+默认通过Git提交、CHANGELOG或项目已有任务记录追溯作者、日期、原因。不要自动在每个函数前生成Modification History、Bug Fix和版本表。只有项目明确需要代码内记录时才按要求补充，并保持普通注释简洁，不虚构元数据。
 
-```c
-/*
- * Modification History
- * Date         Author      Reason
- * YYYY-MM-DD   <author>    <why this function was added or changed>
- */
-```
-
-关键缺陷修复可补充：
-
-```c
-/*
- * Bug Fix
- * Date   : YYYY-MM-DD
- * Author : <author>
- * Issue  : <observed symptom>
- * Cause  : <root cause>
- * Fix    : <implemented correction>
- */
-```
-
-不要删除已有有效注释；代码变化时同步更新过期注释。
+代码内保留对维护有用的原因，例如“状态必须在写入完成后再发布，避免另一个执行者读到未完成的数据”。不要只写“原子发布”而不说明当前代码保证了什么。
 
 ## 安全性与可移植性
 
@@ -394,8 +391,9 @@ if (command == NULL) {
 - 返回值是否区分失败和业务布尔状态，输出是否只在成功后有效；
 - 函数职责、副作用、阻塞性、可重入性和调用上下文是否明确，复杂度指标是否作为审查信号而非机械拆分目标；
 - 回调是否明确调用者、执行上下文、上下文对象和事件数据生命周期，并支持多实例和非阻塞约束；
-- 每个函数是否有函数头和内部意图注释；
-- 新增或大改函数是否记录作者、日期和原因；
+- 函数是否有必要用途说明，复杂逻辑是否说明计算依据；简单函数没有内部注释不单独判错；
+- 字段是否说明作用、单位/范围和必要例子，用户填写的数据与模块维护的状态是否区分；
+- 普通注释是否使用简易格式，分区或重点星号是否有助于阅读；变更是否可从现有记录追溯；
 - 是否覆盖或伪造版权、作者、年份；
 - 返回值和外部输入是否校验；
 - 是否存在宏副作用、指针截断或 `size_t` 未检查缩窄；

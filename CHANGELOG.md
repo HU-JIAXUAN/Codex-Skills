@@ -9,6 +9,8 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从已提交的5d70799技能源码生成38项正式插件技能，其中电机套件21项；保持dirtySource=false，核验Codex实际技能发现与完整资源。 / Builds 38 bundled skills from committed sources, including all 21 motor-control entries, with runtime discovery verification.
+
 - **fix(c99-comments)**：普通注释默认使用简易中文块说明，不附Doxygen标签或句末句号；允许星号分区和重点标记，参数字段写清作用、单位和例子，移除默认函数历史表模板。 / Uses plain Chinese comments by default while allowing section banners and keeping field documentation practical.
 
 - **fix(markdown)**：本地链接校验排除围栏代码和数学文本，避免将C二维数组或矩阵公式误判成引用链接；补充真实坏链接与代码/数学回归。 / Excludes fenced code and mathematics from reference-link parsing with regression coverage.

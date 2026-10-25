@@ -1,0 +1,4 @@
+interface:
+  display_name: 伺服性能验证
+  short_description: 定义伺服产品指标与工况，执行三条算法纵向链并输出可复现的分层验证证据
+  default_prompt: 使用 $aicoding-servo-validation 分析当前工程，给出方法选择、代码接入和可复现验证。

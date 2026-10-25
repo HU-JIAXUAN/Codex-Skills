@@ -1,0 +1,4 @@
+interface:
+  display_name: "伺服摩擦补偿"
+  short_description: "辨识方向和温度相关摩擦，设计平滑过零补偿并分离重力、齿槽和残差"
+  default_prompt: "请使用 $aicoding-servo-friction-compensation，依据现有模型和证据完成伺服摩擦补偿并说明成立范围。"

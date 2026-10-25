@@ -1,0 +1,4 @@
+interface:
+  display_name: "电机参数辨识"
+  short_description: "电机参数辨识：从模型、时序与边界推导实现并建立可复现的工程验证"
+  default_prompt: "请用 $aicoding-motor-parameter-identification 分析当前工程并给出可验证的设计或修改。"
