@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "name": "电机控制技能套件",
+  "knowledgeDomain": "motor-control",
+  "description": "方法选择、理论依据、实现与工程验证；源目录集中管理，运行包按独立技能展开。",
+  "codeAssets": [
+    "modules/common/controller/Signal generator",
+    "examples/servo-validation"
+  ],
+  "skills": [
+    {
+      "source": ".",
+      "target": "aicoding-motor-control",
+      "title": "电机控制集成",
+      "enabled": true,
+      "include": [
+        "SKILL.md",
+        "agents",
+        "references",
+        "assets"
+      ]
+    },
+    {
+      "source": "系统辨识/电机参数辨识",
+      "target": "aicoding-motor-parameter-identification",
+      "title": "电机参数辨识",
+      "enabled": true
+    },
+    {
+      "source": "电机算法/无传感器电机控制",
+      "target": "aicoding-motor-sensorless-control",
+      "title": "无传感器电机控制",
+      "enabled": true
+    },
+    {
+      "source": "电机算法/电机反馈与标定",
+      "target": "aicoding-motor-feedback-calibration",
+      "title": "电机反馈与标定",
+      "enabled": true
+    },
+    {
+      "source": "自动控制/控制器设计/伺服控制器设计",
+      "target": "aicoding-servo-controller-design",
+      "title": "伺服控制器设计",
+      "enabled": true
+    },
+    {
+      "source": "工程应用/伺服性能验证",
+      "target": "aicoding-servo-validation",
+      "title": "伺服性能验证",
+      "enabled": true
+    },
+    {
+      "source": "电机算法/最大转矩电流比与弱磁控制",
+      "target": "aicoding-pmsm-mtpa-field-weakening",
+      "title": "最大转矩电流比与弱磁控制",
+      "enabled": true
+    },
+    {
+      "source": "电机算法/逆变器死区补偿",
+      "target": "aicoding-inverter-deadtime-compensation",
+      "title": "逆变器死区补偿",
+      "enabled": true
+    },
+    {
+      "source": "电机算法/电流环解耦与电压前馈",
+      "target": "aicoding-pmsm-dq-decoupling",
+      "title": "电流环解耦与电压前馈",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/伺服速度前馈",
+      "target": "aicoding-servo-velocity-feedforward",
+      "title": "伺服速度前馈",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/伺服转矩前馈",
+      "target": "aicoding-servo-torque-feedforward",
+      "title": "伺服转矩前馈",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/运动轨迹规划",
+      "target": "aicoding-motion-trajectory-planning",
+      "title": "运动轨迹规划",
+      "enabled": true
+    },
+    {
+      "source": "系统辨识/伺服频响辨识",
+      "target": "aicoding-servo-frequency-response",
+      "title": "伺服频响辨识",
+      "enabled": true
+    },
+    {
+      "source": "自动控制/控制器设计/伺服自动整定",
+      "target": "aicoding-servo-auto-tuning",
+      "title": "伺服自动整定",
+      "enabled": true
+    },
+    {
+      "source": "自动控制/补偿与观测/伺服振动抑制",
+      "target": "aicoding-servo-vibration-suppression",
+      "title": "伺服振动抑制",
+      "enabled": true
+    },
+    {
+      "source": "自动控制/补偿与观测/伺服扰动观测",
+      "target": "aicoding-servo-disturbance-observer",
+      "title": "伺服扰动观测",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/伺服摩擦补偿",
+      "target": "aicoding-servo-friction-compensation",
+      "title": "伺服摩擦补偿",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/齿槽与转矩纹波补偿",
+      "target": "aicoding-servo-torque-ripple-compensation",
+      "title": "齿槽与转矩纹波补偿",
+      "enabled": true
+    },
+    {
+      "source": "伺服算法/双反馈伺服控制",
+      "target": "aicoding-servo-dual-feedback-control",
+      "title": "双反馈伺服控制",
+      "enabled": true
+    },
+    {
+      "source": "自动控制/经典控制/频域分析与环路设计",
+      "target": "aicoding-control-frequency-analysis",
+      "title": "频域分析与环路设计",
+      "enabled": true
+    },
+    {
+      "source": "系统辨识/激励信号设计",
+      "target": "aicoding-excitation-signal-design",
+      "title": "激励信号设计",
+      "enabled": true
+    }
+  ]
+}

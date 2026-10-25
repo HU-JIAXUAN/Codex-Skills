@@ -17,6 +17,39 @@ PLACEHOLDER = re.compile(r"\{\{[^{}]+\}\}")
 EXTERNAL = ("http://", "https://", "mailto:", "tel:", "data:")
 
 
+def prose_only(markdown: str, *, keep_inline_text: bool = False) -> str:
+    """Exclude fenced code and math from link syntax without changing line layout."""
+    lines: list[str] = []
+    fence: tuple[str, int] | None = None
+    display_math = False
+    for line in markdown.splitlines(keepends=True):
+        stripped = line.lstrip()
+        marker = re.match(r"(`{3,}|~{3,})(.*)", stripped)
+        if fence is not None:
+            if marker and marker[1][0] == fence[0] and len(marker[1]) >= fence[1] and not marker[2].strip():
+                fence = None
+            lines.append("\n" if line.endswith("\n") else "")
+            continue
+        if marker:
+            fence = (marker[1][0], len(marker[1]))
+            lines.append("\n" if line.endswith("\n") else "")
+            continue
+        if stripped.strip() == "$$":
+            display_math = not display_math
+            lines.append("\n" if line.endswith("\n") else "")
+            continue
+        if display_math:
+            lines.append("\n" if line.endswith("\n") else "")
+            continue
+        if keep_inline_text:
+            line = re.sub(r"(`+)(.+?)\1", r"\2", line)
+        else:
+            line = re.sub(r"(`+)(.+?)\1", "", line)
+            line = re.sub(r"(?<!\\)\$(?!\$)(?:\\.|[^$\n])*(?<!\\)\$", "", line)
+        lines.append(line)
+    return "".join(lines)
+
+
 def anchor(text: str) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     text = re.sub(r"[`*_~]", "", text).strip().lower()
@@ -27,7 +60,7 @@ def anchor(text: str) -> str:
 def anchors(markdown: str) -> set[str]:
     counts: dict[str, int] = {}
     found: set[str] = set()
-    for _, title in HEADING.findall(markdown):
+    for _, title in HEADING.findall(prose_only(markdown, keep_inline_text=True)):
         base = anchor(title)
         index = counts.get(base, 0)
         found.add(base if index == 0 else f"{base}-{index}")
@@ -48,10 +81,11 @@ def validate(path: Path) -> list[str]:
     for item in PLACEHOLDER.findall(text):
         errors.append(f"{path}: unresolved placeholder {item}")
 
-    definitions = {key.lower(): value for key, value in REF_DEF.findall(text)}
-    targets = [clean(x) for x in INLINE.findall(text)]
+    prose = prose_only(text)
+    definitions = {key.lower(): value for key, value in REF_DEF.findall(prose)}
+    targets = [clean(x) for x in INLINE.findall(prose)]
 
-    for label, key in REF_USE.findall(text):
+    for label, key in REF_USE.findall(prose):
         lookup = (key or label).lower()
         if lookup not in definitions:
             errors.append(f"{path}: missing reference [{lookup}]")

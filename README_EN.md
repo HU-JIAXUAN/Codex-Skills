@@ -53,6 +53,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 | Path | Purpose |
 |---|---|
 | `embedded/` | Embedded firmware skill family. |
+| [Motor and servo skills](embedded/motorcontrol/README.md) | 21 Chinese UI skills with implementation references and three vertical validation cases. |
 | `standalone/` | Curated local Skills: JSON Canvas, MCP Builder, Obsidian Bases/CLI/Markdown, Visio Diagram, and Webapp Testing. |
 | `platform/aicoding-git-governance/` | Git-Skill source, canonical standard, governance templates, lint templates, and release validators. |
 | `platform/aicoding-kit-maintenance/` | Codex-Skills/AiCoding architecture, plugin packaging, submodule, hook, and completion-gate maintenance workflow. |

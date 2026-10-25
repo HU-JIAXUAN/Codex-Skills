@@ -1,0 +1,4 @@
+interface:
+  display_name: "伺服自动整定"
+  short_description: "设计可重复运行的伺服整定器与候选搜索流程，处理约束、质量、验收与回退"
+  default_prompt: "请使用 $aicoding-servo-auto-tuning，依据现有模型和证据完成伺服自动整定并说明成立范围。"

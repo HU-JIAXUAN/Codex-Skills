@@ -1,0 +1,4 @@
+interface:
+  display_name: "伺服扰动观测"
+  short_description: "建立带单位和明确符号的DOB与ESO，处理实际执行量、噪声和补偿重复"
+  default_prompt: "请使用 $aicoding-servo-disturbance-observer，依据现有模型和证据完成伺服扰动观测并说明成立范围。"

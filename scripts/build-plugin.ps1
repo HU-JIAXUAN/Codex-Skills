@@ -62,11 +62,66 @@ function Normalize-GeneratedTextFiles([string]$Path) {
     }
 }
 
-function Copy-SkillSource($RepoRoot, $SourceRel, $TargetDir, [bool]$RootOnly) {
+function Resolve-ContainedPath([string]$Base, [string]$Relative) {
+    if ([string]::IsNullOrWhiteSpace($Relative) -or [System.IO.Path]::IsPathRooted($Relative)) {
+        throw "Expected a relative source path: $Relative"
+    }
+    $basePath = [System.IO.Path]::GetFullPath($Base).TrimEnd([char[]]'\/')
+    $fullPath = [System.IO.Path]::GetFullPath((Join-Path $basePath $Relative))
+    if ($fullPath -ne $basePath -and -not $fullPath.StartsWith($basePath + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "Source path escapes its root: $Relative"
+    }
+    return $fullPath
+}
+
+function Resolve-PackEntries($RepoRoot, $Config) {
+    $entries = New-Object 'System.Collections.Generic.List[object]'
+    foreach ($entry in $Config.skills) {
+        if ($entry.enabled -ne $false) { $entries.Add($entry) }
+    }
+    foreach ($kit in $Config.skillKits) {
+        if ($kit.enabled -eq $false) { continue }
+        $kitPath = Resolve-ContainedPath $RepoRoot $kit.source
+        $kitConfig = [System.IO.File]::ReadAllText($kitPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+        if ($kitConfig.schemaVersion -ne 1) { throw "Unsupported skillkit schema: $($kit.source)" }
+        $kitRoot = Split-Path -Parent $kitPath
+        foreach ($entry in $kitConfig.skills) {
+            if ($entry.enabled -eq $false) { continue }
+            $sourcePath = Resolve-ContainedPath $kitRoot $entry.source
+            $sourceRel = $sourcePath.Substring($RepoRoot.Length).TrimStart([char[]]'\/') -replace '\\','/'
+            $entries.Add([pscustomobject]@{
+                source = $sourceRel; target = $entry.target
+                rootOnly = [bool]$entry.rootOnly; include = $entry.include
+            })
+        }
+    }
+    $targets = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+    foreach ($entry in $entries) {
+        if ($entry.target -notmatch '^aicoding-[a-z0-9][a-z0-9-]*$') { throw "Plugin skill target must use aicoding- prefix: $($entry.target)" }
+        if (-not $targets.Add($entry.target)) { throw "Duplicate plugin skill target: $($entry.target)" }
+        $sourcePath = Resolve-ContainedPath $RepoRoot $entry.source
+        if (-not (Test-Path -LiteralPath (Join-Path $sourcePath 'SKILL.md') -PathType Leaf)) { throw "Missing skill source: $($entry.source)" }
+        if ($entry.rootOnly -and $null -ne $entry.include -and @($entry.include).Count -gt 0) { throw "rootOnly and include are mutually exclusive: $($entry.source)" }
+        foreach ($item in $entry.include) {
+            $includePath = Resolve-ContainedPath $sourcePath $item
+            if ($includePath -eq $sourcePath -or -not (Test-Path -LiteralPath $includePath)) { throw "Invalid skill include: $($entry.source)/$item" }
+        }
+    }
+    return $entries.ToArray()
+}
+
+function Copy-SkillSource($RepoRoot, $SourceRel, $TargetDir, [bool]$RootOnly, $IncludePaths) {
     $src = Join-Path $RepoRoot $SourceRel
     if (-not (Test-Path -LiteralPath $src)) { throw "Skill source not found: $SourceRel" }
     New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
-    if ($RootOnly) {
+    if ($null -ne $IncludePaths -and @($IncludePaths).Count -gt 0) {
+        foreach ($item in $IncludePaths) {
+            $includePath = Resolve-ContainedPath $src $item
+            $destination = Resolve-ContainedPath $TargetDir $item
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
+            Copy-Item -LiteralPath $includePath -Destination $destination -Recurse -Force
+        }
+    } elseif ($RootOnly) {
         Get-ChildItem -LiteralPath $src -File | Where-Object { $_.Name -notlike '*.bak*' -and $_.Extension -ne '.zip' } | ForEach-Object {
             Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $TargetDir $_.Name) -Force
         }
@@ -102,10 +157,11 @@ function Get-SourceDirty([string]$RepoRoot) {
 
 $repoRoot = Get-RepoRoot
 $configPath = Join-Path $repoRoot 'config/aicoding-plugin-pack.json'
-$config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
-$pluginPath = Join-Path $repoRoot $config.plugin.path
-$skillsTarget = Join-Path $pluginPath 'skills'
-$stagingRoot = Join-Path $repoRoot ".build/$Plugin/staging"
+$config = [System.IO.File]::ReadAllText($configPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+$packEntries = @(Resolve-PackEntries $repoRoot $config)
+$pluginPath = Resolve-ContainedPath $repoRoot $config.plugin.path
+$skillsTarget = Resolve-ContainedPath $pluginPath 'skills'
+$stagingRoot = Resolve-ContainedPath $repoRoot ".build/$Plugin/staging"
 $stagingSkills = Join-Path $stagingRoot 'skills'
 
 $actions = @(
@@ -114,7 +170,7 @@ $actions = @(
     "Generate $($config.plugin.path)/BUILDINFO.json"
 )
 if ($DryRun) {
-    [pscustomobject]@{ plugin=$config.plugin.name; configuration=$Configuration; actions=$actions } | ConvertTo-Json -Depth 5
+    [pscustomobject]@{ plugin=$config.plugin.name; configuration=$Configuration; actions=$actions; skillCount=$packEntries.Count; skills=$packEntries } | ConvertTo-Json -Depth 6
     exit 0
 }
 
@@ -125,13 +181,11 @@ if ($Configuration -eq 'Release' -and (Get-SourceDirty $repoRoot)) {
 if (Test-Path -LiteralPath $stagingRoot) { Remove-Item -LiteralPath $stagingRoot -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $stagingSkills | Out-Null
 
-foreach ($entry in $config.skills) {
-    if ($entry.enabled -eq $false) { continue }
-    if ($entry.target -notmatch '^aicoding-[a-z0-9][a-z0-9-]*$') { throw "Plugin skill target must use aicoding- prefix: $($entry.target)" }
+foreach ($entry in $packEntries) {
     $targetDir = Join-Path $stagingSkills $entry.target
     $rootOnly = $false
     if ($entry.PSObject.Properties.Name -contains 'rootOnly') { $rootOnly = [bool]$entry.rootOnly }
-    Copy-SkillSource $repoRoot $entry.source $targetDir $rootOnly
+    Copy-SkillSource $repoRoot $entry.source $targetDir $rootOnly $entry.include
     Set-SkillName $targetDir $entry.target
 }
 
@@ -153,6 +207,10 @@ $sourceTag = (@(& git -C $repoRoot tag --points-at HEAD) | Select-Object -First 
 $commitTime = (& git -C $repoRoot show -s --format=%cI HEAD).Trim()
 $pluginManifest = Join-Path $pluginPath '.codex-plugin/plugin.json'
 $hooksDir = Join-Path $pluginPath 'hooks'
+$packInputs = [ordered]@{ 'config/aicoding-plugin-pack.json' = (Get-FileSha256 $configPath) }
+foreach ($kit in $config.skillKits) {
+    if ($kit.enabled -ne $false) { $packInputs[$kit.source] = Get-FileSha256 (Resolve-ContainedPath $repoRoot $kit.source) }
+}
 $buildInfo = [ordered]@{
     pluginName = $config.plugin.name
     pluginVersion = (Get-Content -Raw -LiteralPath $pluginManifest | ConvertFrom-Json).version
@@ -162,6 +220,7 @@ $buildInfo = [ordered]@{
     buildTimestampUtc = ([datetimeoffset]::Parse($commitTime).UtcDateTime.ToString('o'))
     buildInfoModel = 'non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests'
     packManifestHash = Get-FileSha256 $configPath
+    packInputHashes = $packInputs
     pluginManifestHash = Get-FileSha256 $pluginManifest
     skillsDigest = Get-TreeDigest $skillsTarget
     hooksDigest = Get-TreeDigest $hooksDir

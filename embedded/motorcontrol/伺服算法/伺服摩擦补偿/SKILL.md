@@ -1,0 +1,30 @@
+---
+name: aicoding-servo-friction-compensation
+description: 辨识和设计伺服库仑、粘性、Stribeck及必要的动态摩擦补偿，处理低速、过零、温度、方向、标定残差和限幅。用于换向误差、爬行与摩擦前馈；输出摩擦模型/候选转矩，不负责最终前馈合成或把齿槽和重力误归为摩擦。
+---
+
+# 伺服摩擦补偿
+
+默认使用中文。先读取任务相关资料，按需加载参考；不将未实测候选写成产品已验证能力。
+
+## Skill 类型
+
+`reusable-domain-knowledge`、`team-expertise`。本技能保存可复用模型、设计判断与验证方法。
+
+## 使用方式
+
+1. 先确认电流尺度、转矩映射、传动坐标、机械释放和基线闭环；读取辨识参考定义方向、速度和温度采样。
+2. 优先从库仑加粘性或平滑Stribeck起步；只有数据存在可复现预滑移/迟滞且收益明确时才引入动态模型。
+3. 读取运行参考定义过零平滑、低速死区、模型版本、输出幅度/斜率和使能过渡；输出摩擦转矩模型给 aicoding-servo-torque-feedforward 合成。
+4. 比较关闭/开启的换向误差、速度纹波、实际电流与残差，区分理论拟合、离线回放和板测；未解释的周期位置误差交 aicoding-servo-torque-ripple-compensation。
+
+## 按需参考
+
+- [摩擦辨识与模型选择](references/identification_and_models_zh.md)：模型、成立条件与常用设计。
+- [过零运行、转矩接口与验收](references/runtime_reversal_validation_zh.md)：运行接口、失败表现和可观察验证。
+
+## 组合与输出边界
+
+本技能输出摩擦转矩模型及有效范围，最终合成由转矩前馈技能完成；不接管抱闸、堵转保护、轨迹规划或把位置周期扰动全部解释成摩擦。
+
+与其他算法组合时，按名称定位 `aicoding-motor-control` 的 `references/control_contracts_zh.md`，核对单位、坐标、时间戳、总限幅、状态与证据等级。当前环境缺该参考时，先显式写清本任务对应契约，不依赖跨技能相对路径。涉及C实现结合C99技能，涉及数值与滤波实现结合DSP技能。

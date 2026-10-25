@@ -1,0 +1,4 @@
+interface:
+  display_name: "频域分析与环路设计"
+  short_description: "从Bode图与带宽、稳定裕度到三环离散设计，核对延迟、噪声和模型变化"
+  default_prompt: "使用 $aicoding-control-frequency-analysis 分析当前电机控制环路，解释指标并给出可实现、可验证的设计。"

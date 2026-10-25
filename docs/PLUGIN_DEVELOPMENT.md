@@ -24,6 +24,8 @@ Manual plugin sources:
 - `plugins/AiCoding/README.md`
 - `config/aicoding-plugin-pack.json`
 
+Motor-control sources form one nested kit under embedded/motorcontrol/. Its skillkit.json owns relative member paths and resource includes. The global config/aicoding-plugin-pack.json remains the authority for selecting kits and direct skills; scripts/build-plugin.ps1 expands enabled members into flat runtime skills. The integration member uses an explicit include list so nested skills are not copied twice. BUILDINFO records hashes for both the global manifest and enabled kit manifests.
+
 Generated plugin outputs:
 
 - `plugins/AiCoding/skills/`

@@ -30,11 +30,6 @@
       "enabled": true
     },
     {
-      "source": "embedded/motorcontrol",
-      "target": "aicoding-motor-control",
-      "enabled": true
-    },
-    {
       "source": "embedded/os",
       "target": "aicoding-os",
       "enabled": true
@@ -101,5 +96,11 @@
     "**/__pycache__/**",
     "**/*.bak*",
     "**/*.zip"
+  ],
+  "skillKits": [
+    {
+      "source": "embedded/motorcontrol/skillkit.json",
+      "enabled": true
+    }
   ]
 }

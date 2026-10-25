@@ -1,5 +1,20 @@
 # 更新日志
 
+## 2026-10-25
+
+### 新增 / Added
+
+- **feat(motor-servo)**：形成21个中文显示名称的电机/高性能伺服技能入口（保留兼容的ASCII技术ID），新增20个专项及各自方法选择、公式/离散实现、调参与工程验证references；覆盖参数辨识、反馈/无传感器、MTPA/弱磁、死区、dq解耦、前馈、轨迹、频响/整定、抑振/观测、摩擦/纹波与双反馈。 / Adds 20 specialized skills alongside the existing integration skill, with Chinese UI names and implementation references.
+- **feat(validation)**：增加离线CSV误差/停稳/电流指标工具与自检，并定义外部CodingKit三条严格C99纵向案例的接入与证据边界。 / Adds offline metrics and contracts for three C99 host validation chains.
+
+### 更新 / Changed
+
+- **fix(c99-comments)**：普通注释默认使用简易中文块说明，不附Doxygen标签或句末句号；允许星号分区和重点标记，参数字段写清作用、单位和例子，移除默认函数历史表模板。 / Uses plain Chinese comments by default while allowing section banners and keeping field documentation practical.
+
+- **fix(markdown)**：本地链接校验排除围栏代码和数学文本，避免将C二维数组或矩阵公式误判成引用链接；补充真实坏链接与代码/数学回归。 / Excludes fenced code and mathematics from reference-link parsing with regression coverage.
+- **fix(motor-contracts)**：统一峰值/RMS、磁链与增量电感、异步反馈年龄、前馈求和点、最终调制约束与抗饱和评价点；采样策略按工程证据推荐，避免强制逐周期新编码器帧和不必要追问。 / Clarifies units, models, timing, realizability and anti-windup contracts.
+- **build(motor-skillkit)**：技能、refs与套件配置集中到embedded/motorcontrol，增加经典频域设计与激励设计，参数辨识归系统辨识；构建器支持套件展开与资源include。推送前通过标准构建器生成全部成员，并验证运行时发现、资源完整性与Git门禁。 / Consolidates 21 skills into a nested source kit and verifies packaging, runtime discovery and publication gates.
+
 ## 2026-09-14
 
 ### 更新 / Changed
