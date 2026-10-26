@@ -2,7 +2,15 @@
 
 ## 选择方法
 
-线性回归、低算力优先从带遗忘因子的RLS开始；模型非线性或状态不可测时再评估EKF/MRAS。更复杂的估计器不能修复不可辨识实验。独立辨识某参数前说明其余参数如何取得，不能把标称值当精确常数。
+先按实验与用途选择，不按估计器名称选择：
+
+| 已确认条件 | 动作与唯一资产 | 拒绝或降级 |
+|---|---|---|
+| 离线、固定Ts、转子静止/反电势可忽略，且有区间内实际ZOH电压与配对电流 | 复用 `modules/common/controller/motor` 的 `mc_rl_init`、`mc_rl_add`、`mc_rl_fit`；批量精确ZOH RL只需固定大小统计量，不必为了低算力改成RLS | 秩不足、周期/版本不一致、窗口无效或电压仍是未执行命令时拒绝发布；先修实验 |
+| 确有运行中参数漂移，目标参数可由当前激励分离，数据/计算预算及发布限速已有约束 | 再评估遗忘RLS；先检查现有工程或SDK是否已有合格实现 | 本资产未提供通用在线RLS，不能把批量RL接口当作RLS；冻结时保留可信结果与年龄 |
+| 非线性模型、不可测状态或高相关参数 | 先确认可观测/可辨识性，再评估EKF/MRAS/预测误差方法 | 增加状态和估计器阶数不能补回缺失信息，也不能消除未知逆变器电压误差 |
+
+独立辨识某参数前说明其余参数如何取得，不能把标称值当精确常数。以下RLS方程属于高级方法说明，不表示仓库已经有对应正式实现。
 
 单输出RLS的离散更新为：
 
@@ -19,42 +27,11 @@ $\lambda\in(0,1]$；P为归一化参数协方差量。多输出按所建噪声�
 
 例：静止已补偿电压，取 $y=u$、$\phi=i$，即估计R；多级正负电流排除常量压降影响。若器件电压偏差随电流符号变化，应增加合理的压降项或先单独标定；简单增广不保证满秩。
 
-## C99边界
+## 正式C99边界
 
-下面是接口形状，不是完整库：状态由调用者持有，各轴/电机独立，无硬件读写和动态内存。
+当前唯一可执行子集是 `motor.h` 的 `McRlConfig/McRlSample/McRl/McRlResult` 与 `mc_rl_init/add/fit`，独立真值、噪声/秩拒绝及留出集测试在同目录 `run_tests.py`。`mc_rl_add` 只接收已配对区间；`mc_rl_fit` 返回参数、秩比和一步残差，调用方仍须在不同数据上独立验收。不要把曾用于讨论的 `id_update/id_get_result` 设计名当作仓库函数，也不在Skill里维护第二份估计器。
 
-```c
-#include <stdbool.h>
-#include <stdint.h>
-typedef struct {
-    float rsOhm;
-    float ldH;
-    float lqH;
-    float fluxWb;
-    uint32_t version;
-} MotorParams;
-typedef struct {
-    float udV;
-    float uqV;
-    float idA;
-    float iqA;
-    float omegaERadS;
-    uint32_t cycleId;
-    bool voltageValid;
-    bool currentValid;
-} IdSample;
-typedef struct {
-    float value[4];
-    float covariance[4][4];
-    MotorParams accepted;
-    uint32_t acceptedSampleId;
-} IdState;
-typedef enum { ID_OK, ID_NO_EXCITATION, ID_BAD_INPUT } IdStatus;
-/** 推进本轴实例估计；有效性失败时冻结，不改活动控制参数。 */
-IdStatus id_update(IdState *state, const IdSample *sample);
-```
-
-实际实现补充显式错误枚举和带限维数的上下文；`id_update`只消费配对样本，`id_get_result`同时返回可信度、工况和参数版本。返回失败时不部分覆盖活动参数。
+在线RLS若需新增，先登记目标参数、模型、归一化、状态维数、错误与发布契约，并用独立对象比较现有批量基线；接口必须消费有效配对样本并返回可信度、工况和版本。返回失败时不部分覆盖活动参数。
 
 插入点：FOC采样快照/实际电压估计 → 降频辨识 → 独立接受判据 → 版本化影子参数 → 控制周期边界原子切换。RLS不应抢占硬实时控制链；参数更新不得同时改变电流标度、角度零点等无关契约。
 
@@ -66,4 +43,4 @@ IdStatus id_update(IdState *state, const IdSample *sample);
 
 ## 来源与证据
 
-欠秩/病态和逆变器依赖来自已核读的《永磁同步电机参数辨识》书p21–22、27、32、41。RLS更新为标准线性回归推导，本次未核读该书第10章算法正文；不得把这里的接口与算例标成作者原代码或板测结果。
+来源身份与核读范围见 `aicoding-motor-control` 的 `references/research_provenance.json`：`B-PARAM-ZHU` 用于欠秩/病态和逆变器依赖，`P-RPEM-PERERA` 用于目标参数与实验准入。RLS更新为标准线性回归推导，未核读书中第10章算法正文；不得把本页说明写成作者原代码或板测结果。

@@ -47,7 +47,11 @@ PWM 同步事件
 
 明确电流、角度和速度的采样时刻、有效性与数据年龄，以及PWM输出生效时刻；`cycle_id`是可选实现手段。测量deadline、overrun和jitter，允许可解释的异步采集与多速率。先读取[公共控制契约](references/control_contracts_zh.md)，时序细节读取 `references/pwm_adc_encoder_timing_zh.md`。
 
+真实 MCU、编译配置、PWM/ADC/反馈事件、ISR 路径和 Shadow 截止的只读分析使用 `aicoding-motor-hardware-deployment`。已知计算先执行确定性工具；不得将静态调用路径或指令估计写成实测 WCET。
+
 ### 3. 选择采样和更新策略
+
+默认优先硬件PWM/定时器触发ADC，并让支持锁存/触发的反馈接口关联同一时基；对无法外部触发的编码器保留物理采样时间与年龄。单/双/三电阻按实际安装位置、开关状态与稳定窗口选择，调用公共工程执行契约中的拓扑规则与工具，不凭电阻数量推断波谷/波峰均可采样。
 
 在波谷、波峰、双采单更和双采双更之间，根据采样窗口、ADC 带宽、计算时间和 shadow load 点选择。用户未给出足够数据时，列出推荐起点、成立条件和需要测量的参数，不武断指定高复杂度方案。
 
@@ -100,6 +104,7 @@ PWM 同步事件
 
 | 当前问题 | 中文技能名称与技术ID |
 |---|---|
+| 真实工程目标、PWM/ADC/ISR、Shadow截止与WCET证据 | 电机控制实机部署与实时验证 `aicoding-motor-hardware-deployment` |
 | Bode、带宽、裕度、离散环路综合 | 频域分析与环路设计 aicoding-control-frequency-analysis |
 | 激励波形、频段/幅值/时长与信息量 | 激励信号设计 aicoding-excitation-signal-design |
 | 参数未知、辨识结果不可信 | 电机参数辨识 `aicoding-motor-parameter-identification` |
@@ -117,3 +122,7 @@ PWM 同步事件
 | 产品指标、对照数据与验收 | 伺服性能验证 `aicoding-servo-validation` |
 
 能力缺失时说明当前可用资产，仍可按已确定的契约给出接口与最小实现。跨模块集成遵循“一个补偿项一个所有者”，逐层传递速度、转矩/电流与最终可实现电压约束。
+
+## 可执行工程入口
+
+按[工程执行契约与能力映射](references/engineering_execution_zh.md)定位每个专项的唯一 C99 资产、Golden Reference、测试入口和未实现变体。数值核心位于 CodingKit 的 `modules/common/controller/motor`，复用既有 FOC/PI/I-f；工程配置与时序工具位于 `tools/motor-engineering`。通过批准的资产发现协议定位它们，不复制进插件，不假设安装缓存与源码相邻。运行 `motor/run_tests.py`、Go `go test ./...` 及相关 `servo-validation` 组合案例后，只报告实际通过的证据等级。

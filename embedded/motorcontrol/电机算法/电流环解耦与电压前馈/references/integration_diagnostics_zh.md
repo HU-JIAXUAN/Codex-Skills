@@ -1,38 +1,14 @@
 # 补偿集成、总限幅与交叉轴验证
 
-## C99接口与插入点
+## 正式C99实现与插入点
 
-```c
-#include <stdint.h>
-#include <stdbool.h>
-typedef struct {
-    float idA;
-    float iqA;
-    float omegaERadS;
-    uint32_t cycleId;
-    bool valid;
-} DqSample;
-typedef struct {
-    float udV;
-    float uqV;
-    bool valid;
-} DqVoltage;
-typedef struct {
-    float ldH;
-    float lqH;
-    float fluxWb;
-} DqFfParams;
-typedef enum { DQFF_OK, DQFF_BAD_INPUT } DqFfStatus;
-/** 根据同一时刻的反馈计算电压；失败不覆盖out，不访问硬件。 */
-DqFfStatus dqff_update(const DqFfParams *params, const DqSample *sample,
-                      DqVoltage *out);
-```
+通过批准的资产发现协议定位 CodingKit 的 `modules/common/controller/motor`，直接使用 `motor.h` 中的 `mc_dq_ff`；唯一实现为 `motor.c`，独立数值与组合入口为 `python run_tests.py`。参数是 `McMotor`，输入/输出为已有 `FocDq`，速度为带符号电角速度 rad/s。不要按旧接口草图新建 `dqff_update` 或复制变换、PI、SVPWM。
 
-`dqff_update`接收同一时间基准的快照及只读参数版本，输出纯补偿；不读取速度PI全局、不写PWM、不修改电流PI积分。若使用LUT，接口同时校验坐标、范围与版本，显式报告越界；不默认外推。
+调用前由集成层校验样本有效性、物理采样/使用时刻及整个参数快照版本；纯函数只计算常参数模型的补偿电压，失败保持输出不变，不读取全局、不写PWM、不改PI积分。磁链LUT尚不是该函数能力；需要时先复用当前工程已验证的实现，并另外校验坐标、范围与版本，不能给常参数函数换个名字就宣称支持交叉饱和。
 
 推荐链：有效采样 → Park → 电流PI → 叠加dq前馈 → 限压/调制 → 实际电压估计 → 下拍模型/抗饱和。死区补偿也会消耗电压，要在最终调制层统一统计。限幅策略可以圆形等比或轴优先，但应匹配弱磁目标，不能按轴独立夹紧后宣称满足圆约束。
 
-一种归一化回算抗饱和形式：
+正式 `pid_pi_eval` 先形成本拍积分候选，`pid_pi_track` 再按可实现的PI分量提交状态；不得在它外面重复加一次 `Ki*Ts*e`。以下回算式是另一种方法的状态说明，不是当前PI接口的第二实现：
 
 $$
 x_{I,k+1}=x_{I,k}+K_iT_se_k+K_{aw}T_s(u_{applied,est,k}-u_{raw,k}).
@@ -59,4 +35,4 @@ $$
 
 源码/主机测试证明符号、单位、边界与时序算法；离散闭环仿真证明所用模型下性能；板上需测真实采样与生效时刻及交叉响应。没有后两层证据时报告为设计/仿真结果。
 
-来源：本页为已声明dq模型的工程推导；诸自强等书p7、27、32、41用于参数、逆变器和辨识误差边界，[MathWorks官方补偿模型](https://www.mathworks.com/help/mcb/ref/pmsmfeedforwardcontrol.html)用于符号交叉核对。
+来源身份与核读范围见 `aicoding-motor-control` 的 `references/research_provenance.json`：`B-PARAM-ZHU` 用于参数与逆变器误差边界；正式实现/真值以 CodingKit 对应资产为准。[MathWorks官方补偿模型](https://www.mathworks.com/help/mcb/ref/pmsmfeedforwardcontrol.html)用于符号交叉核对。

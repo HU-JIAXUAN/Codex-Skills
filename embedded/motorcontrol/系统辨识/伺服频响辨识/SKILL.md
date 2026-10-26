@@ -28,3 +28,9 @@ description: 规划、分析和验证伺服频率响应测量，区分对象、�
 输出原始数据契约、复数FRF、可信频段和候选模型；不会把测量本身称作整定完成，也不输出未经设计验证的滤波器系数。
 
 与其他算法组合时，按名称定位 `aicoding-motor-control` 的 `references/control_contracts_zh.md`，核对单位、坐标、时间戳、总限幅、状态与证据等级。当前环境缺该参考时，先显式写清本任务对应契约，不依赖跨技能相对路径。涉及C实现结合C99技能，涉及数值与滤波实现结合DSP技能。
+
+## 可执行工程入口
+
+按技能名定位 `aicoding-motor-control` 的 `references/engineering_execution_zh.md`，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+复用正式 `Signal generator`，通过 `mc_frf` 计算离线整周期单频 DFT 的 Y/U 幅相并拒绝无激励/非整周期记录。Welch/H1/H2/相干性与闭环偏差估计尚需专项实现，单记录不能生成相干性或无偏闭环声明。

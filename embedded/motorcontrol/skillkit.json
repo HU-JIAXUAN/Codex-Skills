@@ -4,8 +4,14 @@
   "knowledgeDomain": "motor-control",
   "description": "方法选择、理论依据、实现与工程验证；源目录集中管理，运行包按独立技能展开。",
   "codeAssets": [
+    "modules/common/controller/motor",
+    "modules/common/controller/pid",
+    "modules/common/controller/foc",
+    "modules/common/controller/IF",
+    "modules/common/controller/filter/巴特沃兹二阶滤波器",
     "modules/common/controller/Signal generator",
-    "examples/servo-validation"
+    "examples/servo-validation",
+    "tools/motor-engineering"
   ],
   "skills": [
     {
@@ -48,6 +54,12 @@
       "source": "工程应用/伺服性能验证",
       "target": "aicoding-servo-validation",
       "title": "伺服性能验证",
+      "enabled": true
+    },
+    {
+      "source": "工程应用/电机控制实机部署与实时验证",
+      "target": "aicoding-motor-hardware-deployment",
+      "title": "电机控制实机部署与实时验证",
       "enabled": true
     },
     {

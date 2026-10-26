@@ -1,5 +1,18 @@
 # 更新日志
 
+## 2026-10-26
+
+### 新增 / Added
+
+- **feat(motor-engineering)**：新增电机控制实机部署与实时验证，MotorControl保留21项原路由并扩为22项；公共工程契约关联唯一C99算法/Golden与Go源码、时序、采样窗口工具，按L1—L7区分证据和未实现变体。 / Adds hardware deployment analysis and executable engineering contracts without duplicating algorithm sources.
+- **feat(current-sampling)**：默认推荐硬件PWM/定时器触发ADC与反馈同一时基；补单电阻、双/三低侧及inline的窗口、重构、错拍和降级规则，并核对实际QEP/BiSS锁存边界。 / Adds evidence-backed synchronization and shunt sampling/reconstruction rules.
+- **test(motor-contract)**：路由与生成资源检查验证公共事实只打包一次；来源索引记录教材核读页、论文阅读范围、开源Commit/符号/许可证，未测硬件仍为NOT_MEASURED。 / Adds route/resource checks and scoped source provenance.
+- **feat(local-engineering-evidence)**：深读本地TI文章/教材/离散频域资料，对照ODrive、ODRI、STM32及F28388D工程，补充13条条件→动作→验收规则；修正9份专项参考中的伪接口和离散顺序歧义，优先适配已有控制链、PI、CLA与低通资产。 / Adds local source-backed decision rules and removes misleading implementation contracts.
+
+### 构建 / Build
+
+- 本次生成Development候选包，不更新AiCoding子模块、不刷新已安装插件、不创建发布或实机通过声明。 / Generates a development candidate only; installation and hardware evidence remain separate.
+
 ## 2026-10-25
 
 ### 新增 / Added

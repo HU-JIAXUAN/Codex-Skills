@@ -15,6 +15,8 @@ $$
 
 ## C99插入点
 
+下列 `current_ref_update` 是完整转矩分配/动态弱磁的方法设计草图，仓库没有该正式函数。已存在的 `mc_mtpa` 只解常参数固定电流幅值MTPA，`mc_torque` 计算模型转矩，`mc_check_limits` 检查稳态约束；三者不能冒充完整FW/MTPV控制器。先复用当前工程/原始SDK中匹配器件与磁模型的正式分配器，没有时明确实现缺口并单独验收。
+
 ```c
 #include <stdbool.h>
 #include <stdint.h>

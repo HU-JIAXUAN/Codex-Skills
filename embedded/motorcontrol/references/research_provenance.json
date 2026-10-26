@@ -1,0 +1,1070 @@
+{
+  "schema_version": 1,
+  "audited_on": "2026-10-26",
+  "scope": "本文件补充既有 repo_reference_matrix_motor_zh.md；记录本轮实际核读，不代表完整文献综述或目标工程验证。",
+  "evidence_boundary": {
+    "source_review": "CONFIRMED",
+    "upstream_build": "NOT_MEASURED",
+    "target_wcet": "NOT_MEASURED",
+    "hardware_measurement": "NOT_MEASURED",
+    "code_reuse": "只提取思想、公式约束与反例；本轮未复制第三方算法源码。"
+  },
+  "reading_status_values": ["FULL_TEXT", "PARTIAL_TEXT", "ABSTRACT_ONLY", "METADATA_ONLY", "NOT_RETRIEVED"],
+  "local_asset_resolution": {
+    "motor_study_root": "调用方提供本地 Motor Control 学习资料目录；下列路径相对此根，不依赖插件缓存位置。",
+    "c2000ware_root": "调用方提供已安装 C2000Ware_6_00_01_00 根；版本来自本轮实际安装，不是目标工程默认。",
+    "motor_sdk_root": "调用方提供已安装 C2000Ware_MotorControl_SDK_6_00_00_00 根。",
+    "controlsuite_root": "调用方提供controlSUITE根；旧DMC示例只作有明确版本的比较源。",
+    "f28388d_project_root": "调用方提供本轮核验的f28388d_clb_bissc工程根；先复核commit和文件摘要。",
+    "codingkit_root": "调用方通过既有外部资产发现取得CodingKit根；不把源仓库目录当运行包邻居。",
+    "identity_rule": "优先核对 SHA256；同名目录不证明版本。缺文件返回 INSUFFICIENT_EVIDENCE。"
+  },
+  "sources": [
+    {
+      "id": "B-PARAM-ZHU",
+      "kind": "local_book",
+      "title": "永磁同步电机参数辨识",
+      "authors": ["诸自强", "刘侃", "梁大为"],
+      "edition": "中文版2026年1月第1版；CIP为2025.10；原著版权2025",
+      "isbn": "9787111793960",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/电机工程经典书系13册/永磁同步电机参数辨识_9787111793960.pdf",
+      "sha256": "1fa793c9b431dbc560c92d5056d13ae14dfa0b992be88ce00e370b204b9b8de6",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF2–3：书目/版次", "PDF28=书7：式1.8–1.11", "PDF42–43=书21–22：2.1欠秩", "PDF48=书27：2.2逆变器非线性", "PDF53=书32：式2.23", "PDF62=书41：2.3病态"],
+      "checked_content": "抽取正文并渲染复核PDF28公式。增量电感用于微分项，视在电感用于磁链/速度项；稳态两个方程不能同时确定四个独立参数；满秩仍需检查条件数及端电压误差。",
+      "engineering_use": "RL辨识必须固定模型/激励并独立留出验证；磁饱和时禁止把单一常数L当作全工况真值。",
+      "limits": "未精读全书；没有把书中样机结果当成本项目实验。"
+    },
+    {
+      "id": "B-PRACTICE-LI",
+      "kind": "local_book",
+      "title": "电机控制算法实战",
+      "authors": ["李贵", "童维勇"],
+      "edition": "2024年8月第1版第1次印刷",
+      "isbn": "9787121482632",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/电机控制算法实战_李贵.pdf",
+      "sha256": "14b1800aba26374ae46454f1b2e1ada598b5945108cfbd523a5780388c240ddc",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF2–3：书目/版次", "PDF34–37=书25–28：2.1、电压椭圆、MTPA/MTPV", "PDF43–44=书34–35：最高效率与标定表"],
+      "checked_content": "抽取上述正文并渲染复核PDF35。电压椭圆基于稳态、忽略Rs的近似；MTPA还受电压与电流约束；最小铜耗不等于全系统最高效率。",
+      "engineering_use": "统一peak/RMS约定后自行推导数值基准；该书转矩式采用系数3，不能直接与peak-amplitude契约的1.5混用。LUT必须绑定母线、温度、速度与参数有效域。",
+      "limits": "未读取配套源码；未将理论电磁转矩等同轴端实测转矩。"
+    },
+    {
+      "id": "D-TI-F2838X-TRM",
+      "kind": "vendor_manual",
+      "title": "TMS320F2838x Real-Time Microcontrollers With Connectivity Manager Technical Reference Manual",
+      "edition": "SPRUII0F, revised June 2024",
+      "url": "https://www.ti.com/lit/ug/spruii0f/spruii0f.pdf",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/TI/1.电机控制/DSP/4 TMS320F28388D芯片资料/28388用户手册.pdf",
+      "sha256": "d0c19a293663e116cc80f1558450bae5865e9ad9d8435fc3340f1745089dcece",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF1：版本", "PDF2575–2576：20.3 SOC/采样窗", "PDF2596–2602：20.12、表20-10/20-11/20-12、并行ADC", "PDF2910–2915：26.4时基/周期/影子", "PDF2919–2922：同步与计数模式"],
+      "checked_content": "正文抽取，并渲染复核PDF2601表格。单向计数周期=(TBPRD+1)/TBCLK；上下计数周期=2*TBPRD/TBCLK。ADC采样窗=(ACQPS+1)/SYSCLK，转换时基为ADCCLK。",
+      "engineering_use": "精确数据可读时刻查tLAT，不能把ADCINT、EOC、下一个SOC可启动和结果锁存当成同一事件。多ADC并行需触发、采样窗、优先级及队列条件一致。",
+      "limits": "本手册只适用匹配的F2838x器件及版本；不是所有C2000的通用周期表。"
+    },
+    {
+      "id": "D-TI-F28388D-DATASHEET",
+      "kind": "vendor_datasheet",
+      "title": "TMS320F28388D / F28386D datasheet",
+      "url": "https://www.ti.com/lit/gpn/tms320f28388d",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["7.12.2.2 ePWM timing：在线索引的原厂表项", "TI原厂答复946691：F28388D ePWMCLK上限"],
+      "supporting_url": "https://e2e.ti.com/support/microcontrollers/c2000/f/c2000-microcontrollers-forum/946691/tms320f28388d-doesn-t-get-maximum-clock-frequency-for-e-pwm",
+      "checked_content": "F28388D允许最高200MHz EPWMCLK；实际项目仍需识别SYSCLK及EPWMCLK分频。",
+      "engineering_use": "不得从其他C2000器件默认100MHz，也不得用器件上限替代实际工程配置。",
+      "limits": "未精读数据手册全部模拟性能/温度/输入源阻抗限制；最小采样时间必须针对目标分辨率再核对。"
+    },
+    {
+      "id": "S-TI-DRIVERLIB",
+      "kind": "vendor_source",
+      "title": "C2000Ware F2838x driverlib",
+      "version": "6.00.01.00",
+      "asset_root": "c2000ware_root",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "driverlib/f2838x/driverlib/adc.h", "sha256": "1eced050787a821ed639507934f383e956aafd3dd6f1c8e6a5c126df6b2a670e", "symbols": ["ADC_setupSOC", "ADC_setInterruptPulseMode", "ADC_setPrescaler"], "checked_lines": "482–547, 598–640"},
+        {"path": "driverlib/f2838x/driverlib/epwm.h", "sha256": "a7a8d769eb79a96e67b0ec0a75ed3375ee4389a3d4f66fc43ad6c98b81f3dfc7", "symbols": ["EPWM_ClockDivider", "EPWM_HSClockDivider"], "checked_lines": "149–185"},
+        {"path": "driverlib/f2838x/driverlib/sysctl.h", "sha256": "ff6b756fe6573b24b0e2db5e070e2c127ff02a60b9e99cdab352404853f939a4", "symbols": ["SYSCTL_EPWMCLK_DIV_1", "SYSCTL_EPWMCLK_DIV_2"], "checked_lines": "916–917"},
+        {"path": "driverlib/f2838x/driverlib/eqep.h", "sha256": "fd66df320f5407e2d647f8ed269bb3cab6defe2b2f3136d4b89837345deff8ee", "symbols": ["EQEP_setStrobeSource", "EQEP_setLatchMode", "EQEP_getStrobePositionLatch", "EQEP_getPositionLatch"], "checked_lines": "279–292, 1464–1510, 1561–1590, 1683–1719"}
+      ],
+      "checked_content": "ADC_setupSOC的sampleWindow已是SYSCLK周期数，写寄存器时减1；寄存器ACQPS直写值则必须加1。CLKDIV与HSPCLKDIV的编码表不同。",
+      "license": "TI软件集合总许可不代表每个组件；复用前核对目标文件头和C2000Ware manifest。本轮只读取接口语义。",
+      "limits": "driverlib注释对late脉冲的概括不能替代芯片TRM的具体tLAT/tINT表及silicon errata。"
+    },
+    {
+      "id": "S-TI-PI",
+      "kind": "vendor_source",
+      "title": "C2000Ware MotorControl SDK PI",
+      "version": "6.00.00.00",
+      "asset_root": "motor_sdk_root",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [{"path": "libraries/control/pi/include/pi.h", "sha256": "62992599abb4454f0d7788502478c713a9645bb1eb55205aacbdf91ce7d6ad19", "symbols": ["PI_run_parallel", "PI_run_series"], "checked_lines": "1–70, 530–622"}],
+      "checked_content": "串联结构先形成Up再用Ki*Up更新积分；存在积分限幅及输出前馈/输出限幅，Ki语义不能与并联连续域积分增益直接混用。",
+      "license": "所核pi.h文件头为BSD-3-Clause形式；C28x/CLA intrinsic和其他依赖另行核对。",
+      "engineering_use": "以已有CodingKit PI为唯一自维护实现，TI仅作参数语义和状态更新顺序的交叉参考。",
+      "limits": "未构建该SDK示例、未证明CLA/FCL在目标工程可用。"
+    },
+    {
+      "id": "P-RPEM-PERERA",
+      "kind": "author_paper",
+      "title": "Recursive Prediction Error Gradient-Based Algorithms and Framework to Identify PMSM Parameters Online",
+      "authors": ["Aravinda Perera", "Roy Nilsen"],
+      "year": 2022,
+      "doi": "10.48550/arXiv.2209.05094",
+      "url": "https://arxiv.org/html/2209.05094v1",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["I–III：模型、欠秩、实验设计、式1–11与Remark1–5"],
+      "method": "预测误差梯度RPEM，比较SG/Gauss-Newton/物理增益及按速度调度",
+      "assumptions": "已知Ld/Lq、机械位置可用；将预测误差主要归于目标参数失配；电阻和磁链在不同速度区域的信息量不同。",
+      "contribution": "显式选择模型集、实验、代价函数、搜索方向和增益；将辨识条件与算法名称分开。",
+      "implementation_cost": "比固定RL最小二乘多预测器/梯度状态、增益调度和调参；Gauss-Newton还需矩阵计算。",
+      "advantage": "可追踪温度敏感参数；无需据此替换更简单且已可辨识的离线RL估计。",
+      "limits": "arXiv DOI不是已核验的IEEE期刊DOI；本文未精读全部实验。高速显式Euler预测器稳定性需另验。"
+    },
+    {
+      "id": "P-FRACTIONAL-DELAY-HU",
+      "kind": "author_paper",
+      "title": "Digital Current Control for Permanent Magnet Synchronous Machine Drives With Fractional-Step Computation Delay",
+      "authors": ["Mingjin Hu", "Wei Liu", "Shuangxia Niu", "Xin Yuan", "K. T. Chau"],
+      "year": 2026,
+      "journal": "IEEE Transactions on Transportation Electrification 12(1):641–651",
+      "doi": "10.1109/TTE.2025.3619989",
+      "url": "https://ira.lib.polyu.edu.hk/handle/10397/116302",
+      "full_text_url": "https://ira.lib.polyu.edu.hk/bitstream/10397/116302/1/Hu_Digital_Current_Control.pdf",
+      "sha256": "785cbaadc2ccc0520bf99ac14cf90da2f4a531fa864be0dd7e69eea1be5c02f6",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["作者接受稿PDF1–4：I、II.A–D、图1–5、式1–10"],
+      "method": "Ts=nTh、Tc=mTh的分数拍延迟离散模型；互补零点分配与双更新",
+      "assumptions": "每Ts内电角速度/反电势近似恒定；每Th的αβ电压作ZOH；确定性更新序列与充足执行窗口。",
+      "contribution": "揭示分数拍延迟带来的dq传递零点，分开保持坐标、计算延迟和PWM更新模式。",
+      "implementation_cost": "多次电压序列/坐标转换、缓存及参数化矩阵，增加集成/算力/内存成本。",
+      "advantage": "针对低载波比和分数拍延迟提供比连续dq解耦更具体的模型。",
+      "limits": "只核建模正文；未实现或复现其控制器、未核全部实验，因此不能承诺相同带宽/解耦收益。"
+    },
+    {
+      "id": "P-DOB-CHEN",
+      "kind": "publisher_paper",
+      "title": "Disturbance-Observer-Based Control and Related Methods—An Overview",
+      "authors": ["Wen-Hua Chen", "Jun Yang", "Lei Guo", "Shihua Li"],
+      "year": 2016,
+      "journal": "IEEE Transactions on Industrial Electronics 63(2):1083–1095; online 2015",
+      "doi": "10.1109/TIE.2015.2478397",
+      "url": "https://doi.org/10.1109/TIE.2015.2478397",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["出版社索引正文片段：I.B Basic Idea and Features、II相关段落；直接网页有反机器人限制"],
+      "method": "DOB/ESO等总扰动估计与补偿综述",
+      "assumptions": "标称模型、稳定Q滤波器/观察器误差动力学及可用实际输入；不同方法的可证明条件不同。",
+      "contribution": "区分外部扰动和模型不确定性，强调其常被合并为总扰动。",
+      "implementation_cost": "滤波器/观察器状态与噪声-带宽权衡；高增益不能消除采样/延迟/饱和限制。",
+      "advantage": "适合统一比较DOB/ESO的归属与信号契约。",
+      "limits": "未获得可完整核读的出版PDF；不能把总扰动直接发布为唯一摩擦参数或独立负载转矩真值。"
+    },
+    {
+      "id": "P-MORIMOTO-LIMITS",
+      "kind": "publisher_paper",
+      "title": "Expansion of operating limits for permanent magnet motor by current vector control considering inverter capacity",
+      "authors": ["S. Morimoto", "Y. Takeda", "T. Hirasa", "K. Taniguchi"],
+      "year": 1990,
+      "journal": "IEEE Transactions on Industry Applications 26(5):866–871",
+      "doi": "10.1109/28.60058",
+      "url": "https://doi.org/10.1109/28.60058",
+      "discovery_url": "https://cir.nii.ac.jp/crid/1363107371233237504",
+      "reading_status": "METADATA_ONLY",
+      "checked_locations": ["CiNii书目及摘要索引用于定位DOI；IEEE原页面不可访问，未从出版社核摘要或正文"],
+      "method": "在电流/电压及退磁限制下选择电流矢量",
+      "assumptions": "具体磁模型和退磁边界尚需正文核验。",
+      "contribution": "为弱磁约束研究提供经典入口。",
+      "implementation_cost": "本轮未从正文核定；不得填造数字成本。",
+      "advantage": "未据摘要判定优于既有MTPA/弱磁实现。",
+      "limits": "只作待读文献，不以二次索引支撑技术结论；当前实现公式由独立推导和已核教材支撑。"
+    },
+    {
+      "id": "S-VESC-PINNED",
+      "kind": "open_source",
+      "repository": "https://github.com/vedderb/bldc",
+      "commit": "fe81765df98528f84f7a95e2a71b53543366795b",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [{"path": "motor/mcpwm_foc.c", "sha256": "88b82407e82c35d1f02c3e01a032e47085e46e0164b9c7d9a3a8e018636bcfa3", "symbols": ["mcpwm_foc_adc_int_handler", "control_current", "update_valpha_vbeta", "foc_svm", "TIMER_UPDATE_DUTY_M1"], "checked_lines": "2875–2993, 3682, 4574–4715, 4730–4775, 4985–5025, 5054–5120"}],
+      "call_chain": ["mcpwm_foc_adc_int_handler", "control_current(motor_now, dt)", "dq PI + selectable cross/BEMF feedforward", "d-priority vector limiting", "inverse Park / foc_svm", "TIMER_UPDATE_DUTY_M1"],
+      "license": "GPL-3.0-or-later，已核mcpwm_foc.c文件头；本轮未复制代码。",
+      "checked_content": "交叉项用实际电流与电角速度；d轴优先限压再限定q轴。update_valpha_vbeta中死区项用于电压重建，4730行明确不是用来控制开关时刻。",
+      "engineering_use": "与指令电流前馈实现进行噪声/动态误差对照；检验限压几何及最终残差所有者。",
+      "limits": "编译条件/硬件变体未全展开；没有对VESC跑构建、测试或WCET测量。"
+    },
+    {
+      "id": "S-ODRIVE-PINNED",
+      "kind": "open_source",
+      "repository": "https://github.com/odriverobotics/ODrive",
+      "commit": "3a2e4dd1bfbda9e4c534d5c7d8428a99c361e783",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "Firmware/MotorControl/foc.cpp", "sha256": "349e387856d162a4f19ee3919ec95cb7d1635ac3c99bce676f99b2790e22f1ca", "symbols": ["FieldOrientedController::update", "FieldOrientedController::on_measurement", "FieldOrientedController::get_alpha_beta_output"], "checked_lines": "46–181, 184–192"},
+        {"path": "Firmware/MotorControl/motor.cpp", "sha256": "4c40244fe98416390ce6ac63a50cb67ac2747a4a113a546f524b991bcf3c110b", "symbols": ["Motor::current_meas_cb", "Motor::pwm_update_cb"], "checked_lines": "600–608, 652–657, 686–708"},
+        {"path": "LICENSE.md", "sha256": "5ee8e9ffb05566e37947c3f32f199fbd2cd57c1e98c7e7909f8b49170242cdef", "symbols": [], "checked_lines": "许可正文"}
+      ],
+      "call_chain": ["Motor::current_meas_cb(timestamp)", "control_law_->on_measurement(... timestamp)", "FieldOrientedController stores timestamped sample", "Motor::pwm_update_cb(output_timestamp)", "get_output -> get_alpha_beta_output", "apply_pwm_timings"],
+      "license": "MIT，已核LICENSE.md。",
+      "checked_content": "分别按电流采样时刻Park与输出时刻逆Park；反馈-控制快照时间差超界返回错误；饱和时积分每次乘0.99。",
+      "engineering_use": "时间戳和角度补偿归属可借鉴；积分衰减必须随更新率重新分析。",
+      "limits": "这是开源v3.x固件线，不能当作新版商业固件实现；未运行上游测试。"
+    },
+    {
+      "id": "S-MOTEUS-PINNED",
+      "kind": "open_source",
+      "repository": "https://github.com/mjbots/moteus",
+      "commit": "8f747f4ac448d117c1390b77ca2d80c27e751a56",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "fw/bldc_servo.cc", "sha256": "4da42d4e2037dbe125651b427c2d5c2388a8548e1ef238b619b12aee090350b3", "symbols": ["ISR_HandleTimer", "ISR_DoTimer", "ISR_DoTimerLowerPriority", "ISR_CalculateCurrentState"], "checked_lines": "48–54, 754–835, 1012–1019"},
+        {"path": "fw/bldc_servo_control.h", "sha256": "a40df346312b2bc8c386b1097cae34bd33da01f57093f08532441e0d8b3d36ad", "symbols": ["RateConfig", "ISR_DoControl", "ISR_DoCurrent"], "checked_lines": "133–170, 855–868, 1057–1130, 1671–1710, 1750–1782"},
+        {"path": "fw/test/bldc_servo_control_test.cc", "sha256": "a7a0abf0da972fa307be6dfe22a7e0084cbd41a725d8c3cf946a17a4209d4ce4", "symbols": ["Context"], "checked_lines": "1–35"},
+        {"path": "LICENSE", "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4", "symbols": [], "checked_lines": "许可正文"}
+      ],
+      "call_chain": ["timer UIF + direction condition", "ISR_DoTimer -> ISR_DoSenseCritical", "PendSV -> ISR_DoTimerLowerPriority", "ISR_DoSense -> ISR_CalculateCurrentState", "ISR_DoControl -> mode dispatch -> ISR_DoCurrent", "PI + feedforward -> vector limit -> back-calculation"],
+      "license": "Apache-2.0，已核文件头与LICENSE。",
+      "checked_content": "当前版本交叉项使用指令电流，注释解释高速噪声与一拍代数环；最终限压后扣除前馈重建PI积分；存在宿主控制上下文测试。",
+      "engineering_use": "与VESC的实际电流前馈构成可证伪对照：噪声、指令跳变、模型误差分别设计实验。",
+      "limits": "只读测试结构，未执行其Boost测试；固件自身DWT测量钩子不等于本轮已有测量数据。"
+    },
+    {
+      "id": "S-SIMPLEFOC-PINNED",
+      "kind": "open_source",
+      "repository": "https://github.com/simplefoc/Arduino-FOC",
+      "commit": "b3d8f3931342ae68a980d0140e24b9048eba098b",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "src/common/base_classes/FOCMotor.cpp", "sha256": "c119b0e44313f4e36a3886ba40762b7e4b5244e0f82f9d7497efee3a4b765d1f", "symbols": ["FOCMotor::loopFOC", "FOCMotor::move"], "checked_lines": "580–661, 673–683"},
+        {"path": "src/BLDCMotor.cpp", "sha256": "61399ed1e112633c812eca0937809042ff87c249562f625cbed9f283991fb9a9", "symbols": ["BLDCMotor::setPhaseVoltage"], "checked_lines": "153–170, 190–200"},
+        {"path": "src/common/pid.cpp", "sha256": "bf100e8c2b281af663d3a0165ef61836d5cc137cc5b03fe850a3c3fcd7d5b7fa", "symbols": ["PIDController::operator()"], "checked_lines": "18–60"},
+        {"path": "LICENSE", "sha256": "f6431eb872522ce9d415f74af2daa57787158b0ab7c19ab73ae041505fa980e3", "symbols": [], "checked_lines": "许可正文"}
+      ],
+      "call_chain": ["application calls FOCMotor::loopFOC", "sensor->update -> electricalAngle", "current_sense->getFOCCurrents", "LPF -> current PI -> lag/cross coupling terms", "BLDCMotor::setPhaseVoltage -> driver"],
+      "license": "MIT，已核LICENSE。",
+      "checked_content": "PI积分用Tustin；Ts未设置时按micros差值，异常dt替换为1ms。move支持motion_downsample；当前q轴交叉项处保留TODO verify。",
+      "engineering_use": "可参考接口分离和明确固定Ts配置；不能将便捷默认dt或源码TODO当成工业实时保证。",
+      "limits": "未展开具体MCU驱动与采样ISR；用户主循环调用频率不自动等于PWM同步控制率。"
+    },
+    {
+      "id": "D-TI-SHUNT-SPRACT7",
+      "kind": "vendor_application_note",
+      "title": "Sensorless-FOC for PMSM With Single DC-Link Shunt",
+      "authors": ["Steve Lim"],
+      "edition": "SPRACT7, August 2020, available PDF copyright2022",
+      "url": "https://www.ti.com/lit/an/spract7/spract7.pdf",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["p5–8：2.2.1、1/2/3低侧shunt", "p11：开关状态映射", "p12–14：图2-11/2-12、式2/3、失测区", "p18–21：移相补偿和表3-1重构", "p23–25：ISR/ADC/PWM流程"],
+      "checked_content": "低侧测量须在相关下管有效导通窗；三shunt可每周期挑选两有效相，两shunt必须保证固定被测两相有效；单DC-link需两不同有效矢量及对应采样值。",
+      "engineering_use": "式2的最小有效矢量宽度不含公共门驱传播延迟，式3的SOC偏移包含该延迟。传播差异、边沿参照和guard另核验，不把不同定义的时延机械相加。",
+      "limits": "该参考不是F28388D完整适配；扇区编号与采样顺序依实现定义，不能把表3-1序号直接用于另一SVPWM。"
+    },
+    {
+      "id": "D-TI-SHUNT-SBOA587",
+      "kind": "vendor_application_brief",
+      "title": "SBOA587: Single-Shunt Current Sensing With High-Speed Amplifier",
+      "edition": "June 2024",
+      "url": "https://www.ti.com/document-viewer/lit/html/SBOA587/GUID-915C0393-540E-4DBA-B00B-2A6B52D87277",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["Single-Shunt Current Measurement；表1；Need for High-Speed Amplifier；Selecting the Correct Amplifier式4–9"],
+      "checked_content": "000/111只能观察offset，六个有效矢量分别对应带符号相电流；输入RC、放大器带宽/增益、压摆率和settling精度共同限制窗口。",
+      "engineering_use": "settling必须按误差指标测量；只看ADC转换率或放大器GBW不能确认窗口有效。",
+      "limits": "未将文中示例器件和1us条件作为默认选型或板测结果。"
+    },
+    {
+      "id": "D-TI-SHUNT-TIDUCY7",
+      "kind": "vendor_reference_design",
+      "title": "Current Sensing With <1-us Settling for 1-, 2-, and 3-Shunt FOC Inverter Reference Design",
+      "edition": "TIDUCY7, March 2017; TIDA-00778",
+      "url": "https://www.ti.com/lit/pdf/TIDUCY7",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["p10–11：最小有效矢量、传播延迟/延迟失配、器件与示例条件"],
+      "checked_content": "模拟链、门驱和死区共同决定可测范围；延迟失配必须纳入最小有效矢量分析。",
+      "engineering_use": "与SPRACT7及SDK对照不同时间定义，优先用实际电路测得的稳定区间验收。",
+      "limits": "只核相关正文；报告中的1us是其参考板条件，不能宣称本项目达到。"
+    },
+    {
+      "id": "D-TI-SHUNT-SLAU927",
+      "kind": "vendor_manual",
+      "title": "MSPM0 Sensorless FOC Tuning",
+      "edition": "SLAU927C, revised March 2025",
+      "url": "https://www.ti.com/lit/ug/slau927/slau927.pdf",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["p69–70：8.3.2传播延迟、8.3.3 Driver Min On Time、8.3.4 Shunt Configuration"],
+      "checked_content": "两个ADC实例同时采两相；三shunt动态选相需要实际连线支持，把一相接至两ADC才能切换全部组合。CSA rise+settle按满量程阶跃独立测量。",
+      "engineering_use": "跨MCU默认硬件同步触发；ADC硬件资源和PCB路由决定可并行性，不能只靠软件声明三通道。",
+      "limits": "MSPM0机制是工程比较，不代表C2000寄存器或引脚配置。"
+    },
+    {
+      "id": "D-TI-INLINE-SBOA160",
+      "kind": "vendor_application_brief",
+      "title": "Low-Drift, Precision, In-Line Motor Current Measurements With PWM Rejection",
+      "authors": ["Scott Hill"],
+      "edition": "SBOA160 revision D",
+      "url": "https://www.ti.com/lit/pdf/SBOA160",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["p1：in-line位置、PWM共模阶跃和输出glitch/settling"],
+      "checked_content": "inline直接测相电流且不依赖下管导通；实际放大器受PWM高dv/dt共模阶跃干扰，输出恢复时间仍限制可采区间。",
+      "engineering_use": "区分three-inline和three-low-side；检查共模范围、PWM rejection、恢复时间、滤波与同步采样。",
+      "limits": "不能把inline误写为任意时刻无噪声，也不能套用低侧只在000采样的硬约束。"
+    },
+    {
+      "id": "S-TI-SHUNT-SDK",
+      "kind": "vendor_source",
+      "title": "MotorControl SDK DC-link reconstruction and low-side sampling",
+      "version": "6.00.00.00",
+      "asset_root": "motor_sdk_root",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "libraries/control/dclink_ss/include/dclink_ss.h", "sha256": "0f193b815467a04a6a9d37c8b624be6432f27d47e0974bf0b763b276143fe1ec", "symbols": ["DCLINK_SS_runCurrentReconstruction", "DCLINK_SS_runPWMCompensation"], "checked_lines": "177–290, 295–324, 575–609"},
+        {"path": "libraries/control/dclink_ss/source/dclink_ss.c", "sha256": "03ac651ea2eda461508d47c5f8350769666fcdc12cb5974b17a4391c324ef03d", "symbols": ["DCLINK_SS_init", "DCLINK_SS_setInitialConditions"], "checked_lines": "1–125"},
+        {"path": "libraries/transforms/svgen/include/svgen_current.h", "sha256": "98283782939ea2987ce544718797e4580ec25905aac9c3c72d1c188b7a1fb7ae", "symbols": ["SVGENCURRENT_setMinWidth", "SVGENCURRENT_RunIgnoreShunt"], "checked_lines": "1–155, 279–340"},
+        {"path": "solutions/universal_motorcontrol_lab/common/source/motor1_drive.c", "sha256": "eed89461e23eedf5617e7ed81d1838d65a91a2b858b936a07663de6100101410", "symbols": ["motor1CtrlISR", "DCLINK_SS_runCurrentReconstruction", "SVGENCURRENT_compPWMData"], "checked_lines": "500–520, 1883–1908, 4260–4310"},
+        {"path": "solutions/universal_motorcontrol_lab/f28003x/drivers/include/hal.h", "sha256": "4501d031016c3932fe37c6b816bed8eb695c36756cf9ae92d5332c1f24ab64af", "symbols": ["HAL_setTrigger", "HAL_runSingleShuntCompensation"], "checked_lines": "2991–3110"},
+        {"path": "solutions/universal_motorcontrol_lab/f28003x/drivers/source/hal.c", "sha256": "4106a41bfe1b434fd1713e35a2c94cfb5b98bae7c1ea1e2cff3b4e8e64d17ffd", "symbols": ["EPWM_setADCTriggerSource", "ADC_setupSOC"], "checked_lines": "445–572符号定位, 5138–5208"}
+      ],
+      "call_chain": ["motor1CtrlISR consumes ADC currents", "DCLINK_SS_runCurrentReconstruction uses sector_1 and previous vector-area state", "FOC -> SVGEN_run", "HAL_writePWMData", "HAL_runSingleShuntCompensation -> DCLINK_SS_runPWMCompensation", "write revised CMPA/B plus up/down SOC CMPs", "ePWM hardware events trigger next ADC samples"],
+      "license": "所核dclink_ss.c及svgen_current.h文件头为BSD-3-Clause形式；本轮未复制源码。",
+      "checked_content": "同一周期保存匹配的扇区和样本顺序；SOC由补偿后PWM重新计算。motor1_drive.c示例使用包含Tpd的保守Tmin，不能与SPRACT7式2的参照定义混同。",
+      "engineering_use": "分别管理采样周期、扇区版本、两样本时间戳及真实gate状态；过调制/窄窗口失效显式处理。",
+      "limits": "这里的HAL路径为F28003x参考适配，未编译运行，不代表F28388D可原样使用；默认tick常数必须按目标时钟/电路重算。"
+    },
+    {
+      "id": "D-BISS-PROTOCOL",
+      "kind": "protocol_specification",
+      "title": "BiSS C Protocol Description",
+      "edition": "Rev D2, BiSS Association; copyright2007/2023",
+      "url": "https://biss-interface.com/wp-content/uploads/2024/07/BiSS_C_protocol_D2en.pdf",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["p6图6/7：LAT", "p9–10：Latch Point、Processing Time、图16/17", "p27：周期计算位置，正文计算本轮未核"],
+      "checked_content": "第一MAI上升沿LAT触发过程数据锁存/生成；从触发至实际新数据可能有固定内部延迟，tbusy与串行返回完成是另外两个时刻。",
+      "engineering_use": "以PWM/定时器硬件触发BiSS起帧为推荐起点，同时记录LAT、sensor有效时刻、RX完成、ADC采样及PWM生效；不能把收到帧的时刻当物理位置时刻。",
+      "limits": "协议不替代具体编码器的内部采样、滤波/预测、最大帧长和timeout资料；本轮未核某一编码器。"
+    },
+    {
+      "id": "L-TI-REALTIME-GUIDE",
+      "kind": "local_vendor_guide",
+      "title": "实时控制参考指南",
+      "publisher": "Texas Instruments",
+      "edition": "October 2021",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/文章/TI实时控制参考指南.pdf",
+      "sha256": "e60a4cf513e672f0c060e474950601fd6ce39a6c19a4588bd54fd6d0aee11e9a",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF12–16：时序、延迟、离散时域", "PDF26：线性PI", "PDF44：图26与表9/10、RC稳定精度", "PDF56–58：信号链、存储器、DMA、中断"],
+      "checked_content": "核读选定正文并渲染复核p44。纯延迟幅值为1、相位为-omega*T；完整实时链包含中断响应、保存上下文、读、算、写。RC表按满量程阶跃给出12bit=8.32tau。",
+      "numeric_discrepancy": "p44表10写16bit=11.04tau；独立50位Decimal复算16*ln2=11.090354888959tau，与表值不一致。保留原文身份并将此表项标为需核验，不以表常数替代公式。12bit=8.32和half-LSB=9.01分别符合12ln2和13ln2。",
+      "engineering_use": "按实际链分配预算；用显式误差LSB/阶跃幅值重新算RC，不把12bit表值默认为half-LSB；参见RULE-ADC-RC-SETTLING。",
+      "limits": "通用指南不是器件时序或稳定性证明；其简化裕度/二阶关系、cache性能概括不能直接推广到任意对象。"
+    },
+    {
+      "id": "L-TI-CSA-ADJ2019",
+      "kind": "local_vendor_article",
+      "title": "选择三相电机驱动器中使用的基于分流器的电流采样放大器",
+      "authors": ["Martin Staebler"],
+      "publisher": "TI信号链模拟设计期刊 ADJ 4Q2019",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/文章/三相电机驱动器中电阻式电流传感器.pdf",
+      "sha256": "ad51cb9e059905c858f24ac945767b02bee818ceef9cd1f346e56a843a210da5",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF1–2：图1/2、表1、shunt拓扑和两相选择", "PDF3：表2/3、inline PWM恢复", "PDF4–5：sigma-delta、图5、表4", "PDF6：结论/参考设计出处"],
+      "checked_content": "三低侧可取最长导通的两相；两低侧没有第三通道替代。inline仍有共模瞬态恢复。sinc滤波阶数/OSR同时改变精度与延迟，可为控制和保护使用不同滤波链。",
+      "engineering_use": "按拓扑选择采样条件；例中20MHz sinc3 OSR64 settling9.6us、OSR8 settling1.2us只用于比较时间定义，不作为所有器件默认。",
+      "limits": "文中低侧双更新限制与其采样配置有关，不能提升为所有调制都绝对不可能；SDFM滤波settling与群延迟不等价。"
+    },
+    {
+      "id": "L-INFINEON-MOTOR-PARAM",
+      "kind": "local_vendor_application_note",
+      "title": "电机基本参数和配置",
+      "publisher": "Infineon Technologies",
+      "edition": "AN-2023-10_ZH V1.0; 正文日期2024-10-10",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/文章/电机参数测量/Infineon-AN-2023-10_ZH_Basic_Motor_Parameters_and_the_Configuration-ApplicationNotes-v01_00-CN.pdf",
+      "sha256": "9bc54af3545c620720035081ee9cd6e60d7a7da1d517b3b3f62a97fe20de2333",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF4：MCE参数定义", "PDF5–7：Rs/Ld/Lq测量", "PDF8–9：极数和正负峰值定义", "PDF10–12：Ke定义、图10、式1与算例"],
+      "checked_content": "渲染复核p10。MCE电流/Ke采用RMS，p是极数而非极对数；示意星形等效电路的线电阻=2Rs。Ke用相-中性点Vrms/kRPM，Ephase_rms=Eline_peak/sqrt6，rpm=120/(p*Telec)。",
+      "engineering_use": "先确认绕组/线相/peak-RMS/极或极对及试验条件再换算；参数变更应保留来源与有效域。",
+      "limits": "LCR小信号电感不等于负载下增量电感；线电感除2需要模型/互感假设。不能将文中转动或测量步骤自动应用于设备。"
+    },
+    {
+      "id": "L-TI-SENSORED-FOC",
+      "kind": "local_vendor_application_note",
+      "title": "3相永磁同步电机的传感磁场定向控制",
+      "authors": ["Manish Bhardwaj"],
+      "edition": "ZHCA554, July 2013; 原文SPRABQ2",
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/文章/TI-PMSM-FOC.pdf",
+      "sha256": "4019fc79716e2bb7bee223f1c328a899d7a6af3fd79d76b2031c7a9072d061b7",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF17–18/20：LEVEL1目标独立变换/调制", "PDF21–22/24：ADC、相序、Clarke/Park、PI限制", "PDF25–27：QEP/速度及角度来源"],
+      "checked_content": "采用逐级验证定位控制链错误；限制取决于调制/采样有效窗，而非只给d/q轴各一个独立数值。",
+      "crosscheck": {
+        "asset_root": "controlsuite_root",
+        "files": [
+          {"path": "development_kits/HVMotorCtrl+PfcKit_v2.1/HVPM_Sensored/HVPM_Sensored.c", "sha256": "3c3c63b99987b08d057514b45c215ae764afb471d3ff9f9858aab8d7e32bf1a1", "symbols": ["MainISR", "BUILDLEVEL", "CLARKE_MACRO", "PARK_MACRO", "PI_MACRO", "QEP_MACRO"], "checked_lines": "17–48, 517–570, 687–768, 821–851"},
+          {"path": "development_kits/HVMotorCtrl+PfcKit_v2.1/HVPM_Sensored/HVPM_Sensored-Settings.h", "sha256": "d0a353572fbceba9e2dbed2b2cf5e6077e992a31a9d1bcc5720b5f0f37e6c7e5", "symbols": ["LEVEL1", "LEVEL2", "LEVEL3", "LEVEL4", "BUILDLEVEL"], "checked_lines": "11–24"}
+        ]
+      },
+      "engineering_use": "LEVEL3源码Park仍用软件rg1.Out，QEP作观测/验证；LEVEL4 lsw=2才用qep1.ElecTheta。以真实角度数据流判闭环，不以sensored文件名判定。复用现有IF/FOC，而非复制旧Q格式宏。",
+      "limits": "旧例是F2803x/controlSUITE特定硬件；板级运行、载入/使能等原文步骤不授权本任务执行。许可未在本轮完整审计，不复制其源码。"
+    },
+    {
+      "id": "L-CES-ADAPTIVE2012",
+      "kind": "local_primary_paper",
+      "title": "基于参数辨识的PMSM电流环在线自适应控制方法",
+      "authors": ["杨立永", "张云龙", "陈智刚", "李正熙"],
+      "edition": "电工技术学报 27(3):86–91, March2012",
+      "doi": null,
+      "asset_root": "motor_study_root",
+      "relative_path": "网上相关资源/文章/基于参数辨识的PMSM电流环在线自适应控制方法.pdf",
+      "sha256": "1381998c3bb3d86522b6123cce389409af8f1aba7c7eef93a4780e1c8fe600c3",
+      "reading_status": "FULL_TEXT",
+      "checked_locations": ["PDF1–6全文；PDF2=刊p87模型和PI设计；PDF3=刊p88式9–17；PDF4=刊p89激励/分时辨识及实验条件"],
+      "checked_content": "逐页读6页并渲染复核PDF3公式。用稳态电压模型、遗忘RLS及两阶段参数估计；明确至少两个运行点与低频小幅d轴扰动；温度参数辨识拆多ISR步。",
+      "engineering_use": "吸收激励/可辨识和慢参数分时思想；不能将RLS名字或收敛曲线当正确性保证。增益定义、输入输出比例、采样延迟及状态无扰更新必须重验。",
+      "limits": "论文实验为F28335、PWM/采样3kHz。其一阶PWM近似与参数式不能直接用于100kHz/分数拍ZOH；DOI本轮未核得，不编造。"
+    },
+    {
+      "id": "L-F28388D-INTEGRATION",
+      "kind": "local_project_source",
+      "title": "F28388D ADC/BiSS与诊断电流环实际调用链",
+      "asset_root": "f28388d_project_root",
+      "commit": "1a475144a11d2d930619cba97d0c7029d3c9f2cf",
+      "worktree_status_at_audit": "clean",
+      "reading_status": "PARTIAL_TEXT",
+      "files": [
+        {"path": "c2000.syscfg", "sha256": "80acc7c9083cf14e2c4ea4f8a04a001863c0013239cffc296549d7d294821e8c", "symbols": ["clbBase", "CLB_GLOBAL_IN_MUX_EPWM1_CTR_ZERO", "EPWMCLKDIV"], "checked_lines": "1–73"},
+        {"path": "src/board/board_periph.c", "sha256": "05dd512b574f27a67753cb8e1f91f269a6607b52d5ba5597d0bb6a50f950e536", "symbols": ["pwm_channel_init", "adc_init", "ADC_setInterruptSource", "ADC_setupSOC"], "checked_lines": "89–106, 139–195"},
+        {"path": "src/board/board_adc.c", "sha256": "7b5a910943ef757866aa35b0bfdab0e477a19766af0a25d83cf2b5630d43cd45", "symbols": ["adc_isr", "board_adc_bind", "board_adc_start"], "checked_lines": "78–158"},
+        {"path": "src/motor/motor_current.c", "sha256": "12dc82e185531182170283ead72d2693f3d44cab2f4aa5d26b0f85d06eaf6e9d", "symbols": ["current_run", "mc_servo_update", "CPUTimer_getTimerCount", "deadlineMissCount"], "checked_lines": "14–140"},
+        {"path": "src/biss/biss.c", "sha256": "b701fb0d2ef93efeb16cc474d3cb1b302fd6528683a5c8f206695344044381d4", "symbols": ["biss_get_data", "sampleMs", "BISS_FRESH_MS"], "checked_lines": "biss_service末段和biss_get_data完整函数"},
+        {"path": "docs/PWM_TIMING.md", "sha256": "481feddac94831863e564434785d610bba5bff0d54f865caa23b222ad9d2196b", "symbols": [], "checked_lines": "全文"},
+        {"path": "docs/ADC_SAMPLING.md", "sha256": "a2ae469c3d26b456b9f6adf95f9535009000a3d1de89ea6b5c027d550b718c20", "symbols": [], "checked_lines": "全文"},
+        {"path": "docs/CURRENT_LOOP.md", "sha256": "86657111c6ce68de5e77f77442e416db3751b95caf7ebb82a735611ee2c20f1c", "symbols": [], "checked_lines": "全文"}
+      ],
+      "call_chain": ["ePWM1 ZERO -> CLB1 hardware (SysConfig variable clb2)", "ePWM1 PRD SOCA -> ADCA/B/C/D SOC0 plus queued slow SOCs", "ADCD EOC4 -> adc_isr quality/read/clear flags", "bound current_run -> biss_get_data -> mc_servo_update", "publish diagnostic duty only -> PIE ACK"],
+      "checked_content": "SysConfig变量clb1绑定CLB2_BASE，变量clb2绑定CLB1_BASE，故笔记的硬件CLB1描述与源码一致。ADC在PRD、BiSS在ZERO，相位差25us。消费者计时不含此前ADC读取/中断入口/最后ACK。",
+      "engineering_use": "用实例base、实际SOC/EOC及函数数据流确认事实；同频不代表同物理采样时刻。诊断FOC无PWM提交，不可据enabled=true宣布已部署功率闭环。",
+      "limits": "本轮只读，未重跑工程历史宿主/目标构建、未烧录/操作设备；笔记历史通过不计为本轮通过。计时字段无真实采集值，完整ISR WCET为NOT_MEASURED。"
+    },
+  {
+    "id": "local-odrive-control",
+    "kind": "local_source_snapshot",
+    "title": "本地ODrive v3采样/控制/PWM数据流",
+    "asset_root": "motor_study_root",
+    "local_directory": "ODrive-master/Firmware",
+    "reading_status": "PARTIAL_TEXT",
+    "commit": null,
+    "related_source_id": "S-ODRIVE-PINNED",
+    "license": "MIT；实际读取Firmware/LICENSE，SHA256 c9935dab78644abc1f333a49a71995fc673b36b1caf571e0226ec70f6659694b",
+    "files": [
+      {
+        "path": "ODrive-master/Firmware/Board/v3/board.cpp",
+        "sha256": "fa842f1fc607981455df93a06b1aa7a54497c4fd517e78a1382c4a44ea3a85d3",
+        "checked_lines": "475–575",
+        "symbols": [
+          "TIM8_UP_TIM13_IRQHandler",
+          "ControlLoop_IRQHandler"
+        ]
+      },
+      {
+        "path": "ODrive-master/Firmware/MotorControl/foc.cpp",
+        "sha256": "349e387856d162a4f19ee3919ec95cb7d1635ac3c99bce676f99b2790e22f1ca",
+        "checked_lines": "5–39,55–190",
+        "symbols": [
+          "FieldOrientedController::on_measurement",
+          "FieldOrientedController::get_alpha_beta_output",
+          "FieldOrientedController::update"
+        ]
+      },
+      {
+        "path": "ODrive-master/Firmware/MotorControl/motor.cpp",
+        "sha256": "4c40244fe98416390ce6ac63a50cb67ac2747a4a113a546f524b991bcf3c110b",
+        "checked_lines": "294–306,550–590,600–715",
+        "symbols": [
+          "Motor::update_current_controller_gains",
+          "Motor::current_meas_cb",
+          "Motor::pwm_update_cb"
+        ]
+      }
+    ],
+    "call_chain": [
+      "TIM8_UP_TIM13_IRQHandler -> sampling_cb + software ControlLoop IRQ",
+      "ControlLoop_IRQHandler -> ADC -> current_meas_cb -> control_loop_cb -> dc_calib_cb -> pwm_update_cb",
+      "current_meas_cb -> on_measurement; pwm_update_cb -> get_output -> FOC -> SVM -> apply_pwm_timings"
+    ],
+    "checked_content": "按采样/输出时间戳分别Park/逆Park；PI先输出后更新本拍积分，限压后积分乘0.99；调制归一化V/(2/3*Vbus)。与当前CodingKit先积分和applied-output tracking语义不同。",
+    "engineering_use": "复用时刻与错误处理思想；FOC/motor文件SHA与已pin上游相同，但整个本地目录没有commit authority，不能给全工程附会上游commit。",
+    "limits": "只读源码，未运行上游测试/板测；源注释中的周期数不是本轮测量。不要复制disarmed路径零电流假设为已知真值。"
+  },
+  {
+    "id": "local-odrive-rl-calibration",
+    "kind": "local_source_snapshot",
+    "title": "本地ODrive主动R/L校准",
+    "asset_root": "motor_study_root",
+    "relative_path": "ODrive-master/Firmware/MotorControl/motor.cpp",
+    "sha256": "4c40244fe98416390ce6ac63a50cb67ac2747a4a113a546f524b991bcf3c110b",
+    "reading_status": "PARTIAL_TEXT",
+    "commit": null,
+    "related_source_id": "local-odrive-control",
+    "license": "MIT；同一Firmware/LICENSE已读取",
+    "checked_locations": [
+      "16–148,416–507"
+    ],
+    "symbols": [
+      "ResistanceMeasurementControlLaw",
+      "InductanceMeasurementControlLaw",
+      "Motor::measure_phase_resistance",
+      "Motor::measure_phase_inductance",
+      "Motor::run_calibration"
+    ],
+    "call_chain": [
+      "run_calibration -> measure_phase_resistance/inductance -> arm control law -> on_measurement/get_alpha_beta_output -> result -> gains"
+    ],
+    "checked_content": "R用稳态测试电压/目标电流；L用正负电压切换累计电流增量，源码明确同步与有限时间步假设。",
+    "engineering_use": "与CodingKit被动日志精确ZOH RL拟合边界不同；可借鉴数据/失效检查，不把主动校准当离线Golden。",
+    "limits": "该路径会使能/激励功率级，未经单独授权不得执行；电压/电流增益和采样时刻须先映射。"
+  },
+  {
+    "id": "local-odri-cla",
+    "kind": "local_source_snapshot",
+    "title": "本地ODRI F28388D CLA控制",
+    "asset_root": "motor_study_root",
+    "local_directory": "open-motor-driver-initiative-master/firmware/uomodri_c28",
+    "reading_status": "PARTIAL_TEXT",
+    "commit": null,
+    "license": "BSD-3-Clause；已读根LICENSE，SHA256 bb63cf8c443019d1c4cc7f6e5f8339baece87edbe74ceeff738c7b470ea38059",
+    "files": [
+      {
+        "path": "open-motor-driver-initiative-master/firmware/uomodri_c28/.cproject",
+        "sha256": "65421384dcec6796d85a8340acd575063beaa8b5e02d21b1ae494324d2790847",
+        "checked_lines": "25–50",
+        "symbols": [
+          "TMS320F28388D",
+          "fpu32",
+          "cla2",
+          "OPT_LEVEL.3"
+        ]
+      },
+      {
+        "path": "open-motor-driver-initiative-master/firmware/uomodri_c28/inc/uomodri_user_defines.h",
+        "sha256": "2b181d27635d7369be3216bcbc9b7fd5a4e388c3ad751eb18d2c9076d62d0e39",
+        "checked_lines": "22–31",
+        "symbols": [
+          "USE_UOMODRI_REV",
+          "USE_UOMODRI_V3"
+        ]
+      },
+      {
+        "path": "open-motor-driver-initiative-master/firmware/uomodri_c28/motor_control.cla",
+        "sha256": "93cf5f786c37cda14bfbd48e15f5eb6b5dde906ebb50df6ce658cbaf66903ea2",
+        "checked_lines": "35–48,96–126",
+        "symbols": [
+          "motor1_Task",
+          "motor2_Task",
+          "MOT_runControl"
+        ]
+      },
+      {
+        "path": "open-motor-driver-initiative-master/firmware/uomodri_c28/inc/uomodri_shared.h",
+        "sha256": "c9ffaabfd42df9d6fd78b6034ca95bf4266b3d9d06d3bb105ad930aadd4dcfb1",
+        "checked_lines": "41–42,308–312,510–533,565–670,679–711",
+        "symbols": [
+          "USE_FEED_FORWARD",
+          "FOC_runPI",
+          "FOC_runControl",
+          "FOC_svpwm1",
+          "MOT_runControl",
+          "MOT_runCommand"
+        ]
+      },
+      {
+        "path": "open-motor-driver-initiative-master/firmware/uomodri_c28/inc/config/uomodri_3/uomodri_3_hal_defines.h",
+        "sha256": "7d145d059ab842e94d61245ed8dd28e4468e5b9d1f2460b982016bd7306ee2a7",
+        "checked_lines": "734,779–807,850–880,903–907,1088–1112,1140–1146,1791–1841",
+        "symbols": [
+          "ADC_SAMPLING_WINDOW",
+          "ADC_TRIGGER_EPWM1_SOCA",
+          "PWM_FREQ"
+        ]
+      }
+    ],
+    "call_chain": [
+      "ePWM1 ZERO SOCA -> ADCA/B/C SOC0 -> ADCA1 -> CLA task3 motor1_Task",
+      "MOT_runControl -> FOC_getMeasures -> ENC_getPosition/getSpeed/getTheta -> FOC_runControl -> FOC_runPI -> FOC_svpwm1 -> MOT_runCommand -> EPWM_setCounterCompareValue"
+    ],
+    "checked_content": "真实.cproject为F28388D/fpu32/CLA2/O3，V3配置PWM40kHz。三个相电流用不同ADC；PI先积分、按Vbus/2逐轴限幅，电压圆限制代码被注释。默认USE_FEED_FORWARD=0；关闭分支d前馈使用speedMech而q项用speedElec，复用前必须核速度/ke单位和极对因子。",
+    "engineering_use": "作为真实ADC->CLA->PWM资源安排比较源，不把默认关闭且单位有疑点的前馈当已验证Golden。",
+    "limits": "无.git身份；CLA intrinsic/共享指针是平台适配；.lst/.obj库存不证明本轮构建或WCET；不能从task注释推断编码器物理锁存。"
+  },
+  {
+    "id": "local-sguanfoc-g4",
+    "kind": "local_source_snapshot",
+    "title": "本地SguanFOC STM32G4双低侧shunt示例",
+    "asset_root": "motor_study_root",
+    "local_directory": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]",
+    "reading_status": "PARTIAL_TEXT",
+    "commit": null,
+    "license": "README_ONLY_REQUIRES_VERIFICATION：README称MIT，但本地根LICENSE缺失且源码头All Rights Reserved；不得宣称复制授权已核验。",
+    "files": [
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/Hardware/Timer.c",
+        "sha256": "834726c68f38749822059aa0df6a860bd02e46ce9dd8520e53f334be215f5de9",
+        "checked_lines": "24–47",
+        "symbols": [
+          "HAL_TIM_PeriodElapsedCallback",
+          "HAL_ADCEx_InjectedConvCpltCallback",
+          "SguanFOC_High_Loop"
+        ]
+      },
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/Core/Src/adc.c",
+        "sha256": "afbb004e39b178a3c23b496d57fe7f8aaab7c6db673ef6ed393bc02df1db734d",
+        "checked_lines": "64–108",
+        "symbols": [
+          "InjectedNbrOfConversion",
+          "ADC_INJECTED_SOFTWARE_START",
+          "ADC_CHANNEL_3",
+          "ADC_CHANNEL_17"
+        ]
+      },
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/SguanFOC/SguanFOC.c",
+        "sha256": "db7faf3bed8b34906fb6e37ba6dca305af28ef73ce27d1a9b5edd90335ce806b",
+        "checked_lines": "336–345,529–546,804–860,1278–1301,1917–1987,2043–2065",
+        "symbols": [
+          "Current_ReadIabc",
+          "Current_Tick",
+          "Control_Current_SINGLE",
+          "Sguan_Calculate_High_Loop",
+          "SguanFOC_High_Loop"
+        ]
+      },
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/SguanFOC/Sguan_PID.c",
+        "sha256": "0f201b76360a59e539b16d2f94c02d79b746803d50f7088d9a1bd8662764c73d",
+        "checked_lines": "21–39,49–98",
+        "symbols": [
+          "PID_Init",
+          "PID_Loop"
+        ]
+      },
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/SguanFOC/Sguan_Feedforward.c",
+        "sha256": "c7952e0af8a4fbd2cb6bb3221b4725d4c21e89b0684c023ffce85c3030a7cb0f",
+        "checked_lines": "21–35",
+        "symbols": [
+          "Feedforward_CurrentD",
+          "Feedforward_CurrentQ"
+        ]
+      },
+      {
+        "path": "SguanFOC_Library-main/配套最新例程开源③[STM32G4，下桥臂双电阻]/SguanFOC/Sguan_Identify.c",
+        "sha256": "4bc049af29bc4d72736bf6572b47226fcfb38b3369c07c1d807ea4605caeb250",
+        "checked_lines": "24–53,62–80,89–151",
+        "symbols": [
+          "Identify_ReadRs_Init",
+          "Identify_ReadLs_Loop",
+          "Identify_ReadFlux_Init"
+        ]
+      }
+    ],
+    "call_chain": [
+      "TIM1 update ISR -> software ADC2 injected start -> four sequential ranks -> ADC complete callback caches JDR1..4 -> SguanFOC_High_Loop",
+      "High_Loop -> Current_Tick -> Encoder_Tick/angle compensation -> PID -> dq FF -> inverse Park -> PWM_Tick"
+    ],
+    "checked_content": "两shunt重构第三相；ADC rank2/rank3顺序采样，不是两个ADC同时。PI用梯形积分/积分冻结；Current_Tick先消费已缓存sincos，再更新本次Encoder_Tick，需显式确认时间归属。",
+    "engineering_use": "作为软触发/顺序ADC与硬件同步方案的实际反例，迁移时先预算触发抖动/样本时差；R/L/磁链校准的激励路径不能用作被动数值参考。",
+    "limits": "许可证未完整核验，不复制源码；TIM_T=50us、中心对齐ARR4249/RCR1须从时钟链推实际事件率；示例存在算法不等于已验证稳定。"
+  },
+  {
+    "id": "codingkit-butterworth-vs-dfi",
+    "kind": "first_party_reuse_audit",
+    "title": "既有Butterworth LPF与新通用DF-I执行器的复用边界",
+    "asset_root": "codingkit_root",
+    "reading_status": "PARTIAL_TEXT",
+    "legacy_introduction_commit": "75d5476e7f7c1730adc76f8231c209bce24d63f2",
+    "files": [
+      {
+        "path": "modules/common/controller/filter/巴特沃兹二阶滤波器/motor_bw_lpf.c",
+        "sha256": "45f6ee44c85324f78d2092c4c267222588ad30aa6e63773af49b2cd07ca574b7",
+        "checked_lines": "58–104,146–184",
+        "symbols": [
+          "MotorBwLpf2_Config",
+          "MotorBwLpf2_Reset",
+          "MotorBwLpf2_Update"
+        ]
+      },
+      {
+        "path": "modules/common/controller/filter/巴特沃兹二阶滤波器/motor_bw_lpf.h",
+        "sha256": "12c079c4a41db47871323d3bcf3fe17d458bcb0f14490be0993310c55aeb0c0e",
+        "checked_lines": "31–48,52–72",
+        "symbols": [
+          "motor_bw_lpf2_t"
+        ]
+      },
+      {
+        "path": "modules/common/controller/filter/巴特沃兹二阶滤波器/tests/test_motor_bw_lpf.c",
+        "sha256": "8eec618f0034197d6596b5539ff22850e4b9a528bf4785cdbbadc2e9e4e98aae",
+        "checked_lines": "19–52",
+        "symbols": [
+          "main"
+        ]
+      }
+    ],
+    "implementation_crosscheck": "modules/common/controller/motor/motor.c：当前未发布工作树的mc_notch/mc_filter；不以旧filter commit为其来源身份。",
+    "checked_content": "普通LPF优先复用既有Butterworth。旧执行器TDF-II两状态/float，新DF-I四状态/double及错误不更新契约。notch系数设计不同，但通用二阶执行职责确有重叠；旧非法配置禁用并旁路，新实现拒绝非法系数，不能直接替换。",
+    "engineering_use": "共享执行器需先定义状态映射、数值容差、Reset/参数更新与失败语义，再跑契约对照；不为形式统一而重构。",
+    "limits": "仅源码/旧测试正文审阅，不声明本轮新增LPF运行测试通过；当前checkout未发现独立DSP算法模块树，不凭目录名假设已有实现。"
+  },
+    {
+      "id": "L-XIDIAN-DTFT-LECTURE",
+      "kind": "local_teaching_material",
+      "title": "离散时间信号和系统的频域分析",
+      "authors": ["王柯俨"],
+      "edition": "西安电子科技大学课程讲义；年份/版次未核",
+      "asset_root": "motor_study_root",
+      "relative_path": "zhihu/others/离散时间信号和系统的频域分析.pdf",
+      "sha256": "de813248df8c31370a1bb8f8bda5ab95c7fd2de6a6ce0da618f5e4a97dfbd0c8",
+      "reading_status": "PARTIAL_TEXT",
+      "checked_locations": ["PDF1：作者王柯俨", "PDF56=印刷57：DTFT与Z变换/ROC，已渲染复核", "PDF107=印刷108：终值定理极点条件；PDF108仅作业"],
+      "checked_content": "普通DTFT是单位圆上的Z变换，需单位圆在收敛域内；终值结论有相应极点条件。",
+      "engineering_use": "有限日志DFT可算出数值不等于对象稳态FRF已成立；识别周期稳态、漂移和激励SNR，终值推断先核极点。",
+      "limits": "辅助教材而非实机证据；不泛化为积分器不能作Bode。非零频率周期特解/广义频响仍可分析，单位圆极点/频率边界必须明示。未精读全讲义。"
+    }
+  ],
+  "decision_evidence": [
+    {
+      "id": "RULE-ADC-RC-SETTLING",
+      "source_ids": ["L-TI-REALTIME-GUIDE", "D-TI-F2838X-TRM"],
+      "trigger": "已知ADC acquisition窗，但不清楚源阻抗/采样电容是否能在该窗内建立到指定精度。",
+      "evidence_required": ["等效一阶R与C及其物理归属", "分辨率N", "阶跃相对满量程step_fraction", "允许误差max_error_lsb", "数据手册最低acquisition时间"],
+      "action": "由一阶残差独立推导t_rc=R*C*max(0,ln(step_fraction*2^N/max_error_lsb))，取max(t_rc,t_datasheet_min)。结果只能为DERIVED理想下界；实际窗不足则INVALID。",
+      "reject_or_degrade": "不知道误差口径或等效模型时返回INSUFFICIENT_EVIDENCE。不得把文中12bit=8.32RC直接称为0.5LSB；满幅half-LSB应为13ln2 RC。",
+      "assumptions": "R可含经确认的源/串联/采样开关有效阻抗，C为此模型的等效充电电容。外储能电容、charge sharing、前一SOC残留、非线性采样开关与运放slew/recovery不能未经模型确认简单合并。",
+      "discriminating_experiment": "离线检验解析残差；待授权后对同输入改变acquisition与前一通道电平，若误差依赖通道切换/大信号恢复，则单RC不足。",
+      "acceptance_criteria": ["公式输入有限且物理单位一致", "满幅12bit/1LSB约8.317766RC，0.5LSB约9.010913RC", "实际采样窗满足较严格者", "没有板测残差时不宣称达到真实ADC精度"],
+      "engineering_crosscheck": "L-F28388D-INTEGRATION的BOARD_ADC_SAMPLE_CYCLES为64个200MHz SYSCLK即320ns，但电路R/C与动态建立数据不全，所以不能由64这个配置值宣布精度通过。"
+    },
+    {
+      "id": "RULE-SDFM-RATE-LATENCY",
+      "source_ids": ["L-TI-CSA-ADJ2019", "L-TI-REALTIME-GUIDE"],
+      "trigger": "目标实际使用sigma-delta位流/SDFM，或考虑为高压隔离采样替换SAR路径。",
+      "evidence_required": ["真实调制器时钟", "抽取率/滤波器阶数", "输出更新相位", "滤波群延迟与阶跃settling定义", "控制精度与保护响应预算"],
+      "action": "分别预算位流、抽取输出率、控制反馈年龄和保护快滤波路径；从目标滤波器精确传递函数/手册求时序。",
+      "reject_or_degrade": "不能把20MHz位流当20MHz新电流样本；不能把sinc阶跃settling直接当群延迟；无保护快路径证据不以慢控制滤波代替硬件保护。",
+      "assumptions": "L-TI-CSA-ADJ2019图5的20MHz/sinc3例中OSR64 settling9.6us、OSR8 settling1.2us为该参考条件，不推广为任意SDFM。",
+      "discriminating_experiment": "待授权后同时采原始位流/控制滤波输出/比较器或快滤波事件，分别测相位和大阶跃恢复；软件只核查配置与理想模型。",
+      "acceptance_criteria": ["每一路反馈时刻/新鲜度有明确定义", "稳态噪声达到项目目标", "完整控制与保护deadline分别满足", "缺实测时Hardware Measurement为NOT_MEASURED"],
+      "engineering_crosscheck": "已读F28388D工程是12bit SAR ADC，不是SDFM。本规则对当前路径为NOT_APPLICABLE，不能自动迁移或默认SDFM资源空闲。"
+    },
+    {
+      "id": "RULE-PARAM-UNIT-CONVERSION",
+      "source_ids": ["L-INFINEON-MOTOR-PARAM", "B-PARAM-ZHU", "B-PRACTICE-LI"],
+      "trigger": "从铭牌、LCR、反电势波形或外部SDK导入Rs/Ld/Lq/Ke/极数。",
+      "evidence_required": ["星/三角及实际模型等效定义", "线间或相-中性点", "peak或RMS", "极或极对", "LCR频率/激励幅值/转子位置/温度", "速度侧和单位"],
+      "action": "在匹配的星形等效模型中Rphase=Rline/2；极对数=磁极数/2；对正弦平衡反电势Ephase_rms=Eline_peak/sqrt6，rpm=120/(poles*Telec)，Ke=1000*Ephase_rms/rpm。保留源与目标单位元数据。",
+      "reject_or_degrade": "连法/幅值口径缺失时INSUFFICIENT_EVIDENCE；不得普遍将线电感除2，也不得把RMS Ke直接当Wb磁链或把正负极值数直接当极对数。",
+      "assumptions": "反电势换算基于正弦/平衡与开路条件。满机械圈的完整电周期数等于极对数；正峰加负峰的极值总数才对应磁极数。",
+      "discriminating_experiment": "用同一已记录开路波形分别从完整周期和正负极值计数交叉核对；LCR结果与匹配电流/温度的离线阶跃拟合比较，差异可能来自互感、饱和或测量频率。涉及转动的采集须另行授权。",
+      "acceptance_criteria": ["所有换算可用独立解析公式回算", "维度和速度侧一致", "参数范围/温度/版本已绑定", "与目标运行域不匹配时只保留候选参数，不发布运行中设备"],
+      "engineering_crosscheck": "Infineon参数p为磁极数，当前F28388D MOTOR_CURRENT_POLE_PAIRS为极对数；当前parametersCalibrated=false，不能将其联调常数解释为已辨识真实电机。"
+    },
+    {
+      "id": "RULE-IDENTIFICATION-ADMISSION",
+      "source_ids": ["L-CES-ADAPTIVE2012", "B-PARAM-ZHU", "P-RPEM-PERERA"],
+      "trigger": "要启用在线多参数估计或用辨识结果实时修改PI。",
+      "evidence_required": ["模型是否忽略di/dt及其允许误差", "经过单位缩放的回归矩阵秩/条件数与阈值", "足够独立运行点/激励", "实际施加电压及限幅标志", "参数有效域、残差及留出验证", "参数更新与状态切换时刻"],
+      "action": "先在日志/仿真中检验可辨识性；对慢Rs/磁链可分低频或有界分步估计，保持同一输入快照/参数版本。仅独立验证通过且有无扰更新策略后生成候选增益。",
+      "reject_or_degrade": "稳态方程不足、低速反电势信息不足、饱和电压不可追踪、无独立激励或条件数超限时冻结发布。不得因RLS输出收敛就认为真值正确，也不得默认电机运动/注入已授权。",
+      "assumptions": "2012论文用稳态dq模型和F28335/3kHz实验，至少两个运行点及小幅低频d轴扰动；这些不是任意高速/100kHz系统的默认条件。分步期间输入一致性为本工程增加的守卫。",
+      "discriminating_experiment": "离线用相同数据比较无激励/有独立激励、参考电压/重建实际电压、训练/留出残差；改逆变器误差模型后若Rs显著变化，应先排电压偏差。",
+      "acceptance_criteria": ["正规化秩/条件数满足项目门槛", "留出预测误差及参数置信区间满足声明目标", "正反转、不同母线/电流的结果在其有效域内一致", "参数发布有版本和确定生效边界", "没有设备数据不声称在线辨识已通过"],
+      "engineering_crosscheck": "当前CodingKit离线RL精确ZOH拟合与旧论文稳态多参数RLS方法不同；优先复用前者做被动日志基线，不复制论文的实时矩阵求逆或旧PI增益式。"
+    },
+    {
+      "id": "RULE-STAGED-BRINGUP",
+      "source_ids": ["L-TI-SENSORED-FOC", "L-F28388D-INTEGRATION"],
+      "trigger": "新工程集成FOC，或闭环异常但采样/相序/反馈基础尚未证实。",
+      "evidence_required": ["独立变换/调制Golden", "真实ADC通道/增益/方向/有效窗", "Park角度来源和物理时刻", "限幅/保护路径", "当前阶段是否实际写PWM"],
+      "action": "先宿主数值/配置静态检查，再诊断采集与只计算路径；按数据链逐层确认后提出具体板级验收。只启用当前已授权阶段。",
+      "reject_or_degrade": "LEVEL3、CURRENT或enabled等名称不证明编码器物理闭环或功率已部署；实际硬件动作、注入/转动、刷写仍须单独授权。",
+      "assumptions": "controlSUITE LEVEL3使用rg1.Out软件角，QEP用于观察；LEVEL4 lsw=2才转为qep1.ElecTheta。角色以真实数据流判定。",
+      "discriminating_experiment": "只读追踪Park输入、PI调用次数、最终PWM寄存器写点；宿主替换输入验证模式和失效路径。板上只按另行批准的测量方案核对相序/角度/输出。",
+      "acceptance_criteria": ["每阶段只声明已验证模块", "采样错误与角度错误可被独立隔离", "保护保持优先", "未连接输出的诊断算法不标为实机控制通过"],
+      "engineering_crosscheck": "当前F28388D current_run -> mc_servo_update只发布duty，未提交PWM。复用其诊断分层与CodingKit IF/FOC正式实现，不能将旧TI宏再维护为第二套核心。"
+    },
+    {
+      "id": "RULE-TIMING-SOURCE-CHECK",
+      "source_ids": ["L-F28388D-INTEGRATION", "S-TI-DRIVERLIB"],
+      "trigger": "从工程笔记、SysConfig变量名或ISR名推断采样/控制顺序。",
+      "evidence_required": ["工程commit和内容摘要", "SysConfig实例到硬件base映射", "ePWM计数/触发/使能", "SOC/EOC/INT/数据读取", "实际调用链和PWM提交点"],
+      "action": "先解析实例身份再连事件。当前变量clb1=CLB2_BASE、clb2=CLB1_BASE；所以变量clb2.IN4的ZERO仍是硬件CLB1.IN4，与笔记一致。",
+      "reject_or_degrade": "仅有名称或历史笔记则UNKNOWN；来源冲突未解决时INSUFFICIENT_EVIDENCE。不得把变量名数字当硬件实例，也不能自动把CPU ISR入口当物理事件时刻。",
+      "assumptions": "代码配置是静态意图，仍须确认实际构建配置/生效生成文件；源码并不证明设备正运行该镜像。",
+      "discriminating_experiment": "对照生成board文件、SysConfig clbBase与map中的符号；板上Trace/GPIO/逻辑分析仪再确认真实边沿，当前只提供方法不执行。",
+      "acceptance_criteria": ["每条事件含文件/行或符号与条件", "未知项不补默认", "笔记与源码对应同一身份", "无板测时事件时刻仅DERIVED/ESTIMATED"],
+      "engineering_crosscheck": "本轮最初只看clb变量名会误判路由，完整追到clbBase后纠正。此记录保留已纠正的解析陷阱，不把它写成工程bug。"
+    },
+    {
+      "id": "RULE-WCET-MEASUREMENT-SCOPE",
+      "source_ids": ["L-TI-REALTIME-GUIDE", "L-F28388D-INTEGRATION"],
+      "trigger": "日志或工程中已有elapsed/maxElapsed等计时字段，准备判断ISR是否满足deadline。",
+      "evidence_required": ["真实计时起止符号/指令点", "计数器时钟/分频/回绕规则", "入口/出口和读写遗漏", "嵌套/高优先级阻塞", "测量环境和最坏工况"],
+      "action": "标明测量覆盖范围，再把未覆盖固定延迟/抖动加入预算；完整ISR、消费者和算法核时间分开报告。",
+      "reject_or_degrade": "存在计时代码但无Trace/计数采集值时NOT_MEASURED；消费者maxElapsed不能直接重命名WCET；不得由指令数或host耗时补实机结果。",
+      "assumptions": "WCET验收须覆盖声明工况、执行位置、缓存/总线争用和工具开销；观察到的最大值也不自动成为数学WCET上界。",
+      "discriminating_experiment": "待授权后分别标记ADC ISR入口/出口与current_run入口/出口，比较差值，并用硬件SOC边沿测调度延迟。",
+      "acceptance_criteria": ["完整worst-observed执行时间加固定延迟/guard小于实际shadow deadline", "有overrun/jitter和样本计数对应", "计时/Trace来源可复现", "报告准确保留NOT_MEASURED缺项"],
+      "engineering_crosscheck": "current_run中CPUTimer0从消费者入口计到结果发布；不含此前ADC质量检查/读取、ISR入口和最终ACK，不能当完整ADC ISR。"
+    },
+    {
+      "id": "RULE-DELAY-DQ-DIAGNOSIS",
+      "source_ids": ["L-TI-REALTIME-GUIDE", "P-FRACTIONAL-DELAY-HU", "L-TI-CSA-ADJ2019", "S-VESC-PINNED", "S-MOTEUS-PINNED"],
+      "trigger": "高速dq串扰、增益提高后振荡，或母线/转向变化使电流误差增大。",
+      "evidence_required": ["电角速度换算及符号", "电流/角度采样时刻", "Park与PWM生效角度", "requested/applied dq电压和saturation", "有效采样窗/ADC质量", "Rs/L/磁链定义与版本"],
+      "action": "先验证单位/符号与样本时序，再分离限压、磁模型、编码器年龄、逆变器误差和PI。纯延迟相位损失按360*f*T度计算；真正离散模型还含ZOH和分数拍零点。",
+      "reject_or_degrade": "缺applied电压、时间戳或有效窗时不得只归因PI；不能因连续域dq前馈公式正确就宣称离散高速解耦成立。",
+      "assumptions": "固定时延造成的角度误差近似omega_e*T，有界速度/加速度和唯一区间补偿所有者才允许预测。实际/指令电流前馈的噪声与动态误差不同。",
+      "discriminating_experiment": "先日志/仿真对照同电流下正反转/不同速度、恒速下不同母线/占空比、前馈启停。速度相关并非延迟的唯一证明；需同时排电压饱和、参数误差和ADC窗口。",
+      "acceptance_criteria": ["每项候选有可区分观测量", "使用同对象同限制的对照数据", "dq耦合指标/相位裕度达到项目输入门槛", "参数/时延补偿有效域明示", "没有板测不承诺提升数值"],
+      "engineering_crosscheck": "VESC用实测电流交叉项、moteus当前版本用指令电流；应按噪声/指令跳变/模型失配实验选择，而非复制最新开源实现。"
+    },
+  {
+    "id": "RULE-PWM-ADC-HARDWARE-FIRST",
+    "source_ids": [
+      "local-odri-cla",
+      "local-sguanfoc-g4",
+      "L-F28388D-INTEGRATION",
+      "S-TI-SHUNT-SDK"
+    ],
+    "trigger": "实际项目的电流采样由定时器回调再软件启动ADC，或存在多ADC/CLA加速候选。",
+    "evidence_required": [
+      "真实时钟/计数模式/重复计数器/事件频率",
+      "ADC触发选择与启动API调用点",
+      "SOC或rank顺序与转换延迟",
+      "硬件路由和DMA/CLA资源所有权",
+      "同PWM epoch的shadow与反馈快照"
+    ],
+    "action": "优先提出PWM/定时器硬件触发ADC和可支持的反馈锁存；重构前先算事件率与窗口。CLA只在目标芯片/SDK/工程、内存和共享契约已证实后作为优化候选。",
+    "reject_or_degrade": "由timer ISR发起ADC仍有ISR延迟，不等于外设硬件直接采样。两个rank顺序采集不等于两个ADC同步。未知时钟/路由返回INSUFFICIENT_EVIDENCE；不自行启用CLA、迁移寄存器或修改设备。",
+    "assumptions": "ODRI F28388D/40kHz ePWM->ADC->CLA是真实参考配置；Sguan G4示例软件注入ADC与50us常数必须结合中心对齐/ARR/RCR再推实际频率。不能照抄任一平台。",
+    "discriminating_experiment": "静态比较触发选择与ADC启动符号；待授权后用SOC/ADC完成/ISR/CLA/PWM更新边沿测抖动和延迟。host耗时不替代目标路径。",
+    "acceptance_criteria": [
+      "实际事件频率与控制Ts一致",
+      "相间时差/encoder年龄受限",
+      "每周期shadow deadline可证明或实测满足",
+      "无实测则目标性能NOT_MEASURED"
+    ],
+    "engineering_crosscheck": "Sguan的Timer.c -> ADC2 software injected start -> four ranks -> High_Loop；ODRI .cproject确定F28388D/CLA2而非由参考文章猜芯片。"
+  },
+  {
+    "id": "RULE-ALGO-REFERENCE-REUSE",
+    "source_ids": [
+      "local-odrive-control",
+      "local-odri-cla",
+      "local-sguanfoc-g4",
+      "S-VESC-PINNED",
+      "S-MOTEUS-PINNED"
+    ],
+    "trigger": "多个源码同称PI/dqFF/FOC，准备直接复制公式或判定某一实现最好。",
+    "evidence_required": [
+      "坐标、相/线、peak/RMS、速度侧",
+      "PI积分先后与Ki是否含Ts/Kp",
+      "限压几何和前馈所有者",
+      "输入采样时刻和输出生效时刻",
+      "许可证与源身份",
+      "目标正式实现和独立Golden"
+    ],
+    "action": "先建立输入输出/状态更新/限制/时序的差异表，再把有证据的方案映射到现有唯一C99实现；只在可证伪收益与独立测试成立时增加可选变体。",
+    "reject_or_degrade": "默认关闭代码、单位冲突或只见README时不得当Golden。ODRI disabled FF的speedMech/speedElec差异须先排查；Sguan无本地LICENSE时不得认定复制授权完成。",
+    "assumptions": "ODrive先输出后积分且饱和衰减0.99；ODRI先积分、逐轴Vbus/2限制；Sguan梯形积分/冻结；这些不同，不应混合参数或宣称数值等价。",
+    "discriminating_experiment": "相同Ts/对象/母线/限制下比较阶跃、饱和退出、前馈开关、噪声和参数突变；输出对照独立解析/高精度模型。",
+    "acceptance_criteria": [
+      "变体的符号/单位可回算",
+      "失败状态和积分更新可复现",
+      "饱和几何和applied-output回传明确",
+      "保留已有正式实现且不复制第二份无差异核心"
+    ],
+    "engineering_crosscheck": "本地motorcontrol代码可以指导边界和反例；不能直接把C++、CLA intrinsic或STM32 HAL带入平台无关C99。"
+  },
+  {
+    "id": "RULE-RL-PASSIVE-VS-ACTIVE",
+    "source_ids": [
+      "local-odrive-rl-calibration",
+      "L-INFINEON-MOTOR-PARAM",
+      "L-CES-ADAPTIVE2012",
+      "B-PARAM-ZHU"
+    ],
+    "trigger": "用户提供已有电压电流日志要识别R/L，或要求运行设备校准。",
+    "evidence_required": [
+      "数据来自被动日志还是实际激励",
+      "施加电压/采样时刻/极性与单位",
+      "定常或动态RL模型及激励信息",
+      "逆变器压降/饱和/电感工作点",
+      "留出数据与测量精度"
+    ],
+    "action": "有可用日志时优先复用被动离线拟合和独立验证；主动校准只产出参数化试验计划与验收脚本，得到单独授权才进入设备操作。",
+    "reject_or_degrade": "不得将ODrive斜率估计当精确ZOH算法Golden，也不得把LCR小信号值直接证明负载下模型。无激励/无实际电压时输出信息不足或不确定度，冻结发布。",
+    "assumptions": "ODrive measure_phase_*会arm控制律并施加测试电压；CodingKit mc_rl只消费离线样本，两者不是同一工作流。",
+    "discriminating_experiment": "离线比较解析ZOH轨迹、不同Ts的斜率近似误差和留出预测残差；对两极性/母线水平的参数差异检查逆变器偏差。",
+    "acceptance_criteria": [
+      "正常/欠激励/过期/饱和数据行为确定",
+      "R/L及残差满足用户声明容差",
+      "训练和验证输入分离",
+      "没有单独授权不触发任何功率级动作"
+    ],
+    "engineering_crosscheck": "ODrive ResistanceMeasurementControlLaw/InductanceMeasurementControlLaw为主动设备流程；不调用它们来生成被动RL拟合期望值。"
+  },
+  {
+    "id": "RULE-BIQUAD-REUSE-CONTRACT",
+    "source_ids": [
+      "codingkit-butterworth-vs-dfi"
+    ],
+    "trigger": "要给反馈/遥测加普通二阶LPF，或已有notch需要二阶执行器。",
+    "evidence_required": [
+      "已有Butterworth模块接口与行为",
+      "新传递函数是否真不同",
+      "TDF-II/DF-I状态定义和精度",
+      "非法参数/失效旁路语义",
+      "Reset/参数变更/多实例契约"
+    ],
+    "action": "普通LPF首先使用MotorBwLpf2_Config/Update/Reset；notch只负责独立的系数设计需求。若整合执行器，先定状态映射和误差/失败测试，不能为少几行代码改掉既有行为。",
+    "reject_or_degrade": "新DF-I mc_filter与旧TDF-II执行职责有重叠，不能声称零重叠；未核容差/状态/失败语义时保留已验证接口，不直接互换。",
+    "assumptions": "旧执行器float/TDF-II两状态，非法配置禁用后旁路；新执行器DF-I四状态/double中间值且错误不更新。",
+    "discriminating_experiment": "独立脉冲/阶跃/频率向量、极限系数、长序列误差、Reset/热更新、非法输入无状态变更对照。",
+    "acceptance_criteria": [
+      "普通LPF不出现第二正式事实源",
+      "独立参考误差满足明确容差",
+      "Reset/错误/无扰更新语义明确",
+      "测试实际运行后才提升Host Unit Test证据"
+    ],
+    "engineering_crosscheck": "既有路径在modules/common/controller/filter/巴特沃兹二阶滤波器；新motor.c的mc_notch系数设计是独立能力，但不能据此掩盖通用执行器重叠。"
+  },
+  {
+    "id": "RULE-FRF-STEADY-ADMISSION",
+    "source_ids": [
+      "L-XIDIAN-DTFT-LECTURE",
+      "P-FRACTIONAL-DELAY-HU",
+      "L-TI-REALTIME-GUIDE"
+    ],
+    "trigger": "从有限日志DFT之比估计对象FRF，或用终值定理/连续Bode宣布闭环稳定。",
+    "evidence_required": [
+      "实际采样时刻与频率轴",
+      "周期稳态/漂移/趋势",
+      "注入点与被测输入输出定义",
+      "激励SNR/相干性/非线性失真",
+      "离散极点及终值适用条件"
+    ],
+    "action": "先核普通DTFT的ROC/单位圆条件和终值定理极点条件；对实验日志检查稳态、漂移和信息量，再按注入点估计FRF。积分器的非零频率周期特解或广义频响需明示边界。",
+    "reject_or_degrade": "有限DFT总能得到数值并不证明稳态FRF存在，也不证明闭环稳定；未满足条件返回INSUFFICIENT_EVIDENCE，不能从一张曲线输出稳定通过。",
+    "assumptions": "课程讲义只支撑数学适用条件；窗口、谱估计、闭环偏差及工程测量还需专项模型/数据。",
+    "discriminating_experiment": "用相同激励的重复周期检查漂移/相位一致性；改变窗口长度、去趋势策略与独立验证段，若FRF随截取大幅变化先排非稳态。",
+    "acceptance_criteria": [
+      "时间轴和注入量可追踪",
+      "分析适用域和未辨频段明确",
+      "数据质量达到项目输入门槛",
+      "稳定结论另有适用离散模型或闭环实验支持"
+    ],
+    "engineering_crosscheck": "单位圆pole/积分对象不能简单归为禁止Bode；应区别普通绝对收敛DTFT、频率特解与有限数据谱。"
+  }
+  ],
+  "sampling_semantics": {
+    "sources": ["D-TI-SHUNT-SPRACT7", "D-TI-SHUNT-SBOA587", "D-TI-SHUNT-TIDUCY7", "D-TI-SHUNT-SLAU927", "D-TI-INLINE-SBOA160", "S-TI-SHUNT-SDK", "S-TI-DRIVERLIB", "D-BISS-PROTOCOL"],
+    "trigger_policy": {
+      "default": "不依赖MCU品牌，优先以同一硬件定时器/PWM时基触发ADC并调度反馈采集/锁存，随后由完成事件启动控制计算。",
+      "required_evidence": ["目标触发路由确实存在且已配置", "实际ADC采样窗与可用结果时刻", "反馈物理采集/锁存与RX完成语义", "时基同步、分频和多速率关系"],
+      "fallback": "硬件不支持某种编码器物理同步采样时，采用可追溯时间戳、最大年龄和有界预测/降级；不能默认为所有编码器都有外部采样触发。",
+      "same_trigger_is_not_same_capture": "QEP可在SOC脉冲锁存，但ADC电流捕获在采样窗末；共用触发不自动消除角度/电流时差。"
+    },
+    "single_dc_link": {
+      "required_samples": "每个重构epoch内两个不同且独立的有效矢量样本；保留每样本时间戳、上管真实状态/匹配扇区、采样次序和有效窗。",
+      "state_mapping_upper_switch_bits": {"100": "+ia", "110": "-ic", "010": "+ib", "011": "-ia", "001": "+ic", "101": "-ib", "000": "no_independent_phase_current", "111": "no_independent_phase_current"},
+      "reconstruction": "按实际开关状态确定两个带符号相电流，在三线系统且零序/漏电可忽略、时差误差有界时由ia+ib+ic=0求第三相。不能假定不同库sector整数含义相同。",
+      "blind_regions": ["扇区边界有一个有效矢量趋零", "低调制时两个有效矢量均可能过短", "过调制/极限占空比下可用状态受限"],
+      "allowed_response": "先判窗口；再选有证据的PWM移相/脉宽补偿、重新安排SOC或有界预测。补偿后必须同步更新扇区/样本映射并复核平均电压、纹波及最终限幅。",
+      "invalid_response": "缺第二有效样本、错扇区、过期或ADC异常必须输出INVALID或INSUFFICIENT_EVIDENCE；不能把零矢量母线读数当相电流，也不能把丢样默认为0。",
+      "time_skew": "两样本不同时。必须以已知di/dt上界、目标电感/电压或实测波形限制重构误差；没有依据则不能称同步三相真值。"
+    },
+    "two_low_side": {
+      "rule": "两个固定被测相均需下管有效导通、模拟链已稳定且ADC采样窗完整；第三相按KCL重构。",
+      "parallel_adc": "优先两个ADC同时采样；同一ADC不同SOC通常是顺序采样，需计算时差。",
+      "blind_region": "任一被测相高侧接近100%时，下管窗口可能消失；不能因有两个shunt就保证全调制范围。",
+      "response": "按可用公共窗限制调制、调整PWM/SOC，或明确采用已验证重构/预测；无有效窗时拒绝本样本。"
+    },
+    "three_low_side": {
+      "rule": "每周期从实际有效导通窗选择两相；若ADC/引脚支持，可动态选择最宽共同窗口并重构第三相。",
+      "route_constraint": "三通道不代表三路同时采样；两个ADC动态选任意两相可能需要把一相接入两个ADC。实际PCB和ADC资源决定可选组合。",
+      "limits": "三low-side仍受窄低侧脉宽和模拟settling影响；三相均可读时可监视电流和/offset，但应考虑真实零序/漏电和测量时差。"
+    },
+    "three_inline": {
+      "rule": "传感器与相绕组串联，电流连续可见，不要求相关下管导通。仍优先硬件PWM同步采样以固定纹波相位。",
+      "constraints": ["放大器/隔离器共模范围和高dv/dt耐受", "PWM共模阶跃后的glitch恢复/settling", "输入RC/带宽与延迟", "ADC建立时间和跨相时差"],
+      "limits": "不得套用three-low-side专属导通窗，也不得宣称inline任意时刻均有效。"
+    },
+    "window_models": {
+      "spra_ct7_definition": "SPRACT7 p13式2：Tmin_dur > Trise + Tsettle + TS&H + Tdead；p14式3：Tsample_delay = Tdead + Tdriver_prop + Trise + Tsettle。相同传播延迟平移两边沿，不在该宽度定义中重复相加。",
+      "conservative_command_bound": "若以PWM逻辑命令时刻为起点，SDK6参考采用Tdead + Tdriver_prop + Trise + Tsettle + TS&H的保守最小窗；明确是保守边界并增加真实失配、blanking和guard。",
+      "measured_stable_window": "若输入已是实测稳定区间，只需把完整ADC acquisition窗放入该区间并留guard；不得再次扣掉已包含的deadtime、rise或settling。",
+      "not_acquisition": "ADC转换和结果可读延迟属于控制deadline；SAR完成采样保持后通常不要求相电流在整个转换期保持稳定。多SOC队列仍须单独检查。",
+      "missing_reference": "未说明区间基准、误差指标、是否已含时延时，返回INSUFFICIENT_EVIDENCE，不自动混合公式或采用示例常数。"
+    },
+    "encoder_alignment": {
+      "qep_f2838x": "已核EQEP_setStrobeSource支持strobe OR ADCSOCA/ADCSOCB；配合strobe latch并读QPOSSLAT。unit-timeout latch读QPOSLAT，须证明unit timer与PWM相位关系。具体SOC来源/使能仍从工程核实。",
+      "biss_c": "硬件起帧可固定MA LAT时刻；协议LAT触发内部数据锁存/生成，具体传感器可带固定采集处理延迟。RX完成、CRC有效和timeout分别跟踪。",
+      "spi": "定时启动SPI传输只固定读事务，不能普遍证明传感器物理采集时刻。需器件数据说明连续转换、流水寄存器、触发引脚、命令/返回帧配对及内部预测。",
+      "resolver": "需要核对激励、解调与RDC滤波/速度跟踪延迟；同步ADC或RDC锁存路由须按实际器件证据决定。",
+      "contract": ["t_physical_sample_or_latch", "t_rx_complete", "t_adc_capture", "t_park", "t_pwm_apply", "age_limit", "prediction_bound", "delay_compensation_owner"],
+      "limit": "只能由一个所有者补偿同一延迟；接口内部预测/DAEC等若存在，须先确认后避免再次补偿。"
+    }
+  },
+  "timing_semantics": {
+    "authority": "D-TI-F2838X-TRM",
+    "pwm_period": {"up_or_down": "(TBPRD+1)/TBCLK", "up_down": "2*TBPRD/TBCLK", "location": "26.4.3, p2914"},
+    "adc_acquisition": {"register": "(ACQPS+1)/SYSCLK", "driverlib": "sampleWindow/SYSCLK", "location": "20.3.3 p2576; S-TI-DRIVERLIB ADC_setupSOC"},
+    "tSH": "单个SOC采样保持窗，单位SYSCLK周期；物理捕获约在窗末前5ns，不能将SOC触发瞬间当物理采样时刻。",
+    "tEOC": "采样窗末至下一SOC采样窗可以开始的间隔；不等于结果可读延迟。",
+    "tLAT": "采样窗末至ADCRESULT锁存；此前读到上次结果。",
+    "tINT": "采样窗末至ADCINT标志；early可受ADCINTCYCLE.OFFSET影响，late也可能早于tLAT。",
+    "example": {"resolution_bits": 12, "sysclk_to_adcclk_ratio": 4, "tEOC_sysclk_cycles": 41, "tLAT_sysclk_cycles": 44, "tINT_late_sysclk_cycles": 41, "location": "p2601 Table20-11"},
+    "pipeline_rule": "相邻同ADC的SOC可能在前一结果锁存前开始；用N*(tSH+tLAT)只能是明确声明不重叠的上界模型，不可冒作实际流水线精确时刻。精确模型还需SOC优先级、仲裁、并发触发、同步跨ADC条件和silicon errata。",
+    "errata_status": "NOT_RETRIEVED：表20-11/20-12脚注要求核对ADC DMA Read of Stale Result。本轮未精读对应器件/硅版本勘误，不能据此确认DMA安全。"
+  },
+  "skill_source_map": [
+    {"skill": "aicoding-motor-control", "sources": ["B-PARAM-ZHU", "D-TI-F2838X-TRM", "S-ODRIVE-PINNED", "L-TI-SENSORED-FOC", "L-F28388D-INTEGRATION"], "use": "模型、限制和事件所有者；按真实数据流分阶段", "gap": "目标工程/功率级证据需任务内获取"},
+    {"skill": "aicoding-motor-parameter-identification", "sources": ["B-PARAM-ZHU", "P-RPEM-PERERA", "L-INFINEON-MOTOR-PARAM", "L-CES-ADAPTIVE2012", "local-odrive-rl-calibration"], "use": "欠秩、病态、单位/参数有效域；被动与主动辨识边界", "gap": "磁链图/交叉饱和全算法与实测未覆盖"},
+    {"skill": "aicoding-motor-sensorless-control", "sources": ["P-RPEM-PERERA", "S-VESC-PINNED"], "use": "参数敏感性、已有控制入口", "gap": "HFI/SMO/PLL正文及上游observer完整链未核读，不能作为其实现验证证据"},
+    {"skill": "aicoding-motor-feedback-calibration", "sources": ["S-ODRIVE-PINNED", "D-TI-F2838X-TRM", "S-TI-DRIVERLIB", "D-BISS-PROTOCOL", "L-INFINEON-MOTOR-PARAM"], "use": "硬件触发、采样与输出角度时刻分离；极/极对数区分", "gap": "具体编码器内部延迟/旋变物理锁存与校准仍需器件证据"},
+    {"skill": "aicoding-servo-controller-design", "sources": ["S-TI-PI", "S-SIMPLEFOC-PINNED", "P-FRACTIONAL-DELAY-HU", "L-TI-REALTIME-GUIDE", "L-CES-ADAPTIVE2012", "local-odrive-control"], "use": "离散状态更新、增益语义、保持/延迟与无扰参数更新", "gap": "不由这些源码推定目标稳定裕度"},
+    {"skill": "aicoding-servo-validation", "sources": ["S-MOTEUS-PINNED", "S-ODRIVE-PINNED", "L-TI-SENSORED-FOC", "L-F28388D-INTEGRATION"], "use": "可测变量、计时范围与阶段状态分离", "gap": "上游测试未运行；本轮没有硬件数据"},
+    {"skill": "aicoding-pmsm-mtpa-field-weakening", "sources": ["B-PRACTICE-LI", "P-MORIMOTO-LIMITS"], "use": "MTPA/电压电流交集/退磁边界", "gap": "经典IEEE文献正文未得；MTPV与非线性磁图需继续核验"},
+    {"skill": "aicoding-inverter-deadtime-compensation", "sources": ["B-PARAM-ZHU", "S-VESC-PINNED", "L-TI-CSA-ADJ2019"], "use": "非线性偏差、六次纹波、电压重建与采样窗口边界", "gap": "功率器件温度/电流动态开关模型与板测标定未得"},
+    {"skill": "aicoding-pmsm-dq-decoupling", "sources": ["B-PARAM-ZHU", "S-VESC-PINNED", "S-MOTEUS-PINNED", "P-FRACTIONAL-DELAY-HU", "local-odri-cla", "local-sguanfoc-g4"], "use": "符号、指令/实测电流取舍、数字延迟；默认关闭分支不能当Golden", "gap": "任意分数拍控制器及高频GaN实验未复现"},
+    {"skill": "aicoding-servo-velocity-feedforward", "sources": ["S-ODRIVE-PINNED"], "use": "参考时刻与限幅组合；旧矩阵提供外环入口", "gap": "本轮未重新沿全部位置环调用链核读"},
+    {"skill": "aicoding-servo-torque-feedforward", "sources": ["B-PARAM-ZHU", "S-ODRIVE-PINNED"], "use": "机械量/电气量分工", "gap": "轴侧折算与惯量实测仍需专门验证"},
+    {"skill": "aicoding-motion-trajectory-planning", "sources": ["S-ODRIVE-PINNED"], "use": "外环参考与快环输出分离", "gap": "本轮未审阅轨迹实现或jerk有界证明"},
+    {"skill": "aicoding-servo-frequency-response", "sources": ["P-FRACTIONAL-DELAY-HU", "P-RPEM-PERERA", "L-XIDIAN-DTFT-LECTURE"], "use": "离散对象、激励/数据条件、ROC与周期稳态准入", "gap": "闭环FRF无偏估计/相干性文献与测量数据本轮未新增"},
+    {"skill": "aicoding-servo-auto-tuning", "sources": ["S-TI-PI", "P-FRACTIONAL-DELAY-HU", "L-CES-ADAPTIVE2012"], "use": "候选增益语义、延迟/辨识适用边界和参数发布", "gap": "自动搜索/回退及继电辨识论文沿用旧矩阵，未在本轮重新核读"},
+    {"skill": "aicoding-servo-vibration-suppression", "sources": ["B-PRACTICE-LI", "codingkit-butterworth-vs-dfi", "L-XIDIAN-DTFT-LECTURE"], "use": "复用普通LPF与notch执行器边界；频域数据准入", "gap": "本轮未读该书谐振章节，输入整形专项论文待核"},
+    {"skill": "aicoding-servo-disturbance-observer", "sources": ["P-DOB-CHEN"], "use": "标称模型、总扰动与噪声/带宽权衡", "gap": "离散稳定性和目标负载扰动试验需独立验收"},
+    {"skill": "aicoding-servo-friction-compensation", "sources": ["B-PARAM-ZHU", "P-DOB-CHEN"], "use": "机械模型与总扰动不得直接当摩擦参数", "gap": "Stribeck/LuGre原始论文正文与温度实测未核"},
+    {"skill": "aicoding-servo-torque-ripple-compensation", "sources": ["B-PARAM-ZHU", "S-VESC-PINNED"], "use": "区分逆变器六次纹波与位置周期纹波", "gap": "齿槽独立标定/周期表验证待真实数据"},
+    {"skill": "aicoding-servo-dual-feedback-control", "sources": ["S-MOTEUS-PINNED"], "use": "换相状态与外环位置状态的所有者", "gap": "本轮未审阅双反馈融合或两惯量模型源码/论文"},
+    {"skill": "aicoding-control-frequency-analysis", "sources": ["P-FRACTIONAL-DELAY-HU", "P-RPEM-PERERA", "L-XIDIAN-DTFT-LECTURE", "L-TI-REALTIME-GUIDE"], "use": "ZOH坐标、数字延迟、ROC/终值与离散极点限制", "gap": "不得由连续PI交越频率计算宣称实测闭环带宽"},
+    {"skill": "aicoding-excitation-signal-design", "sources": ["B-PARAM-ZHU", "P-RPEM-PERERA", "L-CES-ADAPTIVE2012"], "use": "持续激励、回归矩阵条件与独立验证；不自动执行注入", "gap": "PRBS/多正弦原文沿用旧矩阵，未本轮重读"},
+    {"skill": "aicoding-motor-hardware-deployment", "sources": ["D-TI-F2838X-TRM", "D-TI-F28388D-DATASHEET", "S-TI-DRIVERLIB", "S-ODRIVE-PINNED", "S-MOTEUS-PINNED", "D-TI-SHUNT-SPRACT7", "S-TI-SHUNT-SDK", "D-TI-SHUNT-SLAU927", "D-TI-INLINE-SBOA160", "D-BISS-PROTOCOL", "L-F28388D-INTEGRATION", "L-TI-REALTIME-GUIDE", "L-TI-CSA-ADJ2019", "local-odri-cla", "local-sguanfoc-g4"], "use": "硬件触发、1/2/3shunt有效窗、RC精度、事件/实例身份与测量范围", "gap": "silicon errata、具体传感器/功率级、目标编译/反汇编/Trace仍需当前项目证据"}
+  ],
+  "unread_inventory": [
+    {"asset_root": "motor_study_root", "relative_path": "算法/07-svc算法解析与调试记录.pdf", "sha256": "9c3c28a500b71880e6b62867f31994de8a9eae392f66d3dabd873cb4fc7a3c86", "pdf_pages": 119, "reading_status": "METADATA_ONLY", "reason": "确认真实文件和摘要；前两页无可抽取文字，本轮未开展全书OCR/精读，因此不以它支撑任何算法或时序结论。"}
+  ],
+  "unresolved_research": [
+    "没有对21项算法逐项完成论文全文、目标构建与硬件实验；本索引明确逐项缺口。",
+    "无实测ISR WCET、抖动、编码器锁存延迟、ADC窗口、功率级死区或动态GaN开关数据。",
+    "不能由源码注释、论文实验或参考硬件推定当前工程硬件事实。",
+    "上游开源源码各自有不同采样/坐标/饱和/前馈选择；必须按同一对象和数据设计交叉验证，不能直接排名或照搬。"
+  ]
+}
