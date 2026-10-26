@@ -43,6 +43,8 @@ $$
 
 ## C99快照与验证
 
+以下 `observer_update` 是完整观测器的方法设计草图，仓库没有该正式实现。现有 `mc_pll_init/update` 仅跟踪输入相位，并不从电压/电流生成可观测角度；已有I-f启动也不等于无传感器闭环。需要SMO/磁链/HFI时先查当前项目或原始SDK的已验证模块，明确缺口后再实现并做独立真值，不从本页C声明生成空stub当成完成。
+
 快照至少含 `uAppliedAlphaV/uAppliedBetaV/iAlphaA/iBetaA/sampleTimeS/valid`，`cycleId/sampleId`可选用于追踪；输出 `thetaERad/omegaERadS/confidence/ageS/valid`。观测器自有状态、可复位；不隐式读取编码器或电机全局变量。`observer_update`只估计，状态机决定是否消费；无效样本不得静默置角度0。下例展示带可选追踪字段的一种布局，不要求每个工程使用相同字段。
 
 ```c
@@ -91,7 +93,7 @@ ObserverStatus observer_update(ObserverState *state, const ObserverSample *sampl
                                ObserverResult *out);
 ```
 
-配置含Rs、L、Ts、K、ε、滤波/PLL增益和有效性门限，初始化时与实例绑定；上述结构展示状态与样本的分离，生产接口还须明确配置生命周期与丢样策略，不能偷偷从全局读取参数。
+配置含Rs、L、Ts、K、ε、滤波/PLL增益和有效性门限，初始化时与实例绑定；上述结构仅展示状态与样本分离。若使用正式相位PLL，成功更新后的 `angleRad` 属于k+1；不能把它当k时刻角度再补同一拍。生产观测器还须明确配置生命周期、时间戳与丢样恢复，不能偷偷读取全局参数。
 
 先影子运行，以时间对齐的临时编码器比较包角误差；再做速度/负载/温度/正反转/母线变化，注入电流偏置、Rs偏差、电压饱和和丢样。指标包含角误差分位数、失锁率、重新捕获时间、CPU最坏耗时，不能只看速度均值。
 

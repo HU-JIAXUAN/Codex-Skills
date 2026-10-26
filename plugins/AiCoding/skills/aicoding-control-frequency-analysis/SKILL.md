@@ -24,3 +24,9 @@ description: 用频率响应、Bode图、带宽、交越频率、稳定裕度和
 实验激励交给`aicoding-excitation-signal-design`；FRF获取与偏差交给`aicoding-servo-frequency-response`；三环结构与饱和交给`aicoding-servo-controller-design`；批量参数搜索交给`aicoding-servo-auto-tuning`。
 
 跨模块按名称定位`aicoding-motor-control`的`references/control_contracts_zh.md`；缺少该资源时显式定义本任务的坐标、量纲和时刻。C实现结合C99，滤波及定点结合DSP。最终交付应能从公式、系数和对象数据复算，而非只有一张好看的Bode图。
+
+## 可执行工程入口
+
+按技能名定位 `aicoding-motor-control` 的 `references/engineering_execution_zh.md`，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+复用 `mc_pi_design` 的声明模型/延迟准入和 `mc_notch` 离散系数，并运行 `motor/run_tests.py`。通用多交越裕度、Nyquist 和多变量鲁棒性尚需专项计算；单频准入不能代替稳定性证明。

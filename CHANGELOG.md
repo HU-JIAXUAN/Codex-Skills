@@ -11,7 +11,7 @@
 
 ### 构建 / Build
 
-- 本次生成Development候选包，不更新AiCoding子模块、不刷新已安装插件、不创建发布或实机通过声明。 / Generates a development candidate only; installation and hardware evidence remain separate.
+- **build(plugin)**：从已提交源码生成39项技能的可复现插件包，供AiCoding锁定已推送并核验的依赖；安装刷新和实机验收单独记录。 / Generates 39 bundled skills from committed sources; installation and hardware evidence remain separate.
 
 ## 2026-10-25
 

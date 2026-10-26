@@ -1,30 +1,30 @@
-﻿{
-    "pluginName":  "aicoding",
-    "pluginVersion":  "0.1.0",
-    "sourceRepository":  "JiaxI2/Codex-Skills",
-    "sourceCommit":  "5d70799015a0ba3e0168420743c5e2449ee1b97c",
-    "sourceTag":  null,
-    "buildTimestampUtc":  "2026-10-25T10:47:40.0000000Z",
-    "buildInfoModel":  "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
-    "packManifestHash":  "d1a3d56e0d0ffbc2cb89db26946aea9189b1e45828755e774f2931e1db39e9c1",
-    "packInputHashes":  {
-                            "config/aicoding-plugin-pack.json":  "d1a3d56e0d0ffbc2cb89db26946aea9189b1e45828755e774f2931e1db39e9c1",
-                            "embedded/motorcontrol/skillkit.json":  "cbd89082a1c084ec1cd5844bd44ebb8ea5e14974dd35222b4e7db9103a38b872"
-                        },
-    "pluginManifestHash":  "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
-    "skillsDigest":  "1804bdd9c851f0d9f6968779375e07735738404614feef504f5ab5ae7a0932c8",
-    "hooksDigest":  "021f1beb59eeefdafca4748f9bec984b9f48bf6073ba1c86e2068d7d5c51d3f5",
-    "dirtySource":  false,
-    "generated":  [
-                      "plugins/AiCoding/skills",
-                      "plugins/AiCoding/BUILDINFO.json"
-                  ],
-    "manual":  [
-                   "plugins/AiCoding/.codex-plugin/plugin.json",
-                   "plugins/AiCoding/hooks",
-                   "plugins/AiCoding/README.md",
-                   "config/aicoding-plugin-pack.json",
-                   "scripts/build-plugin.ps1",
-                   "scripts/verify-plugin.ps1"
-               ]
+{
+  "pluginName": "aicoding",
+  "pluginVersion": "0.1.0",
+  "sourceRepository": "JiaxI2/Codex-Skills",
+  "sourceCommit": "b899578a68499adaa490ec73d6ea07c691dd23e1",
+  "sourceTag": null,
+  "buildTimestampUtc": "2026-10-26T03:19:30.0000000Z",
+  "buildInfoModel": "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
+  "packManifestHash": "d1a3d56e0d0ffbc2cb89db26946aea9189b1e45828755e774f2931e1db39e9c1",
+  "packInputHashes": {
+    "config/aicoding-plugin-pack.json": "d1a3d56e0d0ffbc2cb89db26946aea9189b1e45828755e774f2931e1db39e9c1",
+    "embedded/motorcontrol/skillkit.json": "f28fbdbc12d7dace20856c77fea8376652661d4a67b65f0f0f004d1dce988048"
+  },
+  "pluginManifestHash": "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
+  "skillsDigest": "2aef95216eb91d531ff122cb362be211033204c9dc64d97789766c0388b33219",
+  "hooksDigest": "021f1beb59eeefdafca4748f9bec984b9f48bf6073ba1c86e2068d7d5c51d3f5",
+  "dirtySource": false,
+  "generated": [
+    "plugins/AiCoding/skills",
+    "plugins/AiCoding/BUILDINFO.json"
+  ],
+  "manual": [
+    "plugins/AiCoding/.codex-plugin/plugin.json",
+    "plugins/AiCoding/hooks",
+    "plugins/AiCoding/README.md",
+    "config/aicoding-plugin-pack.json",
+    "scripts/build-plugin.ps1",
+    "scripts/verify-plugin.ps1"
+  ]
 }

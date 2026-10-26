@@ -10,37 +10,9 @@
 
 补偿也消耗可用电压/脉宽。最终调制限幅后，把其引起的电压残差返回电流PI/集成层；不能只在补偿前夹紧PI而忽略最后裁剪。补偿模块报告请求与使用值，限幅政策由集成层统一拥有。采样窗被破坏时优先保证可测量性，并返回饱和/采样无效状态。
 
-```c
-#include <stdint.h>
-#include <stdbool.h>
-typedef struct {
-    float iaA;
-    float ibA;
-    float icA;
-    float busV;
-    float tempC;
-    uint32_t sampleId;
-    bool currentValid;
-} DeadtimeInput;
-typedef struct {
-    float uaV;
-    float ubV;
-    float ucV;
-    bool valid;
-} DeadtimeVoltage;
-typedef struct {
-    float pwmPeriodS;
-    float effectiveTimeS;
-    float deviceDropV;
-    float zeroBandA;
-} DeadtimeParams;
-typedef enum { DEADTIME_OK, DEADTIME_BAD_INPUT } DeadtimeStatus;
-/** 计算三相补偿电压；所有指针必需，失败不覆盖out，不写PWM。 */
-DeadtimeStatus deadtime_update(const DeadtimeParams *params,
-                              const DeadtimeInput *input, DeadtimeVoltage *out);
-```
+已有正式实现应直接复用：CodingKit `modules/common/controller/motor/motor.h` 的 `McDeadtime`、`FocPhase` 与 `mc_deadtime`，唯一实现 `motor.c`，独立真值入口 `python run_tests.py`。不要把旧讨论名 `deadtime_update` 当成资产或再造同功能接口。该纯函数计算已标定等效时间误差和过零平滑、去零序的三相补偿；不写PWM、不读取全局电流，不包含尚未标定的温度/器件压降模型。
 
-`deadtime_update`只算补偿，不写PWM、不读取全局电流；配置含周期、等效时间、压降模型和过零带。无效输入默认输出显式无效/由集成策略禁用补偿，不能保持一个旧符号无限补偿。相电压单位V，若API输出归一化占空比要明确基值和饱和。
+调用前由集成层校验电流有效性和时基；检查返回状态后才消费输出，失败保持的旧缓冲区不能当新有效补偿。不能保持一个旧电流符号无限补偿。输出是相电压V；若现有工程在归一化占空比层补偿，先确认基值、极性与最终饱和，不能直接替换两者的数值。
 
 ## 诊断顺序
 

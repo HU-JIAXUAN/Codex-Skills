@@ -28,3 +28,9 @@ description: 设计和审查伺服DOB、线性ESO及扰动补偿接口，明确�
 本技能输出扰动/残差及补偿候选；不声称观测量可唯一分离摩擦、重力、齿槽和参数误差。所有补偿最终由转矩合成技能处理，保留饱和与失效状态。
 
 与其他算法组合时，按名称定位 `aicoding-motor-control` 的 `references/control_contracts_zh.md`，核对单位、坐标、时间戳、总限幅、状态与证据等级。当前环境缺该参考时，先显式写清本任务对应契约，不依赖跨技能相对路径。涉及C实现结合C99技能，涉及数值与滤波实现结合DSP技能。
+
+## 可执行工程入口
+
+按技能名定位 `aicoding-motor-control` 的 `references/engineering_execution_zh.md`，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+调用 `mc_dob_init/update` 的一阶 Q 精确 ZOH 子集，输入必须是实际施加转矩。完整 ESO、柔性模型 DOB 和含噪目标验证尚需专项实现；不得把总扰动估计称为唯一摩擦参数。

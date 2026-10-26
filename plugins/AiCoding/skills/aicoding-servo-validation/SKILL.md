@@ -26,3 +26,9 @@ description: 设计并执行伺服算法与产品性能验证。用于定义指�
 `scripts/metrics.py`是小型CSV后处理器，输入`time_s,reference_rad,position_rad`及可选`current_a`，计算误差与电流指标；它不连接设备。停稳需显式指定起始时刻、误差带与保持时间，目标在此段必须恒定。用`--self-test`验证后处理边界。
 
 输出工况/指标表、可复现命令、原始数据位置、数值结果和证据等级。数据不满足单调时刻、有限值或稳定参考时给错误，不输出虚假停稳。C99案例优先复用已检查的PI/数学/SVPWM原语；实际调用链应独立核对。
+
+## 可执行工程入口
+
+按技能名定位 `aicoding-motor-control` 的 `references/engineering_execution_zh.md`，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+运行当前 `scripts/metrics.py --self-test` 和正式 `servo-validation/run_validation.py`；数值核心另跑 `motor/run_tests.py`。原始日志、产品阈值和硬件故障恢复由实际项目提供，宿主案例不能替代板测。

@@ -20,3 +20,9 @@ description: 为电机参数、机械模型与伺服频响辨识选择和实现�
 参数估计交给`aicoding-motor-parameter-identification`，FRF估计交给`aicoding-servo-frequency-response`，已获FRF的环路设计交给`aicoding-control-frequency-analysis`。调参时幅值、带宽、模型阶次与数据长度联动考虑，不以“换成EKF/RLS”代替激励不足。
 
 跨模块按技能名定位`aicoding-motor-control`的公共控制契约；C实现结合C99，滤波/定点结合DSP。没有板上数据只标记设计或宿主验证，禁止把重复同一波形后的低残差称为产品辨识完成。
+
+## 可执行工程入口
+
+按技能名定位 `aicoding-motor-control` 的 `references/engineering_execution_zh.md`，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+运行正式 `Signal generator/run_tests.py` 验证波形、复位和多实例；与 `mc_rl_init/add/fit` 的秩/激励拒绝组合。实际电压、温升、行程和信噪比仍需采集证据，禁止把请求激励直接当施加输入。
