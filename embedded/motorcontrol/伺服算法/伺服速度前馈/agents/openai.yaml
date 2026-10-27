@@ -1,4 +1,0 @@
-interface:
-  display_name: 伺服速度前馈
-  short_description: 按轨迹速度设计前馈、匹配轴侧与延迟，生成接口并验证跟随误差和限幅行为
-  default_prompt: 使用 $aicoding-servo-velocity-feedforward 分析当前工程，给出方法选择、代码接入和可复现验证。

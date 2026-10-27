@@ -29,7 +29,15 @@ function Get-FileSha256([string]$Path) {
     if (Test-TextFileForStableHash $Path) {
         return Get-StringSha256 (Normalize-Text ([System.IO.File]::ReadAllText($Path, [System.Text.Encoding]::UTF8)))
     }
-    return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
+    $stream = [System.IO.File]::OpenRead($Path)
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-', '').ToLowerInvariant()
+    }
+    finally {
+        $stream.Dispose()
+        $sha.Dispose()
+    }
 }
 
 function Get-StringSha256([string]$Text) {
@@ -83,10 +91,30 @@ function Resolve-PackEntries($RepoRoot, $Config) {
         if ($kit.enabled -eq $false) { continue }
         $kitPath = Resolve-ContainedPath $RepoRoot $kit.source
         $kitConfig = [System.IO.File]::ReadAllText($kitPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
-        if ($kitConfig.schemaVersion -ne 1) { throw "Unsupported skillkit schema: $($kit.source)" }
+        if ($kitConfig.schemaVersion -notin @(1, 2)) { throw "Unsupported skillkit schema: $($kit.source)" }
         $kitRoot = Split-Path -Parent $kitPath
-        foreach ($entry in $kitConfig.skills) {
-            if ($entry.enabled -eq $false) { continue }
+        $members = @($kitConfig.skills | Where-Object { $_.enabled -ne $false })
+        if ($kitConfig.schemaVersion -eq 2) {
+            $runtimeSkill = [string]$kitConfig.runtimeSkill
+            $runtimeEntries = @($members | Where-Object { $_.target -eq $runtimeSkill -and $_.source -eq '.' -and $_.entrypoint -eq 'SKILL.md' })
+            if ($runtimeEntries.Count -ne 1) { throw "Single-entry kit requires one root SKILL.md: $($kit.source)" }
+            $memberIds = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::OrdinalIgnoreCase)
+            foreach ($member in $members) {
+                if ($member.target -notmatch '^aicoding-[a-z0-9][a-z0-9-]*$' -or -not $memberIds.Add($member.target)) {
+                    throw "Invalid or duplicate kit capability: $($member.target)"
+                }
+                $memberRoot = Resolve-ContainedPath $kitRoot $member.source
+                $expectedEntrypoint = if ($member.target -eq $runtimeSkill) { 'SKILL.md' } else { 'GUIDE.md' }
+                if ($member.entrypoint -ne $expectedEntrypoint -or
+                    -not (Test-Path -LiteralPath (Join-Path $memberRoot $expectedEntrypoint) -PathType Leaf)) {
+                    throw "Missing or invalid kit entrypoint: $($member.source)/$expectedEntrypoint"
+                }
+            }
+            $nestedSkills = @(Get-ChildItem -LiteralPath $kitRoot -Recurse -Filter SKILL.md -File | Where-Object { $_.DirectoryName -ne $kitRoot })
+            if ($nestedSkills.Count -ne 0) { throw "Single-entry kit contains nested SKILL.md: $($kit.source)" }
+            $members = $runtimeEntries
+        }
+        foreach ($entry in $members) {
             $sourcePath = Resolve-ContainedPath $kitRoot $entry.source
             $sourceRel = $sourcePath.Substring($RepoRoot.Length).TrimStart([char[]]'\/') -replace '\\','/'
             $entries.Add([pscustomobject]@{
@@ -156,6 +184,12 @@ function Get-SourceDirty([string]$RepoRoot) {
 }
 
 $repoRoot = Get-RepoRoot
+$buildMutex = [System.Threading.Mutex]::new($false, ('CodexSkillsBuild_' + (Get-StringSha256 ($repoRoot.ToLowerInvariant())).Substring(0, 24)))
+$buildLockAcquired = $false
+try {
+try { $buildLockAcquired = $buildMutex.WaitOne(30000) }
+catch [System.Threading.AbandonedMutexException] { $buildLockAcquired = $true }
+if (-not $buildLockAcquired) { throw 'Timed out waiting for the repository plugin build lock.' }
 $configPath = Join-Path $repoRoot 'config/aicoding-plugin-pack.json'
 $config = [System.IO.File]::ReadAllText($configPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
 $packEntries = @(Resolve-PackEntries $repoRoot $config)
@@ -232,4 +266,10 @@ $buildInfo | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $plug
 
 if ($Verify) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'scripts/verify-plugin.ps1') -PluginPath $pluginPath
+    if ($LASTEXITCODE -ne 0) { throw 'Generated plugin verification failed.' }
+}
+}
+finally {
+    if ($buildLockAcquired) { $buildMutex.ReleaseMutex() }
+    $buildMutex.Dispose()
 }

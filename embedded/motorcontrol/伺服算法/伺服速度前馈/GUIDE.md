@@ -1,0 +1,37 @@
+---
+capability_id: aicoding-servo-velocity-feedforward
+description: 设计、实现和调试伺服轨迹速度前馈。用于位置跟随误差、前馈比例与延迟匹配、速度指令限幅和切换；输出速度增量。惯量/摩擦转矩前馈及dq电压前馈由对应技能处理。
+---
+
+# 伺服速度前馈
+
+本文件是[电机控制与伺服总入口](../../SKILL.md)调度的内部专题指南，不独立注册。`aicoding-servo-velocity-feedforward` 是内部能力键；其他专题通过[skillkit.json](../../skillkit.json)的 `target → source/entrypoint` 定位并读取对应 `GUIDE.md`，不调用同名独立 skill。
+共同约束读取[公共控制契约](../../references/control_contracts_zh.md)，执行与证据读取[工程执行契约](../../references/engineering_execution_zh.md)。
+
+## Skill Type
+
+`reusable-domain-knowledge`、`team-expertise`。
+
+## 输入与推荐起点
+
+从工程读取位置环结构、轨迹的同周期位置/速度、反馈轴侧、单位、位置/速度环周期、指令延迟和速度限制。采用位置控制器输出速度的级联结构时，先用轨迹直接生成的速度做比例前馈；比例从明确单位映射下的保守值调到目标，先确认相位与方向。
+
+## 方法与实现
+
+读取[模型与选择](references/model_selection_zh.md)选择比例、滤波/超前或多速率重采样；不要通过差分噪声位置代替已有轨迹速度。
+
+在位置反馈输出的同一速度求和点叠加，统一限速并将最终残差反馈到可能带积分的位置控制器。前馈并不改变反馈闭环的极点，不能替代稳定性设计。
+
+读取[实现与验证](references/implementation_validation_zh.md)，给出配置、独立状态、每拍调用和使能衔接。C99实现将方向/轴侧换算与纯计算分开，明确成功输出与无效输入处理。
+
+## 输出与工程验证
+
+输出注入位置、单位/时序映射、推荐增益及成立条件、最小改动和可执行对照。固定轨迹、增益、初态、母线和负载，只切换前馈，比较峰值/RMS跟随误差、停稳、速度限制时间和噪声。外部CodingKit可用时使用 `examples/servo-validation` 的案例2，并读取该次实际结果。
+
+数据不足时先给可复核的模型与推荐测量，不能填造已调好的增益。跨模块的单位/最终约束采用“电机控制集成”的公共控制契约；涉及C实现加载C99技能。
+
+## 可执行工程入口
+
+读取[工程执行契约与能力映射](../../references/engineering_execution_zh.md)，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+复用 `servo-validation` 的轨迹→前馈→三环案例及 `mc_schedule` 多速率边界；速度前馈保持唯一求和点。实机仍需验证轨迹导数、时延匹配和最终限速后的跟随误差。

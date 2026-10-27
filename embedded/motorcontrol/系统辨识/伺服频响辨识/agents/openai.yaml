@@ -1,4 +1,0 @@
-interface:
-  display_name: "伺服频响辨识"
-  short_description: "设计可信的伺服激励与频响估计，区分对象和闭环并输出模型及有效频段"
-  default_prompt: "请使用 $aicoding-servo-frequency-response，依据现有模型和证据完成伺服频响辨识并说明成立范围。"

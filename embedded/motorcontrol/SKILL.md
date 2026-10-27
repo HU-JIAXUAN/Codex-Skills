@@ -1,9 +1,9 @@
 ---
 name: aicoding-motor-control
-description: 电机控制集成与伺服产品设计。用于从产品指标建立控制链、分配采样与执行时序、组合辨识/反馈/控制器/前馈/补偿，以及定位跨模块问题。专项算法交给对应技能；本技能负责共同接口、约束传播与系统验证。
+description: 电机控制与伺服统一入口，覆盖电机参数辨识、反馈与无传感器、三环与频域设计、MTPA/弱磁、死区与dq解耦、轨迹与前馈、频响与自动整定、振动/扰动/摩擦/纹波补偿、双反馈、实机部署和性能验证。按问题加载本目录内21个专题GUIDE，共享单位、时序、约束与验收；子专题不独立注册或调用。
 ---
 
-# 电机控制集成
+# 电机控制与伺服
 
 ## Skill Type
 
@@ -14,10 +14,10 @@ description: 电机控制集成与伺服产品设计。用于从产品指标建�
 ## 核心边界
 
 - 聚焦控制链路、实时采样、控制算法、保护、调试和验证。
-- 将目录分层、平台抽象、Bootloader、OTA、量产和发布门禁交给 `architecture`。
-- 涉及 C 实现时同时使用 `C99`。
-- 涉及定点数学、滤波、饱和或数值稳定性时同时使用 `dsp`。
-- 涉及具体 ARM 中断、NVIC、cache 或寄存器时同时使用 `arm`。
+- 将目录分层、平台抽象、Bootloader、OTA、量产和发布门禁交给 `aicoding-architecture`。
+- 涉及 C 实现时同时使用 `aicoding-c99-standard-c`。
+- 涉及定点数学、滤波、饱和或数值稳定性时同时使用 `aicoding-dsp`。
+- 涉及具体 ARM 中断、NVIC、cache 或寄存器时同时使用 `aicoding-arm`。
 
 ## 工作流
 
@@ -47,7 +47,7 @@ PWM 同步事件
 
 明确电流、角度和速度的采样时刻、有效性与数据年龄，以及PWM输出生效时刻；`cycle_id`是可选实现手段。测量deadline、overrun和jitter，允许可解释的异步采集与多速率。先读取[公共控制契约](references/control_contracts_zh.md)，时序细节读取 `references/pwm_adc_encoder_timing_zh.md`。
 
-真实 MCU、编译配置、PWM/ADC/反馈事件、ISR 路径和 Shadow 截止的只读分析使用 `aicoding-motor-hardware-deployment`。已知计算先执行确定性工具；不得将静态调用路径或指令估计写成实测 WCET。
+真实 MCU、编译配置、PWM/ADC/反馈事件、ISR 路径和 Shadow 截止的只读分析使用 [电机控制实机部署与实时验证](工程应用/电机控制实机部署与实时验证/GUIDE.md)。已知计算先执行确定性工具；不得将静态调用路径或指令估计写成实测 WCET。
 
 ### 3. 选择采样和更新策略
 
@@ -62,7 +62,7 @@ PWM 同步事件
 - 速度和位置环按噪声、延迟、机械共振和负载确定带宽；
 - 仅在基础相序、方向、offset、极对数和闭环稳定后增加前馈或补偿。
 
-频域指标与离散环路综合使用aicoding-control-frequency-analysis；系统辨识的模型/实验/估计边界读取[系统辨识基础](references/system_identification_foundations_zh.md)。需要带宽、补偿和测试细节时读取 `references/pid_bandwidth_compensation_zh.md`。
+频域指标与离散环路综合使用[频域分析与环路设计](自动控制/经典控制/频域分析与环路设计/GUIDE.md)；系统辨识的模型/实验/估计边界读取[系统辨识基础](references/system_identification_foundations_zh.md)。需要带宽、补偿和测试细节时读取 `references/pid_bandwidth_compensation_zh.md`。
 
 ### 5. 处理多轴和故障
 
@@ -100,26 +100,33 @@ PWM 同步事件
 
 ## 专项能力路由
 
-按技能清单中的实际路径加载以下入口，只读取当前问题所需references；不假设源码目录与安装缓存相邻。
+Codex 只注册本总入口。先识别主问题，再读取下表对应的 `GUIDE.md` 和当前问题所需 references；跨专题时复用公共契约，不一次加载全部指南。下表相对路径在规范源与生成包中保持一致，不依赖源码仓库与插件缓存相邻。
 
-| 当前问题 | 中文技能名称与技术ID |
+[skillkit.json](skillkit.json)记录21个内部专题的 `target → source/entrypoint` 映射。旧 `aicoding-*` 专项 ID 仅作内部能力键，不代表可单独调用的 Codex skill；需要组合时按表或清单定位本地指南。
+
+| 当前问题 | 内部专题指南 |
 |---|---|
-| 真实工程目标、PWM/ADC/ISR、Shadow截止与WCET证据 | 电机控制实机部署与实时验证 `aicoding-motor-hardware-deployment` |
-| Bode、带宽、裕度、离散环路综合 | 频域分析与环路设计 aicoding-control-frequency-analysis |
-| 激励波形、频段/幅值/时长与信息量 | 激励信号设计 aicoding-excitation-signal-design |
-| 参数未知、辨识结果不可信 | 电机参数辨识 `aicoding-motor-parameter-identification` |
-| 编码器/旋变、方向/零位、速度噪声 | 电机反馈与标定 `aicoding-motor-feedback-calibration` |
-| 观测器、HFI、无传感器启动/切换 | 无传感器电机控制 `aicoding-motor-sensorless-control` |
-| 三环、离散设计、稳定性 | 伺服控制器设计 `aicoding-servo-controller-design` |
-| 最小电流、高速限压、电流分配 | 最大转矩电流比与弱磁控制 `aicoding-pmsm-mtpa-field-weakening` |
-| dq耦合与反电动势 | 电流环解耦与电压前馈 `aicoding-pmsm-dq-decoupling` |
-| 逆变器误差、小电流畸变 | 逆变器死区补偿 `aicoding-inverter-deadtime-compensation` |
-| 轨迹跟踪和加减速误差 | 伺服速度前馈 `aicoding-servo-velocity-feedforward`；伺服转矩前馈 `aicoding-servo-torque-feedforward` |
-| S曲线、改目标、多轴同步 | 运动轨迹规划 `aicoding-motion-trajectory-planning` |
-| 动态对象未知、批量调参 | 伺服频响辨识 `aicoding-servo-frequency-response`；伺服自动整定 `aicoding-servo-auto-tuning` |
-| 机械振动、未知负载、低速/周期扰动 | 伺服振动抑制 `aicoding-servo-vibration-suppression`；伺服扰动观测 `aicoding-servo-disturbance-observer`；伺服摩擦补偿 `aicoding-servo-friction-compensation`；齿槽与转矩纹波补偿 `aicoding-servo-torque-ripple-compensation` |
-| 电机侧/负载侧双反馈 | 双反馈伺服控制 `aicoding-servo-dual-feedback-control` |
-| 产品指标、对照数据与验收 | 伺服性能验证 `aicoding-servo-validation` |
+| 真实工程目标、PWM/ADC/ISR、Shadow截止与WCET证据 | [电机控制实机部署与实时验证](工程应用/电机控制实机部署与实时验证/GUIDE.md) |
+| Bode、带宽、裕度、离散环路综合 | [频域分析与环路设计](自动控制/经典控制/频域分析与环路设计/GUIDE.md) |
+| 激励波形、频段/幅值/时长与信息量 | [激励信号设计](系统辨识/激励信号设计/GUIDE.md) |
+| 参数未知、辨识结果不可信 | [电机参数辨识](系统辨识/电机参数辨识/GUIDE.md) |
+| 编码器/旋变、方向/零位、速度噪声 | [电机反馈与标定](电机算法/电机反馈与标定/GUIDE.md) |
+| 观测器、HFI、无传感器启动/切换 | [无传感器电机控制](电机算法/无传感器电机控制/GUIDE.md) |
+| 电流/速度/位置控制器结构、离散设计、稳定性 | [伺服控制器设计](自动控制/控制器设计/伺服控制器设计/GUIDE.md) |
+| 最小电流、高速限压、电流分配 | [最大转矩电流比与弱磁控制](电机算法/最大转矩电流比与弱磁控制/GUIDE.md) |
+| dq耦合与反电动势 | [电流环解耦与电压前馈](电机算法/电流环解耦与电压前馈/GUIDE.md) |
+| 逆变器误差、小电流畸变 | [逆变器死区补偿](电机算法/逆变器死区补偿/GUIDE.md) |
+| 位置跟随误差、速度前馈与限速 | [伺服速度前馈](伺服算法/伺服速度前馈/GUIDE.md) |
+| 加减速误差、惯量/重力/已知负载前馈 | [伺服转矩前馈](伺服算法/伺服转矩前馈/GUIDE.md) |
+| S曲线、改目标、jerk约束与多轴时间同步 | [运动轨迹规划](伺服算法/运动轨迹规划/GUIDE.md) |
+| 动态对象未知、频响采集及模型质量 | [伺服频响辨识](系统辨识/伺服频响辨识/GUIDE.md) |
+| 批量调参、候选筛选与回退 | [伺服自动整定](自动控制/控制器设计/伺服自动整定/GUIDE.md) |
+| 机械共振、残振与专用滤波 | [伺服振动抑制](自动控制/补偿与观测/伺服振动抑制/GUIDE.md) |
+| 未知负载、扰动估计与补偿 | [伺服扰动观测](自动控制/补偿与观测/伺服扰动观测/GUIDE.md) |
+| 低速爬行、过零与换向误差 | [伺服摩擦补偿](伺服算法/伺服摩擦补偿/GUIDE.md) |
+| 齿槽与位置周期转矩纹波 | [齿槽与转矩纹波补偿](伺服算法/齿槽与转矩纹波补偿/GUIDE.md) |
+| 电机侧/负载侧双反馈 | [双反馈伺服控制](伺服算法/双反馈伺服控制/GUIDE.md) |
+| 产品指标、对照数据与验收 | [伺服性能验证](工程应用/伺服性能验证/GUIDE.md) |
 
 能力缺失时说明当前可用资产，仍可按已确定的契约给出接口与最小实现。跨模块集成遵循“一个补偿项一个所有者”，逐层传递速度、转矩/电流与最终可实现电压约束。
 

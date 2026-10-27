@@ -6,7 +6,7 @@
 
 固定Ts、局部线性RL且匹配这个顺序时，复用 `modules/common/controller/motor` 的 `mc_pi_design` 计算精确ZOH候选与延迟准入，`mc_pi_cfg` 仅保持切换瞬间同一误差下 `Kp*e+I` 连续；后续由新Ki按新速率积分。运行同目录 `run_tests.py`，再用当前工程的时钟、采样/生效延迟和最终限制复验。高阶柔性、非线性磁链和不同离散顺序不满足该准入时，不强套此设计。
 
-借用TI已有实现时先辨认 parallel/series、是否预乘Ts及更新先后。`S-TI-PI` 核验的 series 路径以 `Ki*Up` 积分，其中 `Up` 已含Kp；其Ki不等于这里单位为输出/(误差·s)的连续Ki。按实际代数映射后复算离散闭环，不直接复制同名参数。来源身份与核读范围仅维护于 `aicoding-motor-control` 的 `references/research_provenance.json`。
+借用TI已有实现时先辨认 parallel/series、是否预乘Ts及更新先后。`S-TI-PI` 核验的 series 路径以 `Ki*Up` 积分，其中 `Up` 已含Kp；其Ki不等于这里单位为输出/(误差·s)的连续Ki。按实际代数映射后复算离散闭环，不直接复制同名参数。来源身份与核读范围仅维护于 `aicoding-motor-control` 的 [来源身份与核读范围](../../../../references/research_provenance.json)。
 
 本地 `local-odrive-control` 的FOC采用旧积分输出、随后积分及饱和衰减；`local-sguanfoc-g4` 使用Tustin误差对与积分冻结。保留这些实现时应按其真实状态方程设计与验证，不直接套 `mc_pi_design` 的先积分矩形模型；实际编译分支和最终可实现输出比函数名更有决定性。
 

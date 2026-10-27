@@ -1,0 +1,37 @@
+---
+capability_id: aicoding-motion-trajectory-planning
+description: 设计、实现和验证伺服梯形/S曲线、jerk受限轨迹、在线重规划、停止和多轴时间同步。输出一致的位置/速度/加速度参考，处理非零初态与可行性。空间避障与机器人逆运动学由独立任务处理。
+---
+
+# 运动轨迹规划
+
+本文件是[电机控制与伺服总入口](../../SKILL.md)调度的内部专题指南，不独立注册。`aicoding-motion-trajectory-planning` 是内部能力键；其他专题通过[skillkit.json](../../skillkit.json)的 `target → source/entrypoint` 定位并读取对应 `GUIDE.md`，不调用同名独立 skill。
+共同约束读取[公共控制契约](../../references/control_contracts_zh.md)，执行与证据读取[工程执行契约](../../references/engineering_execution_zh.md)。
+
+## Skill Type
+
+`reusable-domain-knowledge`、`team-expertise`。
+
+## 输入与推荐路线
+
+取得当前/目标p/v/a、单位/轴侧、控制周期、速度/加速度/jerk边界、位置行程、可用转矩与同步需求。静止到静止优先明确范围的七段S曲线；途中改目标需要保持当前p/v/a的在线方法，不把静止边界公式直接重启。
+
+读取[轨迹模型与选择](references/trajectory_models_zh.md)。对需要任意状态时间最优、多轴同步或中间路点的问题，比较成熟库、受限自研和产品实时资源，明确功能/许可证/部署边界。Ruckig只是可选参考，其不同版本和路点接口需要单独检查。
+
+## 代码实现
+
+读取[在线实现与验证](references/online_validation_zh.md)。将轨迹求解与每拍解析求值分离；使用有界求解、预分配状态及明确错误状态，失败时不覆盖仍有效的轨迹。
+
+每拍输出来自同一轨迹的p/v/a；给速度/转矩前馈使用。端点与段间切换采用解析积分/边界匹配，不能单靠离散截断修补。多轴必须说明时间同步或相位同步及其约束；轴运动可行不代表整机路径无碰撞。
+
+## 工程验收
+
+输出方法选择依据、成立边界、公式/接口、重规划/停止语义、数值范围与最坏时间测量方法。验证短程、反向、零位移、非零v/a改目标、临界初态、不可行请求、目标热更新和多轴终端；记录p/v/a连续性、v/a/j上限、端点及失败处理。
+
+外部CodingKit案例2采用边界匹配五次Bezier段及导数控制点凸包界；它与七段S曲线并列，不声称通用时间最优。宿主执行时间不代替目标MCU截止点测量。
+
+## 可执行工程入口
+
+读取[工程执行契约与能力映射](../../references/engineering_execution_zh.md)，只加载本专项映射和 L1—L7 验收条件；通过批准的资产发现协议定位 CodingKit，命令与覆盖范围以唯一资产的 README、头文件和实际测试输出为准。
+
+调用 `mc_traj_plan`/`mc_traj_sample` 验证静止到静止五次轨迹的采样 PVAJ 和 v/a/j 约束；`mc_schedule` 核对整数多速率。通用非零初态在线重规划、不可行停止和多轴同步仍须按本专项实现验收。

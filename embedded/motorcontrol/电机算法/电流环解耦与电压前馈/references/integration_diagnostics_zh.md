@@ -35,4 +35,4 @@ $$
 
 源码/主机测试证明符号、单位、边界与时序算法；离散闭环仿真证明所用模型下性能；板上需测真实采样与生效时刻及交叉响应。没有后两层证据时报告为设计/仿真结果。
 
-来源身份与核读范围见 `aicoding-motor-control` 的 `references/research_provenance.json`：`B-PARAM-ZHU` 用于参数与逆变器误差边界；正式实现/真值以 CodingKit 对应资产为准。[MathWorks官方补偿模型](https://www.mathworks.com/help/mcb/ref/pmsmfeedforwardcontrol.html)用于符号交叉核对。
+来源身份与核读范围见 `aicoding-motor-control` 的 [来源身份与核读范围](../../../references/research_provenance.json)：`B-PARAM-ZHU` 用于参数与逆变器误差边界；正式实现/真值以 CodingKit 对应资产为准。[MathWorks官方补偿模型](https://www.mathworks.com/help/mcb/ref/pmsmfeedforwardcontrol.html)用于符号交叉核对。

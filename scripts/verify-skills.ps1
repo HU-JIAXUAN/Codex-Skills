@@ -90,5 +90,7 @@ foreach ($file in $skillFiles) {
     if ($text -notmatch '(?m)^name:\s*[^\r\n]+') { $errors.Add("Missing name: $($file.FullName)") | Out-Null }
     if ($text -notmatch '(?m)^description:\s*') { $errors.Add("Missing description: $($file.FullName)") | Out-Null }
 }
+$motorOutput = @(& python (Join-Path $repoRoot 'scripts/test-motor-contract.py') 2>&1)
+if ($LASTEXITCODE -ne 0) { $errors.Add("Motor bundle source contract failed: $($motorOutput -join ' ')") | Out-Null }
 if ($Json) { [pscustomobject]@{ ok=($errors.Count -eq 0); count=$skillFiles.Count; errors=$errors } | ConvertTo-Json -Depth 5 } elseif ($errors.Count -eq 0) { Write-Host "Skill verification passed ($($skillFiles.Count) SKILL.md files)." } else { $errors | ForEach-Object { Write-Error $_ } }
 if ($errors.Count -gt 0) { exit 1 }

@@ -46,9 +46,19 @@ if (Test-Path -LiteralPath $skillsPath) {
         if (-not (Test-Path -LiteralPath $skillFile)) { Add-Err "Missing SKILL.md: $($dir.Name)"; continue }
         $name = Read-FrontmatterName $skillFile
         if ($name -ne $dir.Name) { Add-Err "Skill name mismatch: dir=$($dir.Name), frontmatter=$name" }
+        $nestedSkills = @(Get-ChildItem -LiteralPath $dir.FullName -Recurse -Filter SKILL.md -File | Where-Object { $_.DirectoryName -ne $dir.FullName })
+        foreach ($nested in $nestedSkills) { Add-Err "Nested registered skill is not allowed: $($nested.FullName)" }
     }
 }
 if (Has-AbsolutePersonalPath (Join-Path $PluginPath 'hooks')) { Add-Err 'Hooks contain personal absolute paths.' }
+
+$motorRoot = Join-Path $skillsPath 'aicoding-motor-control'
+$packConfig = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'config/aicoding-plugin-pack.json') | ConvertFrom-Json
+$motorSelected = @($packConfig.skillKits | Where-Object { $_.enabled -ne $false -and $_.source -eq 'embedded/motorcontrol/skillkit.json' }).Count -gt 0
+if ($errors.Count -eq 0 -and ($motorSelected -or (Test-Path -LiteralPath $motorRoot -PathType Container))) {
+    $motorOutput = @(& python (Join-Path $repoRoot 'scripts/test-motor-contract.py') --package --plugin-path $PluginPath 2>&1)
+    if ($LASTEXITCODE -ne 0) { Add-Err "Motor bundle contract failed: $($motorOutput -join ' ')" }
+}
 
 if ($Json) {
     [pscustomobject]@{ ok=($errors.Count -eq 0); errors=$errors } | ConvertTo-Json -Depth 5

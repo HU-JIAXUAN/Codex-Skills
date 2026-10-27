@@ -6,7 +6,7 @@
 
 当前唯一C99子集是 CodingKit `modules/common/controller/motor` 的 `mc_frf`，仅执行8—4096点整周期单频DFT及激励幅值准入。H1/H2、相干性、闭环无偏估计与稳定性判断不在该函数中；优先复用当前工程/原始SDK的合适工具，不能把本页公式或函数名视为已经提供完整FRF估计器。
 
-来源索引 `L-XIDIAN-DTFT-LECTURE`、`RULE-FRF-STEADY-ADMISSION` 区分了DTFT/收敛域和终值定理的适用条件：常规单位圆频响要核查相应收敛条件；使用终值定理时，需检查 `(z-1)X(z)` 的极点条件，不能只凭末段趋势。含积分器的系统在非零频率仍可分析周期特解或广义频响，但DC、初态与漂移须另行处理，不据此声称BIBO稳定，也不泛化为“积分器不能做Bode”。来源身份、实际核读页与边界只在 `aicoding-motor-control` 的 `references/research_provenance.json` 维护。
+来源索引 `L-XIDIAN-DTFT-LECTURE`、`RULE-FRF-STEADY-ADMISSION` 区分了DTFT/收敛域和终值定理的适用条件：常规单位圆频响要核查相应收敛条件；使用终值定理时，需检查 `(z-1)X(z)` 的极点条件，不能只凭末段趋势。含积分器的系统在非零频率仍可分析周期特解或广义频响，但DC、初态与漂移须另行处理，不据此声称BIBO稳定，也不泛化为“积分器不能做Bode”。来源身份、实际核读页与边界只在 `aicoding-motor-control` 的 [来源身份与核读范围](../../../references/research_provenance.json) 维护。
 
 ## 从同步序列得到复数响应
 

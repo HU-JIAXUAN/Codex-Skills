@@ -43,4 +43,4 @@ $\lambda\in(0,1]$；P为归一化参数协方差量。多输出按所建噪声�
 
 ## 来源与证据
 
-来源身份与核读范围见 `aicoding-motor-control` 的 `references/research_provenance.json`：`B-PARAM-ZHU` 用于欠秩/病态和逆变器依赖，`P-RPEM-PERERA` 用于目标参数与实验准入。RLS更新为标准线性回归推导，未核读书中第10章算法正文；不得把本页说明写成作者原代码或板测结果。
+来源身份与核读范围见 `aicoding-motor-control` 的 [来源身份与核读范围](../../../references/research_provenance.json)：`B-PARAM-ZHU` 用于欠秩/病态和逆变器依赖，`P-RPEM-PERERA` 用于目标参数与实验准入。RLS更新为标准线性回归推导，未核读书中第10章算法正文；不得把本页说明写成作者原代码或板测结果。
