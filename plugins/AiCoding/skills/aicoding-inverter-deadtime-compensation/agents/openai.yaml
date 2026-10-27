@@ -1,4 +1,0 @@
-interface:
-  display_name: "逆变器死区补偿"
-  short_description: "逆变器死区补偿：从模型、时序与边界推导实现并建立可复现的工程验证"
-  default_prompt: "请用 $aicoding-inverter-deadtime-compensation 分析当前工程并给出可验证的设计或修改。"

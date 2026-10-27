@@ -1,193 +1,100 @@
 ---
 name: aicoding-architecture
-description: 设计、审查和重构嵌入式固件系统架构，覆盖 MCU、MPU、DSP、FPGA、SoC、裸机、RTOS 和 Linux 边缘设备。先把厂商目录名归一为语义角色（SL-*），再按依赖规则（DR-*）判断边界、按可观察信号（SIG-*）测出泄漏基线、按门禁（GATE-*）机器化验证、按方法（AM-*）执行分析与迁移、按模式（PAT-*）命名结构、按成熟度阶梯（L0-L5）与证据分级给出结论。规则与具体项目解耦，不携带任何仓库的路径或数值。用于职责分层、真实变化点抽象、App/算法平台化、Port/Adapter/组合根、Bootloader、OTA、A/B、Manifest、参数与校准区、产线烧录、依赖注入、测试与发布门禁，以及将架构约束落实为 CLI/Hook/CI Lint 阻塞规则。仅在系统边界、目录结构、平台适配或量产交付是主问题时使用；FOC、SVPWM、PI/PID、采样时序和多轴控制算法改用 motorcontrol。参考开源或厂商工程前先确认主控、需求、许可证和复刻范围，不得默认照搬。
+description: 分析、设计和审查嵌入式系统的职责、模块边界、依赖、变化传播与平台适配。用于 App 解耦、分层决策、跨模块资源与执行关系，以及工程资产沉淀；围绕真实用例比较取舍，不预设层数或框架。对象身份与生命周期、内部字段与数据语义分别按需结合对象模型设计和数据模型设计。
 ---
 
-# 嵌入式架构平台化
+# 嵌入式架构
 
-默认使用中文输出。
+默认使用简体中文；运行时入口为 `aicoding-architecture`。负责系统和模块之间的设计判断，细部问题按需使用专项知识。
 
 ## Skill 类型
 
-本 Skill 属于 `consistent-workflow`、`organization-standard`、`reusable-domain-knowledge` 和 `team-expertise`：它把嵌入式架构审查流程、团队平台化标准、量产交付知识和高级架构经验固化为按 ID 引用的可复用规则。
+属于 `reusable-domain-knowledge` 和 `team-expertise`：提供架构概念、判断方法、按需参考资料和可执行检查器。
 
-使用本 Skill 当：任务涉及重复架构审查流程、团队平台化标准、可复用架构知识、量产/升级/发布门禁，或需要把架构约束落成 CLI/Hook/CI Lint 阻塞规则。
+- 覆盖 MCU、MPU、DSP、FPGA、SoC、裸机、RTOS 和 Linux 边缘固件。
+- 只为已确认的变化点、测试替身或隔离需要增加边界，不默认引入 HAL/BSP/ops、第二实现或空 Port。
+- 一次性简单解释、局部修复无需完整架构流程；探索阶段可以分析候选边界，不强制生成目录、映射文件或门禁。
+- C 实现结合 `aicoding-c99-standard-c`；ARM 启动、中断和 cache 结合 `aicoding-arm`；FOC、PI、采样与多轴算法交给 `aicoding-motor-control`。
 
-跳过本 Skill 当：任务只是一次性简单解释、只是在探索原型且边界未稳定、或主问题是具体控制算法而应改用 `motorcontrol`。
+## 核心指导思想
 
-## 规范 ID 体系
+- 沉淀基本概念、架构能力与设计判断方法，按 [AP-012](references/architecture_principles_zh.md#AP-012) 选择性固化；具体业务设计由当前工程推导，示例不自动成为约束。
+- 按职责和变化原因划分模块，业务逻辑与硬件、OS、第三方库细节解耦；依赖围绕稳定接口组织，不按目录名判断。
+- App 描述产品要做什么，Service 将底层能力组织为可复用系统能力。这是职责划分的参考；层数、名称和接口形式服从实际工程，不要求固定五层或每次调用逐层经过。
+- 参数、运行状态、资源和数据明确归属与生命周期，保持单一状态来源。对象、数据、管理、配置与扩展按本次问题考虑，`cfg/ctx/data/ops` 是可选建模词汇。
+- 采用能解决当前问题的最小结构，复用已有稳定接口；普通函数与静态绑定同样可以解耦，不为结构完整制造空层、第二实现或新文档。
+- **工程开发必须考虑 App 层的资产沉淀**：保留可复用的产品流程、状态机、业务规则、数据模型和异常处理经验，同时积累有价值的服务、算法、测试工具与平台适配。
 
-所有架构结论按 ID 引用规范，不复制规则正文。ID 的唯一归属如下：
+层级概念和组织示例查[语义模型](references/semantic_layer_model_zh.md)与[参考架构](references/reference_architecture_zh.md)；边界原则查 [DR-017](references/dependency_rules_and_gates_zh.md#DR-017)。对象建模按 [AM-012](references/architecture_methods_zh.md#AM-012)，轻量资产沉淀按 [AM-013](references/architecture_methods_zh.md#AM-013)。
 
-| 前缀 | 含义 | 唯一定义位置 |
+## 专项子 Skill 路由
+
+设计时重点思考：什么需要一起变化、谁拥有状态和资源、调用者真正需要什么、当前约束是什么，以及增加边界是否值得。比较适合当前用例的少量方案，给出取舍与最小验证；不把这些问题变成必须填写的新表单。
+
+主 Skill 负责系统职责、依赖与资产积累，按问题调用专项：
+
+| 问题 | 子 Skill |
+|---|---|
+| 对象职责、身份、协作与生命周期，以及是否需要统一管理 | **对象模型设计**（`aicoding-object-model-design`） |
+| 对象内部字段、cfg/ctx/data/ops、类型、存储、读写权限与有效期 | **数据模型设计**（`aicoding-data-model-design`） |
+
+三个入口都可直接使用。按主要设计问题选入口，只有遇到实质设计缺口时才结合专项，不要求依次执行或来回转交。普通字段整理不扩展为对象框架，身份与生命周期设计不重复维护内部数据细节。
+
+## 如何推进设计
+
+先理解产品用例和本次变化，再读取相关代码、构建、调用关系与已有记录。识别职责、状态和资源的所有者，找出具体环境细节如何影响业务；只对会改变方案的缺失信息提问。
+
+围绕真实变化点比较少量可行方案，说明边界隔离了什么、增加了什么成本。能复用现有接口就复用，必要时落地一个最小切片。用户要求只分析时，在回复中给出具体方案与验证办法，不生成业务文件。
+
+按影响选择构建、依赖与行为验证，交代结论的证据范围和未验证项。设计结果应让当前职责与变化传播更清楚，并保留后续可用的 App 成果；小任务复用现有代码、测试和记录即可。
+
+## 先选路径
+
+| 任务 | 最小工作路径 | 验收重点 |
 |---|---|---|
-| `AP-*` | 判断原则 | [架构原则](references/architecture_principles_zh.md) |
-| `SL-*` | 语义角色 | [语义层级模型](references/semantic_layer_model_zh.md) |
-| `DR-*` / `GATE-*` | 边界约束与门禁 | [依赖规则与门禁](references/dependency_rules_and_gates_zh.md) |
-| `AM-*` | 分析与迁移方法 | [架构方法](references/architecture_methods_zh.md) |
-| `PAT-*` | 结构模式 | [模式目录](references/architecture_patterns_zh.md) |
-| `SYN-*` | 成熟度与证据分级 | [架构成熟度与证据分级](references/architecture_maturity_zh.md) |
-| `SIG-*` | 可观察泄漏信号与基线指标 | [泄漏信号与基线测量](references/leak_signals_and_baseline_zh.md) |
+| 新项目／新模块 | 从一个用例确定职责与接口，复用工程设施，落地最小可验证结构 | 按实际交付验证接口、构建接线及关键行为，替身和 smoke 按需选择 |
+| 存量审查／迁移 | 读相关构建与调用链，判断实际职责，选一个变化点分析或迁移 | 受影响依赖和行为有证据；实际迁移明确新旧路径与退出条件 |
+| 量产／升级边界 | 在已有架构上补充当前交付相关的镜像、参数、恢复与追溯契约 | 用相应故障、断电或现场证据判断；不把这些项目强加给普通骨架任务 |
 
-角色之间的装配关系见[通用参考架构](references/reference_architecture_zh.md)。
+边界与契约可查 [AM-002](references/architecture_methods_zh.md#AM-002)，最小结构可查 [AM-004](references/architecture_methods_zh.md#AM-004)，渐进迁移可查 [AM-007](references/architecture_methods_zh.md#AM-007)。这些是按问题选择的方法，不要求每次执行完整流程。全库角色映射、泄漏基线和成熟度仅用于需要该范围结论的审查。
 
-## 分析在前，工具在后
+### 检查器的使用条件
 
-**工具不判断架构，它只复核已经做出的判断。** 「哪些是用户代码」「哪些是厂商代码」「这个目录想表达什么」「什么算环境类型」——没有一项是脚本能看出来的，全部是模型和人读代码后的结论。把顺序倒过来的直接后果是：脚本会拿着一份残缺的输入，安静地报出一个看起来很干净的 0。
+工具复核已完成的判断。日常分析不要求先创建全库映射或增加审批；采用本检查器做阻塞检查时，复用项目已有有效确认与配置，缺少时说明具体条件，不虚构确认人，也不把扫描零告警当作架构通过。
 
-正确顺序固定为三步，不得跳过第一步：
+以下 `<SkillRoot>` 是当前 skill 目录，`<ProjectRoot>` 是目标工程；使用实际路径替换，从 skill 目录定位脚本，不假定业务仓库里已有同名脚本：
 
-```text
-1. 模型分析   读仓库，按 AM-011 定出环境边界、用户代码与厂商代码的分界、各目录的真实意图
-2. 人工确认   把结论写进 arch-map.json，含 analysis_confirmed_by 与每条规则的 evidence
-3. 工具复核   机械校验依赖方向、公共头纯度、角色映射完整性，失败可阻塞
+```powershell
+pwsh -File "<SkillRoot>/scripts/check_layering.ps1" -Root "<ProjectRoot>" -Evidence
+pwsh -File "<SkillRoot>/scripts/check_layering.ps1" -Root "<ProjectRoot>" -Map "<ProjectRoot>/arch-map.json" -BaselineOnly
 ```
 
-第 1 步可以先用证据模式抓原材料。它只输出可复现的事实，**不下任何结论**：
+证据模式只收集事实；基线模式用于报告；去掉 `-BaselineOnly` 才是阻塞检查。映射和环境规则不完整时返回 2，不能解释为零违规。覆盖与限制见[分层检查器说明](references/layering_check_tool_zh.md)。
 
-```bash
-pwsh -File scripts/check_layering.ps1 -Root <项目根> -Evidence
-```
+## 按需读取参考
 
-第 3 步才是校验。判断输入不完整时脚本会拒绝给出结论并返回 2，不会报 0：
+按当前问题读取对应行，不默认加载整套资料。规则正文保持唯一归属，适用时按 ID 引用；项目路径、数值和生产状态留在项目记录中。
 
-```bash
-pwsh -File scripts/check_layering.ps1 -Root <项目根> -Map <项目>/arch-map.json -BaselineOnly
-```
+| 问题 | 资料与唯一规则归属 |
+|---|---|
+| 抽象是否值得、固定板级实现是否应保留 | [架构原则 AP-*](references/architecture_principles_zh.md)、[决策矩阵](references/architecture_decision_matrix_zh.md) |
+| 各层概念、厂商目录映射、采集与执行链路 | [语义角色 SL-*](references/semantic_layer_model_zh.md)、[通用参考架构](references/reference_architecture_zh.md) |
+| APP 解耦、依赖方向、公共接口、占位与机器门禁 | [依赖规则 DR-* 与门禁 GATE-*](references/dependency_rules_and_gates_zh.md)，APP 参考 DR-017/GATE-011 |
+| 对象职责、协作与生命周期 | 按需结合 `aicoding-object-model-design`；主架构保留 [AM-012](references/architecture_methods_zh.md#AM-012) 与 DR-018 的边界说明 |
+| 对象内部字段、cfg/ctx/data/ops 与数据有效性 | 按需结合 `aicoding-data-model-design`，按字段语义、类型、所有权和寿命设计 |
+| 工程结束后的代码、数据、测试与架构资产 | [方法 AM-013](references/architecture_methods_zh.md#AM-013)，参考 DR-019，重点包括 App 层 |
+| 契约、骨架、切片与渐进迁移 | [方法 AM-*](references/architecture_methods_zh.md)、[模式 PAT-*](references/architecture_patterns_zh.md) |
+| 存量基线与正式架构评估 | [泄漏信号 SIG-*](references/leak_signals_and_baseline_zh.md)、[成熟度 SYN-*](references/architecture_maturity_zh.md) |
+| 量产、Bootloader、OTA、A/B、参数与校准区 | [生产与量产约束](references/production_firmware_constraints_zh.md)、[测试与发布门禁](references/testing_release_gate_zh.md) |
+| 需求不足或参考工程选择 | [访谈清单](references/customer_interview_checklist_zh.md)、[参考仓库矩阵](references/repository_reference_matrix_zh.md)、[行为复刻边界](references/customer_function_replicate_options_zh.md)；先检查主控、需求、许可证和范围 |
+| 多轮协作、正式记录或评审 | [AI 架构工作流](references/ai_architecture_workflow_zh.md)；按需要使用[项目说明](assets/project_architecture_template_zh.md)、[模块契约](assets/module_contract_template_zh.md)、[ADR](assets/adr_template_zh.md)、[任务契约](assets/ai_task_contract_template_zh.md)、[审查输出](assets/architecture_review_template_zh.md)、[检查表](assets/architecture_review_checklist_zh.md)、[客户确认](assets/customer_confirmation_template_zh.md) |
 
-去掉 `-BaselineOnly` 即为阻塞模式，可接入 pre-commit 或 CI required check。它报告未分类模块、依赖方向违规、公共头环境类型泄漏、非组合根引用实现头，并给出过度抽象警告（DR-012）与「一条映射盖住了契约+实现两个角色」警告（DR-014）。
+## 验证与工具
 
-两个检查器的完整用法见[分层检查器使用说明](references/layering_check_tool_zh.md)。
+对可稳定重复判断的规则优先使用已有构建、测试、CLI、Hook 或 CI；不为普通设计分析新建门禁或审批。角色与边界取舍仍需结合用例和证据判断。需要正式发布结论时，采用该项目实际适用的门禁与确认要求，未运行项如实说明。
 
-校验本 skill 自身的文档拓扑与 ID 归属（GATE-007）：
+本 Skill 自身的文档、链接与 ID 归属由 `pwsh -File "<SkillRoot>/scripts/validate_document_architecture.ps1"` 校验；目标工程分层检查器的前提与限制见上文。工具不能证明它未覆盖的运行行为、时序或私有状态访问。
 
-```bash
-pwsh -File scripts/validate_document_architecture.ps1
-```
+## 输出
 
-## 工作流契约
-
-触发：系统边界、目录结构、平台适配、量产交付、发布门禁或架构规则机器化任务。
-
-输入：主控/OS/SDK、项目阶段、真实变化点、强实时路径、升级/产线需求、现有构建和 CI 工具。
-
-步骤：先建立上下文，再把实际目录归一为语义角色，然后测出泄漏基线，只对真实变化点抽象，最后把可机器检查的架构约束落实为 CLI、Hook、Lint、CI 或发布脚本门禁。
-
-完成标准：角色映射覆盖全部模块，边界和依赖方向明确，不新增无法解释的抽象，量产/升级风险有门禁，机器化规则说明命令入口和阻塞阶段。
-
-验证：依赖扫描、include graph、公共头纯度、状态机测试、故障注入、升级断电测试、强实时测量和发布门禁通过。
-
-阻塞 Hook：新增架构边界或发布规则时，若可稳定机器检查但没有 CLI/Hook/CI 阻塞方案，必须在输出中标为未完成风险，不得宣称架构已可发布。
-
-## 核心边界
-
-- 目录名不授予架构语义（AP-009）；先归一角色，再讨论层级。
-- 只抽象真实变化点（AP-006、DR-012），不为目录美观增加层次。
-- 保持 App、算法核心、协议语义、升级与故障状态机不依赖具体芯片和厂商 HAL。
-- 允许固定板级 GPIO、bring-up 和一次性实验保留薄实现。
-- 结论必须分级（AP-010、SYN-010）：目录结构不能证明解耦，静态检查不能证明硬件验证。
-- 本 skill 的规则、信号和模板保持与具体项目解耦：只描述可观察信号、判定条件和命令模板，不写入任何具体仓库的路径、目录名、模块名或快照数值。项目事实属于该项目自己的架构说明和评审记录。
-- 将 FOC、SVPWM、PI/PID、采样时序和多轴控制算法交给 `motorcontrol`。
-- 涉及 C 实现时同时使用 `c99`；涉及具体 ARM 启动、中断或 cache 时同时使用 `arm`。
-
-## 工作流
-
-### 1. 建立上下文
-
-先从仓库证据识别，缺失且会改变方案时再询问：
-
-- 主控、编译器、操作系统和厂商 SDK 版本；
-- 项目阶段：Demo、bring-up、产品化、平台化或量产维护；
-- 强实时路径、周期、WCET、抖动和安全状态；
-- 真实变化点：主控、板卡、协议、编码器、功率板或产品型号；
-- Bootloader、升级、回滚、签名、参数、校准和产线追溯需求。
-
-需要组织问题时读取[客户访谈清单](references/customer_interview_checklist_zh.md)。不要默认引入 HAL/BSP/ops、跨 RTOS、A/B 或全量 GPIO 抽象。
-
-### 2. 语义归一（先做，不可跳过）
-
-按 AM-009 忽略目录名，逐模块判定职责、变化原因、掌握的知识、公共类型和资源所有权，输出“实际路径/构建目标 -> 角色 ID -> planned/implemented”映射表。角色定义与常见名称歧义见[语义层级模型](references/semantic_layer_model_zh.md)，命名与角色不一致的可观察信号见[泄漏信号与基线测量](references/leak_signals_and_baseline_zh.md)。
-
-未分类模块必须列出；带着未分类模块做的依赖判断不成立（DR-014、GATE-009）。
-
-### 3. 测出基线并定级
-
-按 AM-010 和 SIG-008 的记录格式，用可复现命令测出未分类模块数、各角色区域的环境头包含数、全局 include 路径条数、重复能力组数、组合位置数和 planned/弱实现占位数，并同时记录命令与快照标识。再按[架构成熟度与证据分级](references/architecture_maturity_zh.md)的 L0-L5 阶梯给出当前等级和封顶原因。
-
-没有命令支撑的等级声明只能记为意图，不得写入完成度。
-
-### 4. 只针对真实变化点提出方案
-
-对每个新增边界说明：
-
-- 它隔离了哪个已确认的变化；
-- 哪些调用方依赖它；
-- 如何测试或替换；
-- 不增加该边界的实际代价是什么。
-
-无法回答时不新增抽象。抽象与否的判据见[架构决策矩阵](references/architecture_decision_matrix_zh.md)，结构命名与代价见[模式目录](references/architecture_patterns_zh.md)。
-
-反向同样要处理：检查器报出的每条 DR-012 警告（Port 无实现，或只有单一实现且无测试替身）必须给出结论——补出第二实现或替身、说明真实变化轴、或退回直接依赖并删除该 Port。不允许保留“为将来准备”的空接口。
-
-### 5. 用最小纵向切片落地
-
-按 AM-005 和 SIG-009 的选点规则挑一条链路，贯通用例、核心模块、Port、真实 Adapter、Fake、组合接线和门禁；存量项目按 AM-007 绞杀式迁移，保持旧路径可回退。切片成立的判据是：替换实现或注入故障只改动适配与组合侧，核心测试不需要目标板初始化。不要同时开多个切片。
-
-### 6. 处理量产和升级
-
-涉及交付、现场维护或升级时，读取[固件生产与量产约束](references/production_firmware_constraints_zh.md)，明确镜像验证、断电恢复、回滚、参数保护、版本追溯和调试口策略（GATE-010）。
-
-### 7. 使用参考项目
-
-仅当主控、产品形态或问题相近时读取：
-
-- [参考仓库矩阵](references/repository_reference_matrix_zh.md)：快速匹配参考工程；
-- [客户功能复刻方案速查](references/customer_function_replicate_options_zh.md)：比较可复刻行为、代价和许可证风险。
-
-区分架构思想、行为重实现、代码参考和不建议照搬的部分。未经用户确认，不复制参考工程的目录或功能。
-
-### 8. 定义验证和发布门禁
-
-读取[测试与发布门禁](references/testing_release_gate_zh.md)，按语义角色确定最低测试项，并给出每条门禁的命令、阻塞阶段和当前 PASS/FAIL/NOT RUN。没有证据时，不宣称架构已验证或可发布。
-
-### 9. 将架构约束机器化
-
-凡是能被仓库结构、依赖图、构建脚本、静态扫描或测试稳定判断的架构约束，不能只写在设计文档中；必须实现为 CLI、Hook、Lint、CI required check 或发布脚本门禁，并让失败明确阻塞合并、发布或产线包生成。
-
-优先机器化：依赖方向（GATE-001）、公共头纯度（GATE-002）、组件可见性（GATE-003）、主机替身测试（GATE-004）、资源与时序预算（GATE-005）、三视图一致性（GATE-008）、角色映射完整性（GATE-009）、量产与升级（GATE-010）。其中 GATE-001／GATE-002／GATE-009 可直接用 `scripts/check_layering.ps1` 落地，其余按项目构建系统和测试框架补齐。
-
-提出新边界或发布规则时同步给出：判定条件、推荐命令或 hook 入口、阻塞阶段、暂不能机器化的原因和人工确认方式。
-
-## 门禁规则
-
-- CLI 检查器：失败必须返回非零退出码并指出违规文件、来源角色和目标角色。
-- Hook 门禁：可机器检查的约束应接入 pre-commit、Git hook、CI required check、发布打包或产线包生成。
-- MCP 工具库：若存在项目诊断、仓库/依赖分析、构建或测试 MCP，优先作为工具库；没有时用 CLI/构建日志/人工审查替代并说明原因。
-- 人工确认：无法机器化的判断必须转入下节的人工反馈确认，不得用工具零告警替代。
-- 暂不实现原因：无法稳定自动判断、项目结构未稳定、原型阶段变化太快，或需要团队先确认架构边界时，必须写明人工替代项。
-
-## 人工反馈确认
-
-- 负责人（Owner）必须记录已接受的门禁与阻塞项、人工审查范围（真实变化点、抽象代价、许可证边界、量产风险、升级策略）和明确决定（批准／带风险批准／拒绝）。没有确认时不得声称架构已完全可发布。
-
-## AI 协作与输出
-
-多轮或多人协作时按[AI 辅助架构工作流](references/ai_architecture_workflow_zh.md)的七步闭环推进，并使用以下输入包：
-
-- [项目架构说明模板](assets/project_architecture_template_zh.md)
-- [模块契约模板](assets/module_contract_template_zh.md)
-- [架构决策记录模板](assets/adr_template_zh.md)
-- [AI 任务契约模板](assets/ai_task_contract_template_zh.md)
-
-按任务规模输出必要部分：
-
-1. 当前平台、阶段、基线和已确认假设；
-2. 实际路径到语义角色映射与未分类项；
-3. 泄漏基线数值与成熟度等级；
-4. 真实变化点与不应抽象点；
-5. 建议边界、依赖方向、纵向切片和目录映射；
-6. 参考项目的匹配理由与复刻边界；
-7. 门禁清单、阻塞阶段、验证结果和待用户确认项；
-8. 结论证据分级：已验证事实／有根据推断／未验证假设。
-
-正式审查使用[架构审查输出模板](assets/architecture_review_template_zh.md)并逐条挂接[架构评审检查表](assets/architecture_review_checklist_zh.md)；需要方案签字确认时使用[客户确认模板](assets/customer_confirmation_template_zh.md)。
+先报告结论与本次路径，再给必要证据：改动或建议、职责与契约、边界理由、可复现命令及结果、未实现/未验证项和下一阶段条件。工程开发必须交代 App 层及其他有价值成果沉淀了什么、后续怎样使用和验证；复用已有记录，小任务在回复中说明即可。区分已验证事实、有根据推断和未验证假设；正式审查也按项目需要选择角色基线、成熟度或发布门禁记录。

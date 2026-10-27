@@ -1,6 +1,6 @@
 # 工程执行契约与能力映射
 
-本文件是 MotorControl 族的共同执行入口，随 `aicoding-motor-control` 打包一次。专项按技能名定位它，只读取当前任务一行及相应资产；不复制到每个 Skill。单位、坐标与求和点仍以[公共控制契约](control_contracts_zh.md)为准。
+本文件是“电机控制与伺服”总 skill 与21个内部专题的共同执行入口，随唯一注册的 `aicoding-motor-control` 打包一次。专题通过相对链接读取它，只读取当前任务一行及相应资产，不复制到各专题。下表保留的旧专项技术 ID 是 [skillkit.json](../skillkit.json)中的内部能力键，不表示独立注册 skill；总入口按清单中的 `source/entrypoint` 调度对应 `GUIDE.md`。单位、坐标与求和点仍以[公共控制契约](control_contracts_zh.md)为准。
 
 来源核验使用同目录的 `research_provenance.json` 与[现有项目参考矩阵](repo_reference_matrix_motor_zh.md)。以记录的阅读范围、实际页码、Commit/符号及许可证为准；未核验全文或源码不升级为已核验，也不在本文件重复维护来源事实。
 

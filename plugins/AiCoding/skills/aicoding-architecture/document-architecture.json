@@ -17,10 +17,10 @@
   "documents": [
     {
       "path": "SKILL.md",
-      "title": "嵌入式架构平台化",
+      "title": "嵌入式架构",
       "owns": [
         "skill-routing",
-        "workflow-contract",
+        "design-reasoning",
         "output-format"
       ],
       "depends_on": [
@@ -63,7 +63,8 @@
       "title": "厂商命名无关的语义层级模型",
       "owns": [
         "semantic-roles",
-        "vendor-name-normalization"
+        "vendor-name-normalization",
+        "common-layer-concepts"
       ],
       "depends_on": [
         "references/architecture_principles_zh.md"
@@ -99,7 +100,9 @@
       "owns": [
         "analysis-methods",
         "migration-methods",
-        "baseline-measurement"
+        "baseline-measurement",
+        "object-data-lifecycle-modeling",
+        "engineering-asset-accumulation"
       ],
       "depends_on": [
         "references/architecture_principles_zh.md",
@@ -114,7 +117,10 @@
       "owns": [
         "role-assembly",
         "three-view-model",
-        "device-chain-decomposition"
+        "device-chain-decomposition",
+        "acquisition-business-actuation-flow",
+        "architecture-design-dimensions",
+        "five-role-projection"
       ],
       "depends_on": [
         "references/architecture_principles_zh.md",

@@ -1,6 +1,6 @@
 ---
 name: aicoding-behavior-driven-development
-description: Convert SDD requirements and MVP scope into BDD behavior scenarios, acceptance criteria, examples, edge cases, and regression obligations before TDD implementation.
+description: Convert requirements and agreed scope into BDD behavior scenarios, acceptance criteria, examples, edge cases, and regression obligations that map to the project's tests.
 ---
 
 # AiCoding BDD: Behavior-Driven Development
@@ -8,18 +8,18 @@ description: Convert SDD requirements and MVP scope into BDD behavior scenarios,
 
 This skill is both consistent-workflow and organization-standard.
 
-- consistent-workflow: it defines an ordered AiCoding engineering workflow that agents must follow for repeatable delivery.
-- organization-standard: it encodes AiCoding project policy for standalone-capable SDD, MVP, BDD, architecture-first, TDD fallback, verification, and documentation synchronization.
+- consistent-workflow: it defines a repeatable process for expressing requirements as observable behavior scenarios.
+- organization-standard: it records AiCoding scenario coverage and traceability expectations for project tests.
 
 ## Workflow Contract
 
-Trigger: use this skill when the described AiCoding workflow phase is relevant to a non-trivial software, firmware, tooling, automation, architecture, test, documentation, install, release, or maintenance change.
+Trigger: use this skill when requirements need observable acceptance scenarios, edge cases, or regression obligations before implementation or test design.
 
-Inputs: user request, repository AGENTS instructions, existing SDD/BDD/architecture/test/docs artifacts when present, current code and git state, and any applicable project verification commands.
+Inputs: user request, repository AGENTS instructions, agreed requirements and scope, existing behavior and tests, relevant architecture constraints, and project verification commands.
 
-Steps: read the local repository rules, identify the current workflow phase, produce or update only the artifacts required by that phase, keep Superpowers optional, run the repository's validation commands, and hand off to the next AiCoding workflow phase only when the phase output is inspectable.
+Steps: read the requirements and existing behavior, write Given/When/Then scenarios for the agreed scope, cover relevant boundaries and failures, and map each scenario to an appropriate project test or verification obligation.
 
-Exit criteria: the phase has a concrete done state, required artifacts exist or are explicitly marked not applicable, tests or validation commands have been run where available, and documentation impact has been reviewed.
+Exit criteria: scenarios describe observable results, cover the relevant behavior and risks, and map to project verification obligations; executing those checks is required only when implementation or validation is part of the task.
 
 Validation: use repository tests, build checks, lint, skill validators, plugin validators, documentation sync checks, and manual review according to the local project.
 
@@ -38,7 +38,7 @@ Human confirmation: owner/confirmation is the AiCoding maintainer or user integr
 Skip rationale: skip only gates that are not available in the active repository, and replace them with an explicit manual review note or a project-specific command in the final report.
 ## Human Confirmation
 
-Owner/confirmation: the AiCoding maintainer or user integrating this workflow confirms that standalone AiCoding mode is required and Superpowers remains optional.
+Owner/confirmation: the AiCoding maintainer or user integrating this skill owns acceptance behavior and accepts its independent use with the project's requirements and test process.
 
 Accepted gates: CLI validation, pre-commit hook, CI docs-sync, repository tests, plugin/skill validators, and manual review for requirements, architecture, release, and documentation judgment.
 
@@ -46,7 +46,7 @@ Manual review scope: product intent, MVP tradeoffs, architecture approval, behav
 
 Decision: approved for AiCoding integration with the stated gates and manual review boundaries.
 
-Use this skill after SDD and MVP planning and before TDD implementation.
+Use the agreed requirements and scope, whether recorded in an issue, specification, plan, or the current task. Map the scenarios to the test process selected by the project.
 
 BDD means **Behavior-Driven Development / 行为驱动开发**.
 
@@ -69,7 +69,7 @@ Scenario: <observable behavior>
 
 ## Required scenario coverage
 
-For each P0 requirement, define at least:
+For each in-scope requirement (P0 when priorities are used), define at least:
 
 - normal path;
 - boundary path;
@@ -96,4 +96,4 @@ Every BDD scenario should map to at least one test obligation:
 Scenario → Unit / Contract / Integration / System / HIL test
 ```
 
-Use `references/aicoding-sdd-bdd-docsync/bdd-scenarios-template.md`.
+Use the [BDD scenarios template](references/bdd-scenarios-template.md) when a structured scenario record is useful.

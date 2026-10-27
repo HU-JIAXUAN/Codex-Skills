@@ -1,4 +1,4 @@
 interface:
-  display_name: 电机控制集成
-  short_description: 按产品指标组合电机控制算法，统一时序、单位、约束、代码接入及系统验证
-  default_prompt: 使用 $aicoding-motor-control 分析当前伺服产品目标与控制链，给出可实现且可验证的算法组合。
+  display_name: 电机控制与伺服
+  short_description: 一个入口按问题调度辨识、控制器、轨迹前馈、补偿、实机部署与验证等21个内部专题
+  default_prompt: 使用 $aicoding-motor-control 分析当前电机或伺服任务，按问题读取本地专题指南，给出可实现且可验证的方案。

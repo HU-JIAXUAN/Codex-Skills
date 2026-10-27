@@ -1,4 +1,0 @@
-interface:
-  display_name: "伺服控制器设计"
-  short_description: "从电气与机械模型综合伺服环路，核对离散实现、延迟、限幅及抗饱和接口"
-  default_prompt: "请使用 $aicoding-servo-controller-design，依据现有模型和证据完成伺服控制器设计并说明成立范围。"

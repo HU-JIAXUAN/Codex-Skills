@@ -1,4 +1,0 @@
-interface:
-  display_name: 运动轨迹规划
-  short_description: 设计有界速度加速度与加加速度轨迹，处理在线重规划、同步和可复现工程验证
-  default_prompt: 使用 $aicoding-motion-trajectory-planning 分析当前工程，给出方法选择、代码接入和可复现验证。

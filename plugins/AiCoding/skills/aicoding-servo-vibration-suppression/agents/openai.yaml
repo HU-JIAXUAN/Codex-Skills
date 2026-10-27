@@ -1,4 +1,0 @@
-interface:
-  display_name: "伺服振动抑制"
-  short_description: "依据实际机械模态设计陷波与输入整形，核对数字系数、延迟和鲁棒性"
-  default_prompt: "请使用 $aicoding-servo-vibration-suppression，依据现有模型和证据完成伺服振动抑制并说明成立范围。"

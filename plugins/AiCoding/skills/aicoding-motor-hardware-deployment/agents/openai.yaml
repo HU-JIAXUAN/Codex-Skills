@@ -1,4 +1,0 @@
-interface:
-  display_name: "电机控制实机部署与实时验证"
-  short_description: "从真实源码还原 PWM/ADC/ISR 与反馈时序，计算截止预算并区分静态和实测证据"
-  default_prompt: "请用 $aicoding-motor-hardware-deployment 对当前工程执行只读硬件与实时分析，运行可用的确定性工具并报告证据和待测项。"

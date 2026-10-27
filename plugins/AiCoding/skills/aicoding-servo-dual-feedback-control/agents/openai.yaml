@@ -1,4 +1,0 @@
-interface:
-  display_name: "双反馈伺服控制"
-  short_description: "以两惯量模型设计电机侧和负载侧反馈，处理坐标、延迟、柔性与失效"
-  default_prompt: "请使用 $aicoding-servo-dual-feedback-control，依据现有模型和证据完成双反馈伺服控制并说明成立范围。"

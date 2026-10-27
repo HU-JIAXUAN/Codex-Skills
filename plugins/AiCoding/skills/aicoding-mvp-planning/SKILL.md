@@ -8,18 +8,18 @@ description: Define the minimum viable implementation slice for AiCoding enginee
 
 This skill is both consistent-workflow and organization-standard.
 
-- consistent-workflow: it defines an ordered AiCoding engineering workflow that agents must follow for repeatable delivery.
-- organization-standard: it encodes AiCoding project policy for standalone-capable SDD, MVP, BDD, architecture-first, TDD fallback, verification, and documentation synchronization.
+- consistent-workflow: it defines a repeatable process for choosing and validating the smallest useful implementation slice.
+- organization-standard: it records AiCoding scope priorities, acceptance criteria, and risk-based validation expectations.
 
 ## Workflow Contract
 
-Trigger: use this skill when the described AiCoding workflow phase is relevant to a non-trivial software, firmware, tooling, automation, architecture, test, documentation, install, release, or maintenance change.
+Trigger: use this skill when an engineering change needs a concrete MVP boundary, scope priorities, or an incremental delivery plan.
 
-Inputs: user request, repository AGENTS instructions, existing SDD/BDD/architecture/test/docs artifacts when present, current code and git state, and any applicable project verification commands.
+Inputs: user request, repository AGENTS instructions, existing requirements and acceptance criteria, current code and git state, known constraints and risks, and project verification commands.
 
-Steps: read the local repository rules, identify the current workflow phase, produce or update only the artifacts required by that phase, keep Superpowers optional, run the repository's validation commands, and hand off to the next AiCoding workflow phase only when the phase output is inspectable.
+Steps: read the project rules and requirements, identify the main risk, choose one useful end-to-end slice, classify scope as P0/P1/P2/P3, define acceptance and validation for the selected work, and record exclusions and follow-up items in the existing project plan or task response.
 
-Exit criteria: the phase has a concrete done state, required artifacts exist or are explicitly marked not applicable, tests or validation commands have been run where available, and documentation impact has been reviewed.
+Exit criteria: the selected scope, acceptance criteria, validation approach, exclusions, and limitations are concrete and reviewable; implementation checks are required only when implementation is part of the task.
 
 Validation: use repository tests, build checks, lint, skill validators, plugin validators, documentation sync checks, and manual review according to the local project.
 
@@ -38,7 +38,7 @@ Human confirmation: owner/confirmation is the AiCoding maintainer or user integr
 Skip rationale: skip only gates that are not available in the active repository, and replace them with an explicit manual review note or a project-specific command in the final report.
 ## Human Confirmation
 
-Owner/confirmation: the AiCoding maintainer or user integrating this workflow confirms that standalone AiCoding mode is required and Superpowers remains optional.
+Owner/confirmation: the AiCoding maintainer or user integrating this skill owns the scope priorities and accepts its independent use with the project's existing requirements and validation process.
 
 Accepted gates: CLI validation, pre-commit hook, CI docs-sync, repository tests, plugin/skill validators, and manual review for requirements, architecture, release, and documentation judgment.
 
@@ -46,7 +46,7 @@ Manual review scope: product intent, MVP tradeoffs, architecture approval, behav
 
 Decision: approved for AiCoding integration with the stated gates and manual review boundaries.
 
-Use this skill after the initial SDD and before architecture scaffolding.
+Use this skill from the user's requirements and existing project records. It can run independently; the project determines which design and implementation steps follow.
 
 ## Goal
 
@@ -76,4 +76,4 @@ It must include:
 
 Before implementation, output the MVP table and mark which items will be implemented now.
 
-Use `references/aicoding-sdd-bdd-docsync/mvp-template.md`.
+Use the [MVP plan template](references/mvp-template.md) when a structured plan is useful.

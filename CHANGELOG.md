@@ -4,6 +4,7 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从已提交的 `53739b7` 源码生成 16 个运行时入口，包含对象/数据模型、通用 DSP 与单入口电机套件；`dirtySource=false`，通过插件、资源一致性和重复构建检查。 / Packages 16 verified runtime skills from committed sources with complete internal motor topics and deterministic output.
 - **fix(buildinfo)**：构建检查按原始中文路径识别生成文件，避免电机专题迁移后的 Git 路径转义被误判为源码未提交。 / Preserves Unicode paths when determining source dirtiness for generated packages.
 - **build(plugin-layout)**：打包清单同步对象/数据模型入口、单入口电机套件和独立开发辅助技能；更新仓库导航与构建说明，生成内容由源码构建维护。 / Aligns the focused plugin manifest, repository navigation and reproducible packaging documentation.
 - **refactor(development-skills)**：删除 `aicoding-sdd-bdd-tdd-development-flow`、`aicoding-sdd-spec-driven-development`、`aicoding-tdd-fallback` 的 canonical source、插件打包项与专用模板；架构入口改用项目自身流程，MVP、BDD、文档同步独立使用，并将各自模板纳入 Skill 包内。 / Removes three development workflow entries and their unused resources, decouples retained skills and packages their own templates.

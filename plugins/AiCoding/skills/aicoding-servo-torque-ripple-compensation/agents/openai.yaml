@@ -1,4 +1,0 @@
-interface:
-  display_name: "齿槽与转矩纹波补偿"
-  short_description: "识别机械角与电角度阶次，建立可信纹波补偿图并核对插值、延迟和限幅"
-  default_prompt: "请使用 $aicoding-servo-torque-ripple-compensation，依据现有模型和证据完成齿槽与转矩纹波补偿并说明成立范围。"

@@ -1,6 +1,6 @@
 ---
 name: aicoding-documentation-synchronization
-description: Keep AiCoding SDD, BDD, API, architecture, README, changelog, test, release, and embedded documentation synchronized with code changes; pair with hooks and CI for enforcement.
+description: Keep project requirements, behavior scenarios, API, architecture, README, changelog, test, release, and embedded documentation synchronized with relevant changes; use the project's hooks and CI when available.
 ---
 
 # AiCoding Documentation Synchronization
@@ -8,18 +8,18 @@ description: Keep AiCoding SDD, BDD, API, architecture, README, changelog, test,
 
 This skill is both consistent-workflow and organization-standard.
 
-- consistent-workflow: it defines an ordered AiCoding engineering workflow that agents must follow for repeatable delivery.
-- organization-standard: it encodes AiCoding project policy for standalone-capable SDD, MVP, BDD, architecture-first, TDD fallback, verification, and documentation synchronization.
+- consistent-workflow: it defines a repeatable process for reviewing documentation impact and updating affected project records.
+- organization-standard: it records AiCoding expectations for keeping implementation, documentation, and validation evidence consistent.
 
 ## Workflow Contract
 
-Trigger: use this skill when the described AiCoding workflow phase is relevant to a non-trivial software, firmware, tooling, automation, architecture, test, documentation, install, release, or maintenance change.
+Trigger: use this skill when a change may affect documented behavior, interfaces, architecture, configuration, tests, builds, releases, installation, or generated exposure.
 
-Inputs: user request, repository AGENTS instructions, existing SDD/BDD/architecture/test/docs artifacts when present, current code and git state, and any applicable project verification commands.
+Inputs: user request, repository AGENTS instructions, the actual change and git state, affected requirements and project documentation, validation evidence, and available documentation checks.
 
-Steps: read the local repository rules, identify the current workflow phase, produce or update only the artifacts required by that phase, keep Superpowers optional, run the repository's validation commands, and hand off to the next AiCoding workflow phase only when the phase output is inspectable.
+Steps: inspect the actual change, identify affected documentation, update the existing records needed to reflect the change, run available documentation and project checks, and explain any no-documentation-change decision.
 
-Exit criteria: the phase has a concrete done state, required artifacts exist or are explicitly marked not applicable, tests or validation commands have been run where available, and documentation impact has been reviewed.
+Exit criteria: affected documentation matches the implementation and validation evidence, available checks pass, and any decision to leave documentation unchanged has a concrete justification.
 
 Validation: use repository tests, build checks, lint, skill validators, plugin validators, documentation sync checks, and manual review according to the local project.
 
@@ -38,7 +38,7 @@ Human confirmation: owner/confirmation is the AiCoding maintainer or user integr
 Skip rationale: skip only gates that are not available in the active repository, and replace them with an explicit manual review note or a project-specific command in the final report.
 ## Human Confirmation
 
-Owner/confirmation: the AiCoding maintainer or user integrating this workflow confirms that standalone AiCoding mode is required and Superpowers remains optional.
+Owner/confirmation: the AiCoding maintainer or user integrating this skill owns documentation adequacy and accepts its independent use with the project's existing records and validation process.
 
 Accepted gates: CLI validation, pre-commit hook, CI docs-sync, repository tests, plugin/skill validators, and manual review for requirements, architecture, release, and documentation judgment.
 
@@ -56,11 +56,13 @@ This skill tells the agent what to update. The repository hook and CI gate enfor
 
 ## Change-to-document mapping
 
+Review the affected records below and update those needed to reflect the change. Use the project's existing requirements and design records; the list does not require creating every document type.
+
 ### Functional behavior change
 
 Update:
 
-- SDD target behavior and requirements;
+- target behavior and requirements in the project's specification or existing requirements record;
 - BDD scenarios;
 - README or usage docs;
 - test plan or validation evidence;
@@ -70,7 +72,7 @@ Update:
 
 Update:
 
-- SDD interface contract;
+- interface contract in the project's existing specification or API record;
 - API docs or header comments;
 - README examples;
 - compatibility notes;
@@ -80,7 +82,7 @@ Update:
 
 Update:
 
-- SDD architecture impact;
+- architecture impact in the project's existing requirements or design record;
 - PDR / ADR;
 - architecture diagram or module boundary notes;
 - dependency rules;
@@ -139,4 +141,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-documentation-
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-documentation-sync.ps1 -Mode all
 ```
 
-Use `references/aicoding-sdd-bdd-docsync/documentation-sync-checklist.md`.
+Use the [documentation synchronization checklist](references/documentation-sync-checklist.md) to select documentation affected by the change.

@@ -1,4 +1,0 @@
-interface:
-  display_name: "激励信号设计"
-  short_description: "面向电机与伺服辨识选择激励频段、幅值和时长，并实现可重复的波形与采集"
-  default_prompt: "使用 $aicoding-excitation-signal-design 为当前辨识目标设计激励，给出代码接入与有效性检查。"

@@ -1,0 +1,31 @@
+{
+  "skill_name": "aicoding-object-model-design",
+  "language": "zh-CN",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "display、touch 和 IMU 都有对象头，manager 能否把所有操作统一成 read/write/control？",
+      "expected_output": "应区分共同管理需求与业务能力差异，根据操作语义、类型和使用者判断哪些接口值得统一，不以 read/write/control 名字本身判定好坏。DEVICE/SERVICE 是粗分类，不能证明具体 ops 类型；manager 不因统一管理而接管私有业务。"
+    },
+    {
+      "id": 2,
+      "prompt": "sensor_service 依赖 sensor0，sensor0 依赖 I2C。按名字登记后顺序 init/start，第三个失败就把所有对象都 deinit；stop 先标 STOPPED，DMA 回调以后再说，可以吗？",
+      "expected_output": "应按依赖先提供者后使用者启动，停止/释放通常反向；只回退已成功完成动作，不误释放共享资源。异步停止需完成语义，取消/排空回调与在途请求后才允许复用存储；process 是运行期间可选的重复动作，不是必经阶段。"
+    },
+    {
+      "id": 3,
+      "prompt": "我准备给任意 void 指针读 magic/type，通过就强转成 display 对象。公共 object 只要长得一样，放哪个字段都可以吧？",
+      "expected_output": "应指出字段读取本身要求有效对象，magic/type 不能验证任意地址、悬空指针或具体 display 类型。若依赖 C 首成员嵌入的转换约定，应有真实首成员、正确对齐、有效存储和具体类型依据；可用 offsetof 检查局部约定，不把它强加给所有对象。"
+    },
+    {
+      "id": 4,
+      "prompt": "只有几个静态设备，现有启动表能工作。为了对象化，是否要给每个模块都加 cfg/ctx/data/ops 四个 void 指针并单独建任务？",
+      "expected_output": "应先比较当前静态接线与统一管理的真实收益，不因对象化预设线程或裸指针槽位。字段表示成为主要问题时可结合 aicoding-data-model-design，简单概念可直接解释，不必来回转交。收尾必须考虑 App 对象协作与生命周期经验的轻量资产沉淀。"
+    },
+    {
+      "id": 5,
+      "prompt": "现有两个模块靠普通函数协作，也没有公共对象头。只想判断是否要把它们拆成独立对象，是否必须先完成架构、数据模型，再建 manager？",
+      "expected_output": "应从用例、变化、独立状态/资源、协作接口与维护成本判断对象边界，已有上下文足够时直接给取舍。三个 Skill 不必顺序执行，对象头和 manager 也不是目标；仅在系统边界或字段设计存在实质缺口时结合对应专项。"
+    }
+  ]
+}
