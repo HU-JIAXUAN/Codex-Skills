@@ -69,7 +69,7 @@ pwsh -File scripts/check_layering.ps1 -Root <项目根> -Map <项目>/arch-map.j
 | `analysis_confirmed_by` | 角色映射未经确认，不得作为门禁依据 |
 | 每条规则的 `role` 与 `evidence` | 无法复核该角色是怎么判出来的 |
 
-`exceptions` 必须写 `reason`、`owner` 和 `expires`，并在项目架构说明的例外表中登记；没有到期条件的豁免等于取消该规则。
+`exceptions` 必须写 `reason`、`owner` 和 `expires`，并在项目架构说明的例外表中登记；没有到期条件的豁免等于取消该规则。配置可以记录迁移债务，但 `exceptions` 或 `allowed_dependencies` 不能取消 [DR-017](dependency_rules_and_gates_zh.md#DR-017) 的 APP 边界；豁免后得到 0 违规仍不能据此判定 APP 已解耦。
 
 ## 输出与退出码
 
@@ -86,15 +86,17 @@ pwsh -File scripts/check_layering.ps1 -Root <项目根> -Map <项目>/arch-map.j
 - `DR-012`：Port 没有实现、或只有单一实现且无测试替身；以及**该 Port 的适配只包装了一个本来就环境中立的接口**——后者意味着它没有隔离任何环境类型，只增加了间接层。
 - `DR-014`：一条映射规则同时盖住"环境中立的公共头"和"直接接触环境的源"，这通常是契约层与实现层被合并映射了。
 
-按 [AP-006](architecture_principles_zh.md#AP-006) 处理——要么补出第二实现或替身，要么说明真实变化轴，要么退回直接依赖。
+按 [AP-006](architecture_principles_zh.md#AP-006) 处理：说明真实变化轴或测试收益，必要时复用已有稳定接口，减少无收益的间接层。退回直接依赖不能使 APP 接触环境实现，也不要为消除警告制造第二实现。
 
 ## 工具的边界
 
 检查器只看源码 include 关系和文本模式，因此：
 
+- 未解析的 include 当前会跳过，路径解析也不等同于编译器实际的搜索路径；必须结合编译配置核对未覆盖项。环境传递包含链虽参与事实/基线输出，但不等于已完整实现公共头传递污染阻塞；
+- 不解析符号调用、宏展开、寄存器表达式或 `typedef` 别名传播；手写 `extern` 调用 HAL、访问另一业务模块的私有状态，以及同角色之间的越权访问，都可能漏检；
 - 它不能证明构建系统真的限制了可见性，[GATE-003](dependency_rules_and_gates_zh.md#GATE-003) 仍需构建目标层面的检查；
 - 它不能证明运行时的实例所有权和生命周期，[GATE-008](dependency_rules_and_gates_zh.md#GATE-008) 仍需组合根审查；
 - 它不能证明时序、并发和资源预算，[GATE-005](dependency_rules_and_gates_zh.md#GATE-005) 必须由目标板测量；
 - 通过并不等于架构成熟，等级仍按[架构成熟度与证据分级](architecture_maturity_zh.md)判定。
 
-把它的结果按已验证事实报告，把它没覆盖的部分按未验证项单列。
+结果应表述为“在给定映射、模式与扫描范围内未发现违规”，把未覆盖部分单列。按 [GATE-011](dependency_rules_and_gates_zh.md#GATE-011) 选择与本次范围相称的补充检查。

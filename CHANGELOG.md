@@ -1,5 +1,19 @@
 # 更新日志
 
+## 2026-10-28
+
+### 更新 / Changed
+
+- **feat(data-model-design)**：新增“数据模型设计”子 Skill，按字段语义、类型、读写权限、存储与有效期解释 cfg/ctx/data/ops；补充配置共享、快照/新鲜度、行为兼容和示例量纲取舍，主架构及对象模型按需路由，继续保留轻量实现与 App 资产沉淀。 / Adds focused internal data-model design with typed ownership, storage and validity guidance.
+- **docs(architecture-reasoning)**：选择性固化基本概念、不变量和可机械检查项，强调由 LLM 结合业务、变化与约束推导对象、数据和分层方案；示例用于解释取舍，避免固化结构和额外流程。 / Preserves concepts and design reasoning while leaving contextual architecture choices to project evidence.
+- **feat(object-model-design)**：新增“对象模型设计”子 Skill，由架构主入口按需路由并可独立调用；覆盖对象职责、身份、协作与生命周期，将统一对象头、manager、C 首成员和 magic/type 作为按需知识，内部字段交由数据模型专项。 / Adds focused object responsibility, identity, collaboration and lifecycle reasoning with optional management representations.
+- **feat(architecture-boundaries)**：补充 APP、中间件、OS、BSP、Core、Driver 的职责、输入输出与跨厂商语义映射，区分采集发布、调度同步和硬件绑定；新增 DR-017/GATE-011，将 APP 环境隔离、模块私有状态、独立运行与构建/符号证据纳入必需验收，保留裸机及强实时静态绑定。 / Defines vendor-neutral layer concepts and mandatory APP decoupling acceptance while retaining static real-time execution.
+- **feat(architecture-assets)**：贯通对象、数据与生命周期设计，明确工程开发必须考虑 App 产品流程、状态机、业务规则和数据模型的资产沉淀，保留轻量使用与验证说明。 / Adds object/lifecycle guidance and mandatory consideration of reusable App knowledge and code.
+- **fix(architecture-guidance)**：固化解耦、职责、依赖与所有权思想，将五层与 cfg/ctx/data/ops 保留为参考；精简固定层级验收、资产分级与台账要求。 / Keeps architectural principles firm while leaving layouts, checks and asset records proportional to the project.
+- **fix(architecture-evidence)**：明确分层扫描器的符号、未解析 include、传递污染与同角色状态访问盲区，修正门禁实现状态声明，增加四项行为评估并收紧过度抽象条款的适用边界。 / Documents checker limits and adds behavioral evaluations for APP boundaries and execution contexts.
+- **refactor(architecture)**：架构、对象模型、数据模型按系统关系、对象协作和内部数据明确职责，按实际问题独立使用或协作；去掉重复流程、固定全套 Port/Adapter/Fake、机械成熟度封顶和普遍确认要求，移除普通软件骨架/验证的开发流程耦合，保留基本概念、设计推理与 App 资产沉淀要求。 / Separates the three design capabilities, removes prescribed structures and development-flow coupling, and retains contextual reasoning and App asset retention.
+- **fix(architecture-workflow)**：精简触发说明和主入口，按新建骨架、存量审查/迁移及量产边界分流，按需加载参考；骨架、替身、真实实现与实机证据分别验收，更新 UI 名称、提示词和行为评估。 / Adds scoped routing, progressive references and distinct evidence for scaffolds, fakes, implementations and hardware.
+
 ## 2026-10-26
 
 ### 新增 / Added
