@@ -30,7 +30,7 @@ Manual source:
 - `config/aicoding-plugin-pack.json`
 - `scripts/*.ps1`
 
-Motor-control sources form one nested kit under embedded/motorcontrol/. Its skillkit.json owns relative member paths and resource includes. The global config/aicoding-plugin-pack.json remains the authority for selecting kits and direct skills; scripts/build-plugin.ps1 expands enabled members into flat runtime skills. The integration member uses an explicit include list so nested skills are not copied twice. BUILDINFO records hashes for both the global manifest and enabled kit manifests.
+Motor-control sources form one nested kit under `embedded/motorcontrol/`. Its schema-v2 `skillkit.json` declares one `runtimeSkill`, `aicoding-motor-control`, plus 21 internal capabilities. Only the root `SKILL.md` and root UI metadata are registered; the internal entrypoints are `GUIDE.md` files in the existing Chinese category folders. The root skill routes to their relative paths and loads references only as needed. The global `config/aicoding-plugin-pack.json` selects the kit; `scripts/build-plugin.ps1` packages it into one runtime directory without flattening the internal capabilities. Shared contracts remain a single copy. BUILDINFO records hashes for both manifests, and source/package gates reject missing guides, nested `SKILL.md` files and old separate runtime entries.
 
 Generated output:
 
@@ -38,6 +38,20 @@ Generated output:
 - `plugins/AiCoding/BUILDINFO.json`
 
 Generated files are created by `scripts/build-plugin.ps1`. They must not be edited manually. The build writes `plugins/AiCoding/skills/.generated` as a local marker.
+
+The embedded architecture skill at `embedded/architecture/`, exposed as `aicoding-architecture`, owns system responsibilities, module boundaries, stable dependencies, change propagation and platform adaptation. It supports design, review and incremental implementation through project-specific reasoning and proportionate verification.
+
+MVP planning, behavior scenarios and documentation synchronization are independently usable skills. Each packages its own template or checklist under its local `references/` directory. The package does not require a separate SDD orchestrator, SDD skill or TDD fallback skill; the project and user request determine the development and test workflow.
+
+The embedded architecture guidance fixes core ideas: clear responsibilities, business/hardware decoupling, controlled dependencies, explicit state ownership and lifecycle, and practical verification. APP/Service/Platform/Impl/Vendor and cfg/ctx/data/ops are reference organizations rather than mandatory layouts or universal acceptance conditions.
+
+Skills preserve concepts, invariants and design reasoning. Reliable mechanical checks use existing compiler/lint/test tools; business-specific boundaries, representations and layering decisions remain contextual LLM judgments. Examples explain tradeoffs rather than prescribe universal structures.
+
+The complementary `aicoding-object-model-design` (UI: 对象模型设计) owns object responsibilities, identity, collaboration and lifecycle, including deciding whether unified management is worthwhile. Its canonical source is `embedded/object-model-design/`; the pack manifest generates a separate flat runtime directory. Common object headers, managers and registries are optional representations.
+
+The complementary `aicoding-data-model-design` (UI: 数据模型设计) owns internal field semantics, types, ownership, storage, access, lifetime and data validity. Its canonical source is `embedded/data-model-design/`. cfg/ctx/data/ops provides vocabulary rather than a fixed layout. All three skills are independently callable; select by the main design question and combine only for substantive gaps, without a mandatory sequence or repeated handoffs.
+
+Engineering work must consider retaining App product flows, state machines, business rules, data models and recovery knowledge, alongside useful services, algorithms, tests and platform adapters. AM-012 supports object/data modeling; AM-013/DR-019 keep asset accumulation lightweight through existing code and records, minimal usage, verification entrypoints and applicable limits. No separate asset grading, ledger or second project is required.
 
 ## Local Standalone Skill Boundary
 

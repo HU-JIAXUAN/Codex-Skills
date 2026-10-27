@@ -4,6 +4,18 @@ AiCoding is the deployable Codex kit for JiaxI2 embedded development. It package
 
 The package exposes focused `aicoding-*` skills. The broad canonical `embedded` router is intentionally not packaged, avoiding overlapping triggers with the C99, architecture, ARM, DSP, EtherCAT, motor-control, OS, and review skills.
 
+Use `aicoding-architecture` for embedded system responsibilities, module boundaries, dependencies, change propagation and platform adaptation. It supports contextual design, review and incremental implementation, with layer count and structure chosen for the project.
+
+MVP planning, behavior scenarios and documentation synchronization remain independently usable, with their templates and checklists included in each skill. Development and testing follow the project and user request without requiring a separate SDD orchestrator, SDD skill or TDD fallback skill.
+
+`aicoding-object-model-design` (对象模型设计) covers object responsibilities, identity, collaboration and lifecycle. Common object headers and managers are options selected for actual management needs.
+
+`aicoding-data-model-design` (数据模型设计) handles internal field semantics, types, ownership, access, storage, lifetime and validity. cfg/ctx/data/ops is optional vocabulary. Select any of the three entries directly by the main question, combining only for actual design gaps. Each retains the requirement to consider reusable App knowledge and code, without mandatory asset grades, ledgers or new libraries.
+
+`aicoding-dsp` covers generic DSP numerics, sampling/filtering/spectra, streaming execution and firmware toolchains. Processor and library families are optional references after target identification, rather than separate chip routes; the installed skill does not depend on a personal notes vault.
+
+All motor and servo capabilities live inside `skills/aicoding-motor-control/`. Codex discovers one motor-control entry; its root `SKILL.md` selects 21 internal `GUIDE.md` topics through relative links. The internal guides retain their local references and stable capability IDs, while shared contracts and UI metadata have a single owner. Other skill entries are unaffected.
+
 ## Layout
 
 ```text

@@ -15,6 +15,16 @@
       "enabled": true
     },
     {
+      "source": "embedded/object-model-design",
+      "target": "aicoding-object-model-design",
+      "enabled": true
+    },
+    {
+      "source": "embedded/data-model-design",
+      "target": "aicoding-data-model-design",
+      "enabled": true
+    },
+    {
       "source": "embedded/arm",
       "target": "aicoding-arm",
       "enabled": true
@@ -50,16 +60,6 @@
       "enabled": true
     },
     {
-      "source": "platform/aicoding-sdd-bdd-tdd-development-flow",
-      "target": "aicoding-sdd-bdd-tdd-development-flow",
-      "enabled": true
-    },
-    {
-      "source": "platform/aicoding-sdd-spec-driven-development",
-      "target": "aicoding-sdd-spec-driven-development",
-      "enabled": true
-    },
-    {
       "source": "platform/aicoding-mvp-planning",
       "target": "aicoding-mvp-planning",
       "enabled": true
@@ -67,16 +67,6 @@
     {
       "source": "platform/aicoding-behavior-driven-development",
       "target": "aicoding-behavior-driven-development",
-      "enabled": true
-    },
-    {
-      "source": "platform/aicoding-architecture-first-scaffolding",
-      "target": "aicoding-architecture-first-scaffolding",
-      "enabled": true
-    },
-    {
-      "source": "platform/aicoding-tdd-fallback",
-      "target": "aicoding-tdd-fallback",
       "enabled": true
     },
     {

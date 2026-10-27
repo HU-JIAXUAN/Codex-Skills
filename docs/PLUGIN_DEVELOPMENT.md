@@ -24,7 +24,7 @@ Manual plugin sources:
 - `plugins/AiCoding/README.md`
 - `config/aicoding-plugin-pack.json`
 
-Motor-control sources form one nested kit under embedded/motorcontrol/. Its skillkit.json owns relative member paths and resource includes. The global config/aicoding-plugin-pack.json remains the authority for selecting kits and direct skills; scripts/build-plugin.ps1 expands enabled members into flat runtime skills. The integration member uses an explicit include list so nested skills are not copied twice. BUILDINFO records hashes for both the global manifest and enabled kit manifests.
+Motor-control sources form one nested kit under `embedded/motorcontrol/`. Schema v2 declares one `runtimeSkill` and explicit internal `GUIDE.md` entrypoints; only `aicoding-motor-control/SKILL.md` is registered. Keep child guides and references in their existing relative category paths, omit child UI metadata, and route through the root skill. The root include list packages the complete kit once. The global `config/aicoding-plugin-pack.json` remains the kit selection authority, and BUILDINFO records both manifest hashes. `scripts/test-motor-contract.py --package --self-test` checks the single-entry contract, internal routes, resource equality and negative cases; it is also wired into the repository verification flow.
 
 Generated plugin outputs:
 
@@ -55,6 +55,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 ```
 
 Run official plugin validation when available.
+
+Build and generated-drift verification share a bounded, per-repository process mutex. The drift checker invokes the builder in the same PowerShell process so it can hold that lock across the before/after snapshots; parallel builds cannot replace the staging or generated tree mid-check. A failed rebuild must fail verification immediately. Source edits remain independent of this lock, so finish source changes before taking a reproducibility snapshot.
 
 ## Cross-Repository Rule
 

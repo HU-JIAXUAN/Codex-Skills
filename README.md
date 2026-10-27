@@ -53,7 +53,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 | 路径 | 用途 |
 |---|---|
 | `embedded/` | 嵌入式固件 skill 族，包括 C99、架构、ARM、DSP、EtherCAT/CiA402、OS、电机控制和评审路由。 |
-| [电机与伺服技能](embedded/motorcontrol/README.md) | 22个中文技能入口，连接确定性工具、唯一算法资产与分级验证证据。 |
+| [电机与伺服技能](embedded/motorcontrol/README.md) | 1个电机控制入口统一调度21个内部专项，连接确定性工具、唯一算法资产与分级验证证据。 |
 | `standalone/` | 精选本地通用 Skill：JSON Canvas、MCP Builder、Obsidian Bases/CLI/Markdown、Visio Diagram 和 Webapp Testing。 |
 | `platform/aicoding-git-governance/` | Git-Skill 源码、canonical standard、配置模板、lint 模板和 Release 校验工具。 |
 | `platform/aicoding-kit-maintenance/` | Codex-Skills/AiCoding 架构、plugin packaging、submodule、hooks 和完成门禁维护 workflow。 |
