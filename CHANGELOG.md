@@ -4,6 +4,7 @@
 
 ### 更新 / Changed
 
+- **fix(buildinfo)**：构建检查按原始中文路径识别生成文件，避免电机专题迁移后的 Git 路径转义被误判为源码未提交。 / Preserves Unicode paths when determining source dirtiness for generated packages.
 - **build(plugin-layout)**：打包清单同步对象/数据模型入口、单入口电机套件和独立开发辅助技能；更新仓库导航与构建说明，生成内容由源码构建维护。 / Aligns the focused plugin manifest, repository navigation and reproducible packaging documentation.
 - **refactor(development-skills)**：删除 `aicoding-sdd-bdd-tdd-development-flow`、`aicoding-sdd-spec-driven-development`、`aicoding-tdd-fallback` 的 canonical source、插件打包项与专用模板；架构入口改用项目自身流程，MVP、BDD、文档同步独立使用，并将各自模板纳入 Skill 包内。 / Removes three development workflow entries and their unused resources, decouples retained skills and packages their own templates.
 - **feat(data-model-design)**：新增“数据模型设计”子 Skill，按字段语义、类型、读写权限、存储与有效期解释 cfg/ctx/data/ops；补充配置共享、快照/新鲜度、行为兼容和示例量纲取舍，主架构及对象模型按需路由，继续保留轻量实现与 App 资产沉淀。 / Adds focused internal data-model design with typed ownership, storage and validity guidance.

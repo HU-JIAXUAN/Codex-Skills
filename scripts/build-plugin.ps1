@@ -171,7 +171,7 @@ function Set-SkillName([string]$SkillDir, [string]$Name) {
 }
 
 function Get-SourceDirty([string]$RepoRoot) {
-    $lines = @(& git -C $RepoRoot status --porcelain)
+    $lines = @(& git -C $RepoRoot -c core.quotepath=false status --porcelain)
     foreach ($line in $lines) {
         $normalized = $line -replace '\\','/'
         if ($normalized -match '^.. plugins/AiCoding/skills(?:/|$)' -or
