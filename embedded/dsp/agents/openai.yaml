@@ -1,4 +1,4 @@
 interface:
-  display_name: "DSP"
-  short_description: "嵌入式 DSP 固件指导"
-  default_prompt: "使用 $dsp 设计或评审嵌入式 DSP 代码。"
+  display_name: "通用 DSP"
+  short_description: "处理数值、采样、滤波与频谱、流式并发及工具链实时问题，按需参考处理器系列"
+  default_prompt: "使用 $aicoding-dsp 分析当前 DSP 信号处理或固件任务，先明确数值与数据流契约，选择必要方法和验证证据；具体系列只作按需参考。"
