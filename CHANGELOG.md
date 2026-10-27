@@ -4,6 +4,7 @@
 
 ### 更新 / Changed
 
+- **refactor(development-skills)**：删除 `aicoding-sdd-bdd-tdd-development-flow`、`aicoding-sdd-spec-driven-development`、`aicoding-tdd-fallback` 的 canonical source、插件打包项与专用模板；架构入口改用项目自身流程，MVP、BDD、文档同步独立使用，并将各自模板纳入 Skill 包内。 / Removes three development workflow entries and their unused resources, decouples retained skills and packages their own templates.
 - **feat(data-model-design)**：新增“数据模型设计”子 Skill，按字段语义、类型、读写权限、存储与有效期解释 cfg/ctx/data/ops；补充配置共享、快照/新鲜度、行为兼容和示例量纲取舍，主架构及对象模型按需路由，继续保留轻量实现与 App 资产沉淀。 / Adds focused internal data-model design with typed ownership, storage and validity guidance.
 - **docs(architecture-reasoning)**：选择性固化基本概念、不变量和可机械检查项，强调由 LLM 结合业务、变化与约束推导对象、数据和分层方案；示例用于解释取舍，避免固化结构和额外流程。 / Preserves concepts and design reasoning while leaving contextual architecture choices to project evidence.
 - **feat(object-model-design)**：新增“对象模型设计”子 Skill，由架构主入口按需路由并可独立调用；覆盖对象职责、身份、协作与生命周期，将统一对象头、manager、C 首成员和 magic/type 作为按需知识，内部字段交由数据模型专项。 / Adds focused object responsibility, identity, collaboration and lifecycle reasoning with optional management representations.

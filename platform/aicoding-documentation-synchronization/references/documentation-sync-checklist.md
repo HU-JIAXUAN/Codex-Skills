@@ -10,9 +10,11 @@
 - [ ] Release / changelog
 - [ ] Embedded / firmware behavior
 
-## Required Documentation
+## Documentation Affected By This Change
 
-- [ ] SDD
+Select only the records affected by the change. Update existing project records where possible; this checklist does not require creating every document type.
+
+- [ ] Requirements / specification (including an existing SDD)
 - [ ] BDD scenarios
 - [ ] MVP plan
 - [ ] PDR / ADR
