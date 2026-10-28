@@ -128,6 +128,7 @@ validate_release_notes = true
 github_generated_release_notes = false
 hooks_path = ".githooks"
 lint_command = "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/lint-git-governance.ps1 -Mode all"
+stop_lint_mode = "working-tree" # Read-only content checks; staging belongs to pre-commit.
 
 [github_about]
 require_bilingual = true

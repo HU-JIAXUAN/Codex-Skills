@@ -83,6 +83,7 @@ validate_release_notes = true
 github_generated_release_notes = false
 hooks_path = ".githooks"
 lint_command = "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/lint-git-governance.ps1 -Mode all"
+stop_lint_mode = "working-tree"
 
 [github_about]
 require_bilingual = true

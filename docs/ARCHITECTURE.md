@@ -112,6 +112,8 @@ AiCoding owns `config/codex-kit.json`. Codex-Skills only documents the protocol 
 
 Codex lifecycle hooks are auxiliary workflow constraints. They can remind, block, or route based on local repository state, but they are not a complete security boundary and must not be treated as a replacement for Git hooks, CI, branch protection, code review, or human release approval.
 
+The Git Stop checker calls repository lint only through an explicitly configured `automation.stop_lint_mode = "working-tree"`. That read-only mode checks content without staging or commit/push prerequisites. Repositories without this opt-in receive configured CHANGELOG format checks; a dirty or partially staged index alone does not block a turn. Git hooks own CHANGELOG update/staging, commit-message and push checks.
+
 Plugin hooks must:
 
 - use `PLUGIN_ROOT` and `PLUGIN_DATA` when accessing plugin-local or writable plugin state;

@@ -69,8 +69,9 @@ Hook gate:
 Codex Stop hook:
 
 - Keep the plugin hook as an adapter to this Skill's `scripts/check_stop.py`; package the checker with the Skill instead of maintaining a second policy in the hook.
-- Run the repository's `scripts/lint-git-governance.ps1 -Mode all` when present and use its result without an additional CHANGELOG format check.
-- Without repository lint, read the local governance TOML and apply the configured CHANGELOG file, mode and typed-entry requirement. Accept both `**type**` and `**type(scope)**`; require `[Unreleased]` only for `mode = "unreleased"`.
+- Run `scripts/lint-git-governance.ps1 -Mode working-tree` only when `[automation] stop_lint_mode = "working-tree"` is explicitly configured. This mode checks working-tree content without requiring staging, a commit message or a push target; preserve real checker failures and timeouts.
+- Never call `all`, `pre-commit`, `commit-msg` or `pre-push` from Stop. Keep CHANGELOG update/staging requirements in the Git commit gate; a dirty or partially staged repository alone must not block the end of a turn.
+- Without an opted-in working-tree checker, read the local governance TOML and validate only the configured CHANGELOG file, mode and typed-entry format. Accept both `**type**` and `**type(scope)**`; require `[Unreleased]` only for `mode = "unreleased"`.
 - Do not fetch or execute Markdown standards at hook runtime. Regenerate the plugin when this checker changes; refreshing an installed plugin and reviewing `/hooks` are separate installation steps.
 
 Skip rationale:

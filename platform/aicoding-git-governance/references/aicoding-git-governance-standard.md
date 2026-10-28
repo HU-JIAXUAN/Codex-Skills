@@ -135,4 +135,4 @@ Each repository should keep local hook-equivalent checks:
 - `.githooks/pre-commit` calls the configured governance lint.
 - `.githooks/commit-msg` enforces typed commit subjects.
 - The lint must check README language switching, required badges, canonical governance URL, CHANGELOG typing, release-note policy, placeholders, and markdown links when configured.
-- Codex Stop hooks must use the Git Skill's packaged checker and defer to repository lint when present. Keep fallback checks in the Skill, follow the configured CHANGELOG mode/path, and update them through plugin build and installation rather than fetching or executing the standard at runtime.
+- Codex Stop hooks must use the Git Skill's packaged checker. Delegate only to an explicit `[automation] stop_lint_mode = "working-tree"` and a read-only `-Mode working-tree` checker; never run `all` or commit/push modes at Stop. Without opt-in, check configured CHANGELOG format only. Enforce update/staging requirements at Git pre-commit, not on dirty or partially staged work at the end of a turn. Update checks through plugin build and installation rather than fetching or executing the standard at runtime.

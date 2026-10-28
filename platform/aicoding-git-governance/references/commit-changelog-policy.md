@@ -63,8 +63,12 @@ Repositories with hook management enabled should enforce:
 Do not use `--no-verify` unless explicitly approved. If a hook is bypassed, report the skipped check and reason.
 
 The plugin Stop adapter loads this Skill's `scripts/check_stop.py` from the installed
-plugin. That checker delegates to repository lint when available; its fallback reads
-the repository's CHANGELOG configuration. Update and validate the canonical checker,
+plugin. Set `[automation] stop_lint_mode = "working-tree"` only after repository lint
+implements a read-only `-Mode working-tree` path. Stop calls that path and never calls
+`all` or a Git commit/push mode. Without opt-in, it validates the configured CHANGELOG
+format only. Dirty files, partial staging and an unchanged CHANGELOG do not prevent
+ending a turn; Git pre-commit still requires the matching CHANGELOG update and staging.
+Update and validate the canonical checker,
 rebuild the plugin, then refresh installation through the supported plugin workflow.
 Do not patch cache copies or interpret the online standard during a hook invocation.
 

@@ -70,9 +70,13 @@ Build and generated-drift verification share a bounded, per-repository process m
 `hooks/git_governance_stop.py` is an adapter to the bundled Git Skill's
 `scripts/check_stop.py`. Keep executable Stop policy in the canonical
 `platform/aicoding-git-governance/scripts/check_stop.py`; the build packages that
-same checker with the Skill. Repository lint is authoritative when present. The
-fallback reads the local governance configuration, accepts optional typed-label
-scopes and requires `[Unreleased]` only for the selected unreleased mode.
+same checker with the Skill. Repository lint is authoritative only after explicit
+`[automation] stop_lint_mode = "working-tree"` opt-in. The checker calls only
+`-Mode working-tree`; it never runs `all` or a commit/push mode at Stop. This path
+must be read-only and independent of staging, commit messages and push targets.
+Legacy repositories without opt-in use configured CHANGELOG format checks only,
+including optional typed-label scopes and `[Unreleased]` for unreleased mode.
+CHANGELOG update/staging completeness remains a Git pre-commit requirement.
 
 Run `scripts/test-git-governance-hooks.py` after building to exercise the packaged
 adapter against real event payloads and disposable repositories. Tests cover lint
