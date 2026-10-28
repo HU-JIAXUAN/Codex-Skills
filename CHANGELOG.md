@@ -4,6 +4,7 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从已提交的 `653a553` 源码生成 Git 治理 Hook 修复包，保持 `dirtySource=false`；检查器随 Git Skill 打包，验证仓库 lint 优先及 CHANGELOG 模式配置。 / Packages the committed repository-aware Git Stop checker with clean source metadata.
 - **fix(git-hooks)**：Git Stop Hook 改为调用 Git Skill 随包提供的检查器，优先沿用仓库 lint；无 lint 时按治理配置检查 CHANGELOG，接受带 scope 的类型标签，不对 dated 模式强制 Unreleased。新增真实事件回归，源码、生成包与安装刷新分别验证。 / Shares the Git Skill checker with the Stop adapter, honors repository lint and configured changelog modes, and tests scoped labels and failure paths.
 - **build(plugin)**：从已提交的 `b4c703b` 源码生成 14 个运行时入口，纳入 C99 十个内部专题、辅助 Hook 和创建器固定规则；`dirtySource=false`，通过插件、套件资源与重复构建检查。 / Packages the verified C99 kit and mandatory creator workflow from committed sources.
 - **fix(skill-creator)**：创建或修改任意 Skill 时必须先加载技能创建入口，并显式允许隐式调用；正文限定为触发、设计步骤、规则、例子和验证方法，清除自我说明及重复审批要求。 / Requires the creator workflow for Skill edits and limits instruction content to executable guidance.

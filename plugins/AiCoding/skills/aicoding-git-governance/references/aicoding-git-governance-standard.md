@@ -116,6 +116,7 @@ Repositories should expose bilingual metadata:
 - Entries should be Chinese-first with concise English meaning for externally visible changes.
 - Do not paste raw `git log` into CHANGELOG.
 - Diff summaries are permitted in CHANGELOG and Release notes, not README.
+- Typed labels may include a scope: `**refactor(recorder)**` and `**refactor**` are both valid. Require `[Unreleased]` only when the repository selects `changelog.mode = "unreleased"`.
 
 ## Tag and GitHub Release Standard
 
@@ -134,3 +135,4 @@ Each repository should keep local hook-equivalent checks:
 - `.githooks/pre-commit` calls the configured governance lint.
 - `.githooks/commit-msg` enforces typed commit subjects.
 - The lint must check README language switching, required badges, canonical governance URL, CHANGELOG typing, release-note policy, placeholders, and markdown links when configured.
+- Codex Stop hooks must use the Git Skill's packaged checker and defer to repository lint when present. Keep fallback checks in the Skill, follow the configured CHANGELOG mode/path, and update them through plugin build and installation rather than fetching or executing the standard at runtime.

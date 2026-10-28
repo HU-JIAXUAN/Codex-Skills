@@ -2,9 +2,9 @@
     "pluginName":  "aicoding",
     "pluginVersion":  "0.1.0",
     "sourceRepository":  "JiaxI2/Codex-Skills",
-    "sourceCommit":  "b4c703bc5defa60c2cf93e677361c2d445b3ab78",
+    "sourceCommit":  "653a553f321c1419f50198d1cf4737ae6a915a47",
     "sourceTag":  null,
-    "buildTimestampUtc":  "2026-10-28T06:38:28.0000000Z",
+    "buildTimestampUtc":  "2026-10-28T07:17:47.0000000Z",
     "buildInfoModel":  "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
     "packManifestHash":  "3f32d20efa810984ab8be4cb0aae2b39dde673d2a38e152a4e1075148704bf5b",
     "packInputHashes":  {
@@ -13,8 +13,8 @@
                             "embedded/C99/skillkit.json":  "5de8f4df327ecb05e2569055017392bb73c39bce6c90c067d6176aa10a49b272"
                         },
     "pluginManifestHash":  "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
-    "skillsDigest":  "eeb9713537424f8e56eac81fb2a4fe72876a0d62257e05bc27492811ad754405",
-    "hooksDigest":  "a8dde0e35639adbd60bbf03af3d6c8cebb9ffb7cd29ff0d6de89c2627187eec8",
+    "skillsDigest":  "20317e280e68d431adae92398e6d7f558520b17f4f7ca3484e594f75f685ff60",
+    "hooksDigest":  "aa20da3591c83efc4303049b7c6e3a8f0b5fdb5f64e7f8b89869a2bdbe5707ae",
     "dirtySource":  false,
     "generated":  [
                       "plugins/AiCoding/skills",
