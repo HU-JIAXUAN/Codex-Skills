@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "include": ["src/*.c", "src/**/*.c", "include/*.h", "include/**/*.h"],
+  "exclude": ["vendor/**", "third_party/**", "generated/**"],
+  "protected": [],
+  "checks": [
+    {
+      "id": "format",
+      "argv": ["clang-format", "--dry-run", "--Werror", "--style=file:{root}/.clang-format", "{files}"],
+      "timeoutSeconds": 8
+    },
+    {
+      "id": "cppcheck",
+      "argv": ["cppcheck", "--std=c99", "--enable=warning,style,performance,portability", "--inline-suppr", "--suppress=missingIncludeSystem", "--error-exitcode=1", "{files}"],
+      "timeoutSeconds": 8
+    }
+  ]
+}

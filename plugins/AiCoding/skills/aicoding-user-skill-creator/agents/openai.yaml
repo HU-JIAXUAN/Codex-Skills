@@ -1,4 +1,6 @@
 interface:
   display_name: "User-Skill-Creator"
-  short_description: "Create and migrate Agent Skills"
-  default_prompt: "Use $aicoding-user-skill-creator to create, validate, improve, or migrate this Agent Skill for Codex/OpenCode compatibility."
+  short_description: "每次创建或修改 Skill 必须使用，只写触发、步骤、规则、例子和验证"
+  default_prompt: "使用 $aicoding-user-skill-creator 创建或修改 Skill，正文只保留触发条件、设计步骤、规则、例子和验证方法，删除解释与自我评价，沿用已有授权并运行适用验证。"
+policy:
+  allow_implicit_invocation: true

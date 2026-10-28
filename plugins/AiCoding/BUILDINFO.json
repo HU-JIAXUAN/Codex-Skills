@@ -2,18 +2,19 @@
     "pluginName":  "aicoding",
     "pluginVersion":  "0.1.0",
     "sourceRepository":  "JiaxI2/Codex-Skills",
-    "sourceCommit":  "f1091c6058b80da0af698cfac9a12d8cd519f9df",
+    "sourceCommit":  "b4c703bc5defa60c2cf93e677361c2d445b3ab78",
     "sourceTag":  null,
-    "buildTimestampUtc":  "2026-10-28T02:51:19.0000000Z",
+    "buildTimestampUtc":  "2026-10-28T06:38:28.0000000Z",
     "buildInfoModel":  "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
-    "packManifestHash":  "221679d0ca6b7ab67b92466264befadf19bf7d5edcbc73b9e5f54d82b7124800",
+    "packManifestHash":  "3f32d20efa810984ab8be4cb0aae2b39dde673d2a38e152a4e1075148704bf5b",
     "packInputHashes":  {
-                            "config/aicoding-plugin-pack.json":  "221679d0ca6b7ab67b92466264befadf19bf7d5edcbc73b9e5f54d82b7124800",
-                            "embedded/motorcontrol/skillkit.json":  "53eb77beacec10357aa1ccf485ac7d01e6fade4cfa68fd196618422f96ec49ae"
+                            "config/aicoding-plugin-pack.json":  "3f32d20efa810984ab8be4cb0aae2b39dde673d2a38e152a4e1075148704bf5b",
+                            "embedded/motorcontrol/skillkit.json":  "53eb77beacec10357aa1ccf485ac7d01e6fade4cfa68fd196618422f96ec49ae",
+                            "embedded/C99/skillkit.json":  "5de8f4df327ecb05e2569055017392bb73c39bce6c90c067d6176aa10a49b272"
                         },
     "pluginManifestHash":  "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
-    "skillsDigest":  "7d34bd79f2488dcd1e0e23eb01adbc225cc6fffdfd307e41e60a596c91caeb1b",
-    "hooksDigest":  "021f1beb59eeefdafca4748f9bec984b9f48bf6073ba1c86e2068d7d5c51d3f5",
+    "skillsDigest":  "eeb9713537424f8e56eac81fb2a4fe72876a0d62257e05bc27492811ad754405",
+    "hooksDigest":  "a8dde0e35639adbd60bbf03af3d6c8cebb9ffb7cd29ff0d6de89c2627187eec8",
     "dirtySource":  false,
     "generated":  [
                       "plugins/AiCoding/skills",

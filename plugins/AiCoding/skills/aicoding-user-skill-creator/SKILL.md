@@ -1,15 +1,26 @@
 ---
 name: aicoding-user-skill-creator
-description: Create, improve, validate, or migrate Agent Skills for Codex/OpenCode while preserving compatibility with Anthropic-style SKILL.md folders. Use when the user asks to decide whether a skill should be created, classify skill type, enforce workflow-skill contracts with CLI/Hook/Lint gates, build or update a skill, convert Claude/Anthropic skills, add skill tests, improve triggering descriptions, or check portability across agent runtimes.
+description: 任何创建或修改 Skill 的任务都必须先使用本 Skill，无需用户点名；包括 SKILL.md、触发描述、元数据、脚本、references、assets、evals 的新增、修改、优化和迁移。也用于 Skill 分类、评审、验证及 CLI/Hook/Lint 门禁设计。正文只保留触发条件、设计步骤、规则、例子和验证方法，删除背景解释、自我评价及资源数量或覆盖程度的元叙述。适用于 Codex/OpenCode 与兼容 SKILL.md 的技能目录。
 ---
 
 # Agent Skill Creator
 
-Use this user-maintained AiCoding Skill to create new Agent Skills or migrate existing Claude/Anthropic-style skills so they work cleanly in Codex and OpenCode. This skill is intentionally named `aicoding-user-skill-creator` so the system `skill-creator` can remain installed without runtime name conflicts. Keep the workflow practical: understand the intended behavior, edit only the skill files that matter, validate the result, and forward-test when the risk justifies it.
+## 必须触发
+
+- 用户要求创建、修改、优化或迁移任何 Skill，或其他任务中需要修改 Skill 文件时，先加载 `aicoding-user-skill-creator`，再开展修改；不要求用户显式点名。
+- 触发范围包括 `SKILL.md`、触发描述、`agents/openai.yaml`、脚本、参考资料、模板、资源和评估用例。创建门禁只判断怎样实施，不决定是否加载本 Skill。
+- 当前上下文已经加载时直接复用；不重复读取，不重复确认已有授权。仅使用某个 Skill 完成业务任务、不修改 Skill 时，不因此触发创建流程。
+
+## 固定写作规则
+
+- Skill 正文只保留：触发条件、设计步骤、规则、例子和验证方法。输入、前提、边界和例外并入对应步骤或规则。
+- 删除背景介绍、命名来历、改写历程、价值说明、自我评价、泛泛总结，以及围绕参考文件数量或覆盖程度的解释。
+- 每段必须提供可执行动作、适用条件、具体约束、例子或可复现检查；删掉不影响执行的句子。
+- 例子直接展示输入、操作和结果；必要取舍写成条件与规则，不追加自我评价。
+- 这些规则同时适用于新建或修改的 `SKILL.md`、内部指南、references 和本 Skill 自身。不要把用户批评的表述改写成另一段自我说明。
+- 本次讨论、审批记录与编辑取舍留在会话或项目已有记录，不写入生成 Skill 正文。
 
 ## Runtime Compatibility
-
-This skill is adapted for Codex/OpenCode usage.
 
 - Do not assume `claude -p`, `.claude/commands`, `present_files`, or Claude-only slash commands exist.
 - Use Codex tools, local scripts, and available subagents when present; fall back to inline validation when they are not.
@@ -19,7 +30,7 @@ This skill is adapted for Codex/OpenCode usage.
 
 ## Skill Type
 
-This skill is both `consistent-workflow` and `organization-standard`: it decides when to create skills, classifies the skill being created, and enforces a repeatable creation/validation workflow.
+Use `consistent-workflow` and `organization-standard` for this creation workflow.
 
 Supported skill types:
 
@@ -28,7 +39,7 @@ Supported skill types:
 3. `reusable-domain-knowledge`: deep domain knowledge encoded as reusable references, scripts, schemas, or assets.
 4. `team-expertise`: senior professional knowledge preserved as team-operational guidance.
 
-Skip creating a skill when the task is one-time and simple, the base model can already handle it reliably, or the user is only exploring/prototyping and the workflow is not stable yet.
+When deciding whether to propose a new skill, skip the proposal for a one-time simple task or an unstable exploratory workflow. Follow an explicit user request to create or modify a skill.
 
 ## Skill/CLI/MCP/Hook Model
 
@@ -50,36 +61,36 @@ python scripts/skill_gate.py assess --prompt "<user request>"
 python scripts/skill_gate.py assess --prompt-file request.txt --json
 ```
 
-Create or update a skill only when at least one use signal is present:
+For a proposed new skill, check for at least one reuse signal:
 
 - consistent repeated workflow;
 - company/team-specific process or standard;
 - reusable deep domain knowledge;
 - advanced professional knowledge that should become team knowledge.
 
-Block or defer skill creation when skip signals dominate:
+When the user has not explicitly requested a skill and skip signals dominate, use an ordinary answer:
 
 - one-time and simple task;
 - base model can handle it without specialized instructions or resources;
 - exploration/prototype phase before the workflow stabilizes.
 
-If the gate returns `skip`, explain why a normal answer or temporary note is enough. If the user still explicitly requests a skill, proceed but record the tradeoff in the skill body.
+If the gate returns `skip`, report the applicable reason briefly. An explicit creation request authorizes that scope: proceed and keep any material tradeoff in the delivery report. An existing-skill update does not require repeating the creation decision.
 
-When the gate recommends `consistent-workflow` or `organization-standard`, require both gate-rule design and human confirmation before calling the skill complete.
+For `consistent-workflow` or `organization-standard`, define gate rules and apply the confirmation conditions below; reuse existing authorization.
 
 ## Workflow Contract
 
-Trigger: use this workflow when creating, updating, migrating, or validating a skill.
+Trigger: every Skill creation or modification must use this workflow before editing, including changes discovered during another task; also use it for migration, review and validation.
 
 Inputs: user request, existing skill path when present, target runtime, expected reuse pattern, and any project/company standard that must be preserved.
 
 Steps:
 
-1. Run the creation gate and classify the skill type.
+1. For a proposed new Skill, assess reuse and classify its type; for an existing Skill update, reuse the applicable classification and authorization.
 2. For `consistent-workflow`, define the required ordered steps before writing detailed instructions.
 3. Decide whether resources belong in `scripts/`, `references/`, or `assets/`.
-4. Edit only the files needed for the skill behavior.
-5. Validate frontmatter and skill type with `quick_validate.py` and `skill_gate.py validate`.
+4. Edit only the files needed for the skill behavior; apply the fixed writing rules to every changed instruction or example.
+5. Validate frontmatter and skill type with `quick_validate.py` and `skill_gate.py validate`, then manually review the five allowed content categories and trigger scope.
 6. Forward-test when the skill controls a real workflow or deliverable.
 
 Exit Criteria: the skill has a clear trigger description, a recognized skill type, required resources are present, workflow skills have an explicit contract, and validation commands pass.
@@ -95,34 +106,25 @@ For standard/process skills, document these checks before declaring the skill re
 - CLI checker: command name, input files, pass/fail condition, non-zero exit behavior, and example failure message.
 - Hook gate: whether the CLI is wired to pre-commit, Git hook, CI required check, release packaging, or production-package generation.
 - MCP tool library: MCP tools required by the workflow, or the explicit reason no MCP is needed and which CLI/manual path replaces it.
-- Human confirmation: who confirms the gates are acceptable before the skill is considered complete.
+- Human confirmation: identify the owner and reuse accepted gates; ask only for a material undecided choice or an approval explicitly required by the project or user.
 - Skip rationale: if any gate is not implemented, record why it is not stable enough for automation and what manual review replaces it.
 
 A `consistent-workflow` or `organization-standard` skill without `Gate Rules` is incomplete unless the user explicitly accepts the documented skip rationale.
 
 ## Human Confirmation
 
-Before finalizing a standard/process skill, capture human feedback in the skill or final report:
+For a standard/process skill, use these authorization and review rules:
 
-- Owner/确认人: the user, team owner, or named reviewer who accepts the workflow.
-- Accepted gates: CLI, Hook, CI, MCP, manual review, or documented skip decision.
-- Manual review scope: what remains human-only and why it cannot be reliably linted yet.
-- Explicit decision: approved, approved with risk, or rejected for another iteration.
+- Owner/确认人: the current user or project owner; an explicit request authorizes the stated creation or modification scope.
+- Accepted gates: reuse confirmed CLI, Hook, CI, MCP and manual review choices; apply actual project approval rules to new external actions.
+- Manual review scope: review trigger accuracy, instruction consistency and writing rules; do not treat structural validator success as semantic approval.
+- Explicit decision: preserve an existing approval or rejection; record new approval decisions in the delivery report or project record.
 
-If the user has not confirmed these items, ask for confirmation or mark the skill as draft/incomplete.
-
-## Core Workflow
-
-1. Clarify the skill goal with concrete examples.
-2. Decide whether the skill needs only instructions or also bundled `scripts/`, `references/`, or `assets/`.
-3. Create or edit the skill with the smallest useful change.
-4. Validate the skill structure with `scripts/quick_validate.py`.
-5. Forward-test realistic prompts when behavior is complex, fragile, or user-facing.
-6. Iterate from observed failures, not speculative features.
+Ask only when an unresolved condition changes the implementation or a specific required approval is absent. Do not request approval again merely because a Skill is being created or modified.
 
 ## Creating a New Skill
 
-Ask where the user wants the skill created. If they do not specify, choose the active Codex user skill location for this machine, or a repo-local skill directory when the skill is project-specific.
+Use the user-specified path and the repository's canonical source rules. Otherwise reuse the project-local Skill layout or the active user skill location. Ask only if the path cannot be determined and affects the implementation. Do not edit generated packages or installed caches when a canonical source and supported build/install workflow exist.
 
 Use the initializer instead of hand-assembling the folder:
 
@@ -135,7 +137,7 @@ Then edit the generated `SKILL.md`:
 
 - Keep frontmatter to `name` and `description` unless the local runtime explicitly supports more.
 - Put trigger guidance in `description`, because it is visible before the body is loaded.
-- Keep the body focused on procedures and non-obvious domain knowledge.
+- Apply the fixed writing rules: only trigger conditions, design steps, rules, examples and validation methods; place detailed material in the matching resource.
 - Add scripts only when deterministic behavior or repeated code is worth the maintenance cost.
 - Split long reference material into `references/` and point to it from `SKILL.md`.
 
@@ -144,6 +146,8 @@ If `agents/openai.yaml` needs to be regenerated, use:
 ```bash
 python scripts/generate_openai_yaml.py path/to/skill --interface display_name="Display Name" --interface short_description="Short UI description"
 ```
+
+Preserve existing `policy` and `dependencies` when updating UI metadata. The generator writes `interface` only; merge retained fields before replacing the file. Keep `policy.allow_implicit_invocation: true` for this Skill.
 
 ## Migrating an Existing Claude/Anthropic Skill
 
@@ -154,14 +158,14 @@ python scripts/rewrite_skill.py path/to/old-skill path/to/new-skill-codex
 python scripts/quick_validate.py path/to/new-skill-codex
 ```
 
-After the script runs, review the migrated `SKILL.md` manually. Mechanical cleanup cannot fully understand intent.
+After the script runs, review the migrated `SKILL.md` against the actual workflow and fixed writing rules.
 
 Focus the review on:
 
 - Removing hard requirements for Claude-only mechanisms such as `claude -p`, `.claude/commands`, `present_files`, and Claude slash commands.
 - Replacing Claude-specific language with runtime-neutral language such as "agent", "Codex", "available tools", or "subagents if available".
-- Adding or checking a `Runtime Compatibility` section that states what changed and what remains optional.
-- Preserving useful bundled resources instead of deleting them just because they came from a Claude skill.
+- Checking current runtime requirements and optional tools in `Runtime Compatibility`; keep migration history outside the Skill body.
+- Keeping resources needed by the current workflow and removing obsolete resources after migration.
 - Updating `description` so Codex triggers the skill for the migrated workflow rather than only for Anthropic-specific prompts.
 
 ## Improving an Existing Skill
@@ -196,7 +200,7 @@ The validator checks:
 - `description` avoids angle brackets and stays within the supported length.
 - Only compatible top-level frontmatter keys are used.
 
-The validator is designed to work even when `PyYAML` is unavailable. When `PyYAML` is installed, it uses it for stricter parsing.
+修改本 Skill 时，还需核对 `description` 首句覆盖所有 Skill 创建/修改任务，`agents/openai.yaml` 保留布尔值 `policy.allow_implicit_invocation: true`，默认提示包含 `$aicoding-user-skill-creator`。人工逐段检查固定写作规则；结构校验不替代内容审查。
 
 ## Forward Testing
 
@@ -211,9 +215,9 @@ Useful checks include:
 - Bundled scripts run successfully in the target environment.
 - Outputs are inspectable and match the user-visible success criteria.
 
-## Legacy Evaluation Assets
+## Conditional Evaluation Tools
 
-This folder may include Anthropic-origin evaluation helpers such as `eval-viewer/`, benchmark aggregation scripts, and description optimization scripts. Use them only when their runtime assumptions are true.
+Check the commands and runtime dependencies before using evaluation viewers, benchmark scripts or description optimization helpers.
 
 - If a script shells out to `claude -p`, do not use it in Codex unless the user explicitly has Claude CLI available and wants that path.
 - If a review viewer requires a browser server but the environment is headless, generate a static artifact or summarize results inline.
