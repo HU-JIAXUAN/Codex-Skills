@@ -66,6 +66,13 @@ Hook gate:
 - `pre-commit` should call the repository lint command and require the configured CHANGELOG path when `changelog.mode = "unreleased"`;
 - `commit-msg` should enforce `<type>(<scope>): <summary>` or a stricter configured pattern.
 
+Codex Stop hook:
+
+- Keep the plugin hook as an adapter to this Skill's `scripts/check_stop.py`; package the checker with the Skill instead of maintaining a second policy in the hook.
+- Run the repository's `scripts/lint-git-governance.ps1 -Mode all` when present and use its result without an additional CHANGELOG format check.
+- Without repository lint, read the local governance TOML and apply the configured CHANGELOG file, mode and typed-entry requirement. Accept both `**type**` and `**type(scope)**`; require `[Unreleased]` only for `mode = "unreleased"`.
+- Do not fetch or execute Markdown standards at hook runtime. Regenerate the plugin when this checker changes; refreshing an installed plugin and reviewing `/hooks` are separate installation steps.
+
 Skip rationale:
 
 - no MCP gate is required for the core workflow because Git CLI plus repository-local hooks/lint provide deterministic checks; MCP remains optional for GitHub metadata and automation.

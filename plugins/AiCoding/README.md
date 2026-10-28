@@ -20,6 +20,8 @@ All motor and servo capabilities live inside `skills/aicoding-motor-control/`. C
 
 The C99 guard adds edit reminders and optional project checks through PreToolUse/PostToolUse/Stop. Adopt `.c99-policy.json` only with the project's actual include/exclude/protected paths and available read-only checkers. Check results apply to observed files and configuration; Git/CI validates final content independently. Review changed Hook definitions through `/hooks` after installation.
 
+The Git Stop hook delegates to `skills/aicoding-git-governance/scripts/check_stop.py`, which is generated from the canonical Git Skill. Repository governance lint takes precedence; the fallback follows the repository's CHANGELOG configuration and accepts optional scopes in typed labels. Rebuild and refresh the plugin to adopt checker changes; the hook does not download standards or modify the repository.
+
 ## Layout
 
 ```text

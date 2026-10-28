@@ -42,7 +42,12 @@ For repositories using `changelog.mode = "unreleased"`, every non-release commit
 ```markdown
 - **docs**: Add repository usage and submodule initialization instructions.
 - **chore**: Install Git hooks that enforce typed commits and changelog updates.
+- **refactor(recorder)**: Publish completed capture blocks for the application to consume.
 ```
+
+The scope is optional in a typed CHANGELOG label. Both `**refactor**` and
+`**refactor(recorder)**` explicitly identify the same commit type. A Codex hook must
+accept the repository lint's decision instead of imposing a second label format.
 
 For commits that are not user-notable, write the type and exclusion reason in the configured changelog or release-note exclusion path instead of silently omitting it.
 
@@ -56,6 +61,12 @@ Repositories with hook management enabled should enforce:
 - repository-specific Markdown or release-note validators pass.
 
 Do not use `--no-verify` unless explicitly approved. If a hook is bypassed, report the skipped check and reason.
+
+The plugin Stop adapter loads this Skill's `scripts/check_stop.py` from the installed
+plugin. That checker delegates to repository lint when available; its fallback reads
+the repository's CHANGELOG configuration. Update and validate the canonical checker,
+rebuild the plugin, then refresh installation through the supported plugin workflow.
+Do not patch cache copies or interpret the online standard during a hook invocation.
 
 ## Single-commit discipline
 

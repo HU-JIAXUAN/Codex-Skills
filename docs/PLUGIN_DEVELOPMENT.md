@@ -58,11 +58,27 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-plugin.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-skills.ps1
 python -B scripts/test-c99-kit.py --package --self-test
 python -B scripts/test-c99-hooks.py
+python -B scripts/test-git-governance-hooks.py
 ```
 
 Run official plugin validation when available.
 
 Build and generated-drift verification share a bounded, per-repository process mutex. The drift checker invokes the builder in the same PowerShell process so it can hold that lock across the before/after snapshots; parallel builds cannot replace the staging or generated tree mid-check. A failed rebuild must fail verification immediately. Source edits remain independent of this lock, so finish source changes before taking a reproducibility snapshot.
+
+## Git Governance Hook Contract
+
+`hooks/git_governance_stop.py` is an adapter to the bundled Git Skill's
+`scripts/check_stop.py`. Keep executable Stop policy in the canonical
+`platform/aicoding-git-governance/scripts/check_stop.py`; the build packages that
+same checker with the Skill. Repository lint is authoritative when present. The
+fallback reads the local governance configuration, accepts optional typed-label
+scopes and requires `[Unreleased]` only for the selected unreleased mode.
+
+Run `scripts/test-git-governance-hooks.py` after building to exercise the packaged
+adapter against real event payloads and disposable repositories. Tests cover lint
+delegation, configuration, failure and read-only behavior. Source/package checks do
+not refresh an installed cache or grant `/hooks` trust. Use the supported plugin
+installation workflow to refresh it; do not edit cache files directly.
 
 ## C99 Hook Contract
 
