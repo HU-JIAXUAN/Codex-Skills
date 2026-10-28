@@ -4,6 +4,8 @@
 
 ### 更新 / Changed
 
+- **build(plugin)**：从已提交的 `62c7812` 源码生成 Stop 工作区检查模式包，保持 `dirtySource=false`；通过生成漂移、插件与 33 项 Hook 回归检查。 / Packages the verified working-tree Stop checker from committed sources.
+
 - **fix(git-hooks)**：Stop 改为仅调用显式启用的 `working-tree` 只读模式，禁止调用 `all` 或提交/推送阶段；旧仓库按治理配置检查日志格式，不因脏工作区、未更新日志或部分暂存而阻塞回复。Git hooks 保留日志暂存及提交/推送门禁，模板与真实事件回归同步更新。 / Separates Stop content checks from Git commit and push gates with explicit working-tree opt-in and legacy compatibility.
 
 - **build(plugin)**：从已提交的 `653a553` 源码生成 Git 治理 Hook 修复包，保持 `dirtySource=false`；检查器随 Git Skill 打包，验证仓库 lint 优先及 CHANGELOG 模式配置。 / Packages the committed repository-aware Git Stop checker with clean source metadata.

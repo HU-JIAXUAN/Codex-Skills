@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check a Stop event using repository lint, then the selected CHANGELOG profile."""
+"""Check a Stop event using an opted-in working-tree lint or CHANGELOG format."""
 
 from __future__ import annotations
 
@@ -37,25 +37,7 @@ def repo_path(root: Path, name: str) -> Path:
     return path
 
 
-def changed_paths(root: Path) -> set[str]:
-    result = run(["git", "status", "--porcelain=v1", "-z", "--untracked-files=all"], root)
-    if result.returncode:
-        raise RuntimeError(result.stderr.strip() or "git status failed")
-    paths: set[str] = set()
-    records = iter(result.stdout.split("\0"))
-    for record in records:
-        if not record:
-            continue
-        status = record[:2]
-        paths.add(record[3:])
-        if "R" in status or "C" in status:
-            next(records, None)
-    return paths
-
-
-def fallback(root: Path, governance: Path) -> str | None:
-    with governance.open("rb") as handle:
-        config = tomllib.load(handle)
+def fallback(root: Path, config: dict) -> str | None:
     policy = config.get("changelog", {})
     if not isinstance(policy, dict):
         raise ValueError("changelog must be a TOML table")
@@ -80,11 +62,6 @@ def fallback(root: Path, governance: Path) -> str | None:
         return "AiCoding governance: configured CHANGELOG must contain [Unreleased]."
     if require_typed and not TYPED_ENTRY.search(text):
         return "AiCoding governance: configured CHANGELOG must include typed entries such as **docs** or **refactor(scope)**."
-    if mode == "unreleased":
-        paths = changed_paths(root)
-        name = changelog.relative_to(root).as_posix()
-        if paths and name not in paths:
-            return f"AiCoding governance: repository has changes but {name} was not updated."
     return None
 
 
@@ -104,17 +81,29 @@ def main(payload: dict | None = None) -> int:
         root = Path(result.stdout.strip()).resolve()
         lint = root / "scripts/lint-git-governance.ps1"
         governance = root / ".github/repository-governance.toml"
-        if lint.is_file():
+        config = {}
+        if governance.is_file():
+            with governance.open("rb") as handle:
+                config = tomllib.load(handle)
+        automation = config.get("automation", {})
+        if not isinstance(automation, dict):
+            raise ValueError("automation must be a TOML table")
+        stop_mode = automation.get("stop_lint_mode")
+        if stop_mode is not None:
+            if stop_mode != "working-tree":
+                raise ValueError("automation.stop_lint_mode must be working-tree; commit and push gates cannot run at Stop")
+            if not lint.is_file():
+                return output("AiCoding governance: stop_lint_mode requires scripts/lint-git-governance.ps1 with -Mode working-tree.")
             powershell = shutil.which("pwsh") or shutil.which("powershell")
             if not powershell:
                 return output("AiCoding governance: PowerShell is required to run repository lint.")
-            result = run([powershell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(lint), "-Mode", "all"], root)
+            result = run([powershell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(lint), "-Mode", "working-tree"], root)
             if result.returncode:
                 detail = "\n".join(part.strip() for part in (result.stdout, result.stderr) if part.strip())
                 return output(detail or "AiCoding governance lint failed.")
             return output()
         if governance.is_file():
-            return output(fallback(root, governance))
+            return output(fallback(root, config))
         return output()
     except Exception as exc:
         return output(f"AiCoding Stop check failed: {exc}")

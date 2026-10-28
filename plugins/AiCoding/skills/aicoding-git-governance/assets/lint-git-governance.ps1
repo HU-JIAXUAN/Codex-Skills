@@ -1,5 +1,5 @@
 param(
-    [ValidateSet("all", "pre-commit", "commit-msg")]
+    [ValidateSet("all", "working-tree", "pre-commit", "commit-msg")]
     [string]$Mode = "all",
 
     [string]$CommitMsgPath = ""
@@ -162,7 +162,8 @@ if ($changelog -notmatch "\*\*(feat|fix|docs|style|refactor|perf|test|build|ci|c
     Fail "CHANGELOG.md must include typed entries such as **docs** or **chore**."
 }
 
-if ($Mode -eq "all" -or $Mode -eq "pre-commit") {
+# Index completeness belongs to the commit gate, not routine repository checks.
+if ($Mode -eq "pre-commit") {
     $staged = @(& git diff --cached --name-only --diff-filter=ACMR)
     if ($staged.Count -gt 0 -and -not ($staged -contains "CHANGELOG.md")) {
         if ($env:AICODING_SKIP_CHANGELOG -ne "1") {
