@@ -92,5 +92,7 @@ foreach ($file in $skillFiles) {
 }
 $motorOutput = @(& python (Join-Path $repoRoot 'scripts/test-motor-contract.py') 2>&1)
 if ($LASTEXITCODE -ne 0) { $errors.Add("Motor bundle source contract failed: $($motorOutput -join ' ')") | Out-Null }
+$c99Output = @(& python -B (Join-Path $repoRoot 'scripts/test-c99-kit.py') 2>&1)
+if ($LASTEXITCODE -ne 0) { $errors.Add("C99 kit source contract failed: $($c99Output -join ' ')") | Out-Null }
 if ($Json) { [pscustomobject]@{ ok=($errors.Count -eq 0); count=$skillFiles.Count; errors=$errors } | ConvertTo-Json -Depth 5 } elseif ($errors.Count -eq 0) { Write-Host "Skill verification passed ($($skillFiles.Count) SKILL.md files)." } else { $errors | ForEach-Object { Write-Error $_ } }
 if ($errors.Count -gt 0) { exit 1 }

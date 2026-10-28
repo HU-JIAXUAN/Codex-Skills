@@ -1,0 +1,102 @@
+{
+  "skill_name": "aicoding-c99-standard-c",
+  "language": "zh-CN",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给这个模块新增函数，先确定输入输出、错误和回调，按当前接口继续实现。",
+      "primary_topic": "functions",
+      "expected_output": "读取函数指南及相关调用者，明确输入输出/失败/寿命/上下文，沿用已有有效授权，不虚构接口。"
+    },
+    {
+      "id": 2,
+      "prompt": "只补函数注释，保持实现不变，输出失败时保持原值。",
+      "primary_topic": "comments",
+      "expected_output": "先核对实现和调用合同，写普通中文说明；不把未经实现保证的失败不改写进注释。"
+    },
+    {
+      "id": 3,
+      "prompt": "新建一个.c和.h，要有文件说明、内部声明和清楚的公共接口。",
+      "primary_topic": "files",
+      "expected_output": "先文件职责/头边界和构建，再按接口进入functions/comments，不创建其他顶层Skill。"
+    },
+    {
+      "id": 4,
+      "prompt": "static放在这里有什么影响？这是函数内保存上次结果的变量。",
+      "primary_topic": "data",
+      "expected_output": "按静态局部的存储期、共享和重入语境转data，不能当成文件私有函数。"
+    },
+    {
+      "id": 5,
+      "prompt": "volatile缓冲区由DMA写，任务直接读结构体就算一致了吗？",
+      "primary_topic": "realtime",
+      "expected_output": "说明volatile不保证完整快照/发布/cache，按实际链路和所有权判断。"
+    },
+    {
+      "id": 6,
+      "prompt": "sizeof数组参数为什么得到指针大小？顺便检查#define的参数副作用。",
+      "primary_topic": "expressions",
+      "expected_output": "区分参数调整与对象大小，宏副作用和求值；不假定字节8位。"
+    },
+    {
+      "id": 7,
+      "prompt": "size_t、uint32_t、memcpy、#define是不是C语言关键字？",
+      "primary_topic": "keywords",
+      "expected_output": "分别说明类型名、库函数、预处理指令与真正关键字的区别，按实际任务分流。"
+    },
+    {
+      "id": 8,
+      "prompt": "函数超过50行，6个参数，拆成很多单行wrapper就行吧？",
+      "primary_topic": "functions",
+      "expected_output": "复核职责与内聚，不为度量制造碎片函数或参数包。"
+    },
+    {
+      "id": 9,
+      "prompt": "把函数命名改成DEMO_前缀，工具默认喜欢这个，项目已经用snake_case。",
+      "primary_topic": "style",
+      "expected_output": "沿用当前项目和稳定API，选择匹配配置，不套演示前缀。"
+    },
+    {
+      "id": 10,
+      "prompt": "默认verify演示通过了，但没有传我的文件，可以说本次C代码已验证了吗？",
+      "primary_topic": "verification",
+      "expected_output": "不得当作候选通过，指定真实target/config并说明覆盖。"
+    },
+    {
+      "id": 11,
+      "prompt": "我想直接复制foo(b += 3, ++b)的运行输出写进算法说明。",
+      "primary_topic": "expressions",
+      "expected_output": "识别未定义行为，先明确所需顺序与行为，不提供固定可移植输出。"
+    },
+    {
+      "id": 12,
+      "prompt": "一个缓冲区内挪动字符串再插入，memcpy即可吧？",
+      "primary_topic": "safety",
+      "expected_output": "检查重叠/容量/索引/结束符/别名和长度保存，不能只替换函数名。"
+    },
+    {
+      "id": 13,
+      "prompt": "把文件注释改成每行星号和@author公司年份，当前项目只要简短中文块。",
+      "primary_topic": "comments",
+      "expected_output": "保持当前普通中文风格，不虚构元数据或恢复另一套模板。"
+    },
+    {
+      "id": 14,
+      "prompt": "准备模块化并换MCU，只分析方案，不改代码。",
+      "primary_topic": "files",
+      "expected_output": "必须结合aicoding-architecture，按实际职责和适配分析，不生成业务文件。"
+    },
+    {
+      "id": 15,
+      "prompt": "写后Hook提示checker不存在，我先把checks删掉就可以交付了吧？",
+      "primary_topic": "verification",
+      "expected_output": "不擅自降低门禁，明确工具缺失/未验证；本轮配置变化不能沿用旧结果。"
+    },
+    {
+      "id": 16,
+      "prompt": "文件头、函数输入输出与关键步骤说明要一套一致的风格。",
+      "primary_topic": "comments",
+      "expected_output": "选统一模板核对语义，声明是使用合同、定义是实现意图，不能仅凭标签存在判正确。"
+    }
+  ]
+}

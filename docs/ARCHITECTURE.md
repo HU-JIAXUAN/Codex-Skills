@@ -28,9 +28,13 @@ Manual source:
 - `plugins/AiCoding/hooks/`
 - `plugins/AiCoding/README.md`
 - `config/aicoding-plugin-pack.json`
-- `scripts/*.ps1`
+- `scripts/`
 
 Motor-control sources form one nested kit under `embedded/motorcontrol/`. Its schema-v2 `skillkit.json` declares one `runtimeSkill`, `aicoding-motor-control`, plus 21 internal capabilities. Only the root `SKILL.md` and root UI metadata are registered; the internal entrypoints are `GUIDE.md` files in the existing Chinese category folders. The root skill routes to their relative paths and loads references only as needed. The global `config/aicoding-plugin-pack.json` selects the kit; `scripts/build-plugin.ps1` packages it into one runtime directory without flattening the internal capabilities. Shared contracts remain a single copy. BUILDINFO records hashes for both manifests, and source/package gates reject missing guides, nested `SKILL.md` files and old separate runtime entries.
+
+C99 sources use the same single-entry kit contract at `embedded/C99/skillkit.json`. `aicoding-c99-standard-c` routes to ten internal guides by task, file operation and code context: files, functions, comments, style, keywords, data, expressions, safety, realtime and verification. Function input/output and failure contracts, file/function/critical-code comments and consistent formatting share one baseline. A neutral 139-title index supports navigation. The root include list excludes the retained legacy reference; child guides have no registered Skill or UI entry. `scripts/test-c99-kit.py` checks routes, resource equality, neutral runtime text and rejected mutations.
+
+The optional C99 guard observes PreToolUse, PostToolUse and Stop. A project's explicit `.c99-policy.json` selects paths and bounded read-only checkers; absent policy, explicit C/H edits receive context only. Checks report their actual file/config scope and cannot establish interface semantics or hardware behavior. State belongs in `PLUGIN_DATA`, and Hook definition changes require `/hooks` review before runtime trust. Git/CI checks remain independent of session observations.
 
 Generated output:
 

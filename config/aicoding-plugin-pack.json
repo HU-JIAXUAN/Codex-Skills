@@ -5,11 +5,6 @@
   },
   "skills": [
     {
-      "source": "embedded/C99",
-      "target": "aicoding-c99-standard-c",
-      "enabled": true
-    },
-    {
       "source": "embedded/architecture",
       "target": "aicoding-architecture",
       "enabled": true
@@ -80,6 +75,10 @@
   "skillKits": [
     {
       "source": "embedded/motorcontrol/skillkit.json",
+      "enabled": true
+    },
+    {
+      "source": "embedded/C99/skillkit.json",
       "enabled": true
     }
   ]

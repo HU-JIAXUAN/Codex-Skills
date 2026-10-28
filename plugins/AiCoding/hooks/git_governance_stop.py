@@ -17,7 +17,7 @@ TYPED_TOKENS = (
 
 
 def run(args: list[str], cwd: str | Path) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(args, cwd=str(cwd), text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return subprocess.run(args, cwd=str(cwd), text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10)
 
 
 def repo_root(cwd: str | Path) -> Path | None:
@@ -68,6 +68,9 @@ def main() -> int:
     try:
         payload_raw = sys.stdin.read().strip()
         payload = json.loads(payload_raw) if payload_raw else {}
+        if payload.get("stop_hook_active"):
+            print(json.dumps({"continue": True, "systemMessage": "Git governance 已请求过一次复核；仍有未通过项时须明确报告，不再自动续跑。"}, ensure_ascii=True))
+            return 0
         cwd = Path(payload.get("cwd") or os.getcwd())
         root = repo_root(cwd)
         if root is None:

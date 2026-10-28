@@ -1,4 +1,4 @@
 interface:
   display_name: "C99 标准 C"
-  short_description: "编写与审查嵌入式 C99、文件归属、编码规范及可追溯代码"
-  default_prompt: "使用 $c99-standard-c 按文件归属、实际编码和统一规则实现或审查嵌入式 C 代码。"
+  short_description: "按输入输出合同设计函数，统一文件、函数、关键代码注释，并用真实检查约束生成"
+  default_prompt: "使用 $aicoding-c99-standard-c，先读取现有接口与项目规则，明确函数输入、输出、失败和调用约束，按统一简易中文块注释及格式实现最小改动，并对真实候选文件运行适用检查；如实报告未验证项。"

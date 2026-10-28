@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "name": "C99工程技能套件",
+  "knowledgeDomain": "c99",
+  "description": "一个C99运行时入口，按任务、文件操作和代码语境路由十个内部专题，统一函数输入输出、注释和代码风格。",
+  "runtimeSkill": "aicoding-c99-standard-c",
+  "skills": [
+    {
+      "source": ".",
+      "target": "aicoding-c99-standard-c",
+      "title": "C99工程",
+      "enabled": true,
+      "entrypoint": "SKILL.md",
+      "include": [
+        "SKILL.md",
+        "skillkit.json",
+        "agents",
+        "topics",
+        "assets",
+        "evals",
+        "references/project-coding-baseline-zh.md",
+        "references/c-coding-rules-zh.md",
+        "references/function-and-comment-style-zh.md",
+        "references/generation-contract-zh.md",
+        "references/c99-safety-zh.md",
+        "references/verification-and-hooks-zh.md",
+        "references/topic-index-zh.md",
+        "references/rule-topic-index.json"
+      ]
+    },
+    {
+      "source": "topics/files",
+      "target": "aicoding-c99-files",
+      "title": "文件与头文件",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "新建.c",
+        "新建.h",
+        "头文件",
+        "include",
+        "guard"
+      ]
+    },
+    {
+      "source": "topics/functions",
+      "target": "aicoding-c99-functions",
+      "title": "函数与接口",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "函数",
+        "接口",
+        "输入",
+        "输出",
+        "参数",
+        "返回",
+        "回调"
+      ]
+    },
+    {
+      "source": "topics/comments",
+      "target": "aicoding-c99-comments",
+      "title": "注释体系",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "注释",
+        "文件头",
+        "函数头",
+        "关键步骤",
+        "字段说明"
+      ]
+    },
+    {
+      "source": "topics/style",
+      "target": "aicoding-c99-style",
+      "title": "命名与排版",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "命名",
+        "缩写",
+        "缩进",
+        "大括号",
+        "行宽",
+        "代码风格"
+      ]
+    },
+    {
+      "source": "topics/keywords",
+      "target": "aicoding-c99-keywords",
+      "title": "语言与关键字",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "static",
+        "extern",
+        "const",
+        "volatile",
+        "restrict",
+        "inline",
+        "typedef",
+        "sizeof"
+      ]
+    },
+    {
+      "source": "topics/data",
+      "target": "aicoding-c99-data",
+      "title": "数据与寿命",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "变量",
+        "结构体",
+        "配置",
+        "状态",
+        "所有权",
+        "初始化",
+        "寿命"
+      ]
+    },
+    {
+      "source": "topics/expressions",
+      "target": "aicoding-c99-expressions",
+      "title": "表达式与宏",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "#define",
+        "宏",
+        "移位",
+        "副作用",
+        "求值顺序"
+      ]
+    },
+    {
+      "source": "topics/safety",
+      "target": "aicoding-c99-safety",
+      "title": "安全与可移植性",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "指针",
+        "缓冲区",
+        "字符串",
+        "memcpy",
+        "溢出",
+        "ABI"
+      ]
+    },
+    {
+      "source": "topics/realtime",
+      "target": "aicoding-c99-realtime",
+      "title": "实时与并发",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "ISR",
+        "中断",
+        "任务",
+        "DMA",
+        "寄存器",
+        "volatile",
+        "超时"
+      ]
+    },
+    {
+      "source": "topics/verification",
+      "target": "aicoding-c99-verification",
+      "title": "验证与门禁",
+      "enabled": true,
+      "entrypoint": "GUIDE.md",
+      "keywords": [
+        "编译",
+        "lint",
+        "测试",
+        "Hook",
+        "验证",
+        "门禁"
+      ]
+    }
+  ]
+}

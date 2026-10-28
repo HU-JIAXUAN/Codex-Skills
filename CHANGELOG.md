@@ -4,6 +4,10 @@
 
 ### 更新 / Changed
 
+- **fix(skill-creator)**：创建或修改任意 Skill 时必须先加载技能创建入口，并显式允许隐式调用；正文限定为触发、设计步骤、规则、例子和验证方法，清除自我说明及重复审批要求。 / Requires the creator workflow for Skill edits and limits instruction content to executable guidance.
+- **feat(c99-kit)**：C99 保留单一入口，按任务、文件操作与代码语境路由十个内部专题；统一函数输入输出/失败合同、文件/函数/关键代码注释及格式配置，增加139条中性题干导航和可编译边界示例。 / Adds ten internal C99 topics, consistent interface/comment contracts and neutral navigation.
+- **feat(c99-hooks)**：新增显式项目策略驱动的写前/写后/收尾辅助门禁，调用有界只读检查器；增加真实事件回归与套件资源/路由门禁。Hook 定义安装后仍需 `/hooks` 审阅。 / Adds opt-in bounded C99 checks and executable routing/package gates; runtime Hook trust remains separate.
+
 - **build(plugin)**：从已提交的 `f1091c6` 源码生成 14 个运行时入口，对象/数据模型随架构入口内部打包；`dirtySource=false`，通过插件、文档依赖与重复构建检查。 / Packages 14 runtime skills from committed sources with internal architecture guides and deterministic output.
 - **refactor(architecture-routing)**：对象模型与数据模型收为 `embedded/architecture/` 下的内部 `GUIDE.md`，保留各自 references/evals，删除独立运行时入口与子 UI 元数据，由 `aicoding-architecture` 按需路由；嵌入式模块化、平台化/平台适配、解耦必须先加载架构 Skill，按任务选用内容，不强制全套架构流程。 / Consolidates object and data modeling behind the architecture entry and requires that entry for embedded modularization, platform work and decoupling.
 - **build(plugin)**：从已提交的 `53739b7` 源码生成 16 个运行时入口，包含对象/数据模型、通用 DSP 与单入口电机套件；`dirtySource=false`，通过插件、资源一致性和重复构建检查。 / Packages 16 verified runtime skills from committed sources with complete internal motor topics and deterministic output.

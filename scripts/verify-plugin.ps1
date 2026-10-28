@@ -59,6 +59,12 @@ if ($errors.Count -eq 0 -and ($motorSelected -or (Test-Path -LiteralPath $motorR
     $motorOutput = @(& python (Join-Path $repoRoot 'scripts/test-motor-contract.py') --package --plugin-path $PluginPath 2>&1)
     if ($LASTEXITCODE -ne 0) { Add-Err "Motor bundle contract failed: $($motorOutput -join ' ')" }
 }
+$c99Root = Join-Path $skillsPath 'aicoding-c99-standard-c'
+$c99Selected = @($packConfig.skillKits | Where-Object { $_.enabled -ne $false -and $_.source -eq 'embedded/C99/skillkit.json' }).Count -gt 0
+if ($errors.Count -eq 0 -and ($c99Selected -or (Test-Path -LiteralPath $c99Root -PathType Container))) {
+    $c99Output = @(& python -B (Join-Path $repoRoot 'scripts/test-c99-kit.py') --package --plugin-path $PluginPath 2>&1)
+    if ($LASTEXITCODE -ne 0) { Add-Err "C99 kit package contract failed: $($c99Output -join ' ')" }
+}
 
 if ($Json) {
     [pscustomobject]@{ ok=($errors.Count -eq 0); errors=$errors } | ConvertTo-Json -Depth 5

@@ -1,14 +1,51 @@
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^(apply_patch|Edit|Write|Bash)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$PLUGIN_ROOT/hooks/c99_guard.py\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Get-Command py -ErrorAction SilentlyContinue) { & py -3 -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') } else { & python -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') }\"",
+            "timeout": 30,
+            "additionalContextLimit": 1000,
+            "statusMessage": "Checking C99 project scope"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "^(apply_patch|Edit|Write|Bash)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$PLUGIN_ROOT/hooks/c99_guard.py\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Get-Command py -ErrorAction SilentlyContinue) { & py -3 -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') } else { & python -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') }\"",
+            "timeout": 30,
+            "additionalContextLimit": 1000,
+            "statusMessage": "Checking changed C99 files"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "/usr/bin/python3 \"$PLUGIN_ROOT/hooks/git_governance_stop.py\"",
-            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"py -3 \\\"$env:PLUGIN_ROOT\\hooks\\git_governance_stop.py\\\"\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Get-Command py -ErrorAction SilentlyContinue) { & py -3 -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/git_governance_stop.py') } else { & python -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/git_governance_stop.py') }\"",
             "timeout": 30,
             "statusMessage": "Checking AiCoding Git governance"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$PLUGIN_ROOT/hooks/c99_guard.py\"",
+            "commandWindows": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Get-Command py -ErrorAction SilentlyContinue) { & py -3 -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') } else { & python -X utf8 (Join-Path ([Environment]::GetEnvironmentVariable('PLUGIN_ROOT')) 'hooks/c99_guard.py') }\"",
+            "timeout": 30,
+            "statusMessage": "Checking C99 completion evidence"
           }
         ]
       }
