@@ -140,12 +140,12 @@
     {
       "id": 28,
       "prompt": "给 display、touch 和 sensor_service 统一对象头，让 manager 做注册、初始化和启停；具体对象和生命周期该怎么设计？",
-      "expected_output": "应识别对象职责、协作和生命周期是主要问题，按需采用 aicoding-object-model-design 的知识直接完成当前设计；不先要求完整架构审查。不把首成员、magic 或固定状态枚举当作所有模块的硬要求，也不强塞通用 read/write/control。"
+      "expected_output": "应识别对象职责、协作和生命周期是主要问题，由主入口读取 object-model-design/GUIDE.md，直接完成当前设计；不先要求完整架构审查。不把首成员、magic 或固定状态枚举当作所有模块的硬要求，也不强塞通用 read/write/control。"
     },
     {
       "id": 29,
       "prompt": "对象头和生命周期已经清楚了，只想判断一个设备内部的配置、busy、测量结果、时间戳和函数表怎样放，不要再设计 manager。",
-      "expected_output": "应识别内部数据是主要问题，按需采用 aicoding-data-model-design 的知识直接完成字段分析，围绕语义、单位、类型、写入者、读者、有效期及存储选择；不重复对象身份和 manager，不必依次执行三个 Skill，不强制四结构体或四文件。"
+      "expected_output": "应识别内部数据是主要问题，由主入口读取 data-model-design/GUIDE.md，直接完成字段分析，围绕语义、单位、类型、写入者、读者、有效期及存储选择；不重复对象身份和 manager，不必依次执行两个内部指南，不强制四结构体或四文件。"
     },
     {
       "id": 30,
@@ -156,6 +156,26 @@
       "id": 31,
       "prompt": "我只想分析这次功能变化怎样影响模块边界，还没有 arch-map，没有负责人确认，也没打算发布。先别创建文件。",
       "expected_output": "应依据现有代码和用例直接分析职责、依赖和变化传播，比较少量方案及代价，在回复中说明证据与未验证项。不得要求先补全角色表、批准记录、成熟度或发布门禁，不创建文件。"
+    },
+    {
+      "id": 32,
+      "prompt": "把裸机采集固件做模块化，先看业务和驱动边界；暂时不需要统一对象头或拆数据结构。",
+      "expected_output": "必须先加载 aicoding-architecture，按真实调用、职责、依赖与变化点分析模块边界；无需为模块化加载两个无关内部指南，不强制统一对象头或全库审查。"
+    },
+    {
+      "id": 33,
+      "prompt": "把现在的 STM32 固件适配到另一款 MCU，尽量复用业务流程，只分析方案不要改代码。",
+      "expected_output": "必须先加载 aicoding-architecture 处理平台适配与业务复用，区分稳定接口与厂商实现，依据现有构建和调用链给最小迁移方案；遵守只分析，不修改代码或新建文档。"
+    },
+    {
+      "id": 34,
+      "prompt": "电机 App 直接调用 HAL，我想解耦。虽然主要是 C 代码和电机控制，也要用架构 skill 吗？",
+      "expected_output": "必须调用 aicoding-architecture 判断职责与依赖边界，并按 C 实现及控制算法需要结合相应领域 Skill；对象或字段出现实际缺口时才读取内部指南，不把主要领域当作跳过架构的理由。"
+    },
+    {
+      "id": 35,
+      "prompt": "只想整理结构体里的单位、状态和新鲜度，并确认启停期间谁能访问，应该用哪个入口？",
+      "expected_output": "统一通过 aicoding-architecture，先读取 data-model-design/GUIDE.md；当启停和在途访问确有生命周期缺口时再读 object-model-design/GUIDE.md。两个指南不注册独立 Skill，不调用旧独立名称；按当前范围给出设计，不扩展为全套审查。"
     }
   ]
 }

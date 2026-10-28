@@ -1,30 +1,30 @@
-{
-  "pluginName": "aicoding",
-  "pluginVersion": "0.1.0",
-  "sourceRepository": "JiaxI2/Codex-Skills",
-  "sourceCommit": "53739b771dd818cc70ac7efbe5d1a9eb3cd79e1e",
-  "sourceTag": null,
-  "buildTimestampUtc": "2026-10-27T17:18:48.0000000Z",
-  "buildInfoModel": "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
-  "packManifestHash": "55e506512369a87862244da14016549cc8873c518a6d921a6a7ae3d6d061ca53",
-  "packInputHashes": {
-    "config/aicoding-plugin-pack.json": "55e506512369a87862244da14016549cc8873c518a6d921a6a7ae3d6d061ca53",
-    "embedded/motorcontrol/skillkit.json": "53eb77beacec10357aa1ccf485ac7d01e6fade4cfa68fd196618422f96ec49ae"
-  },
-  "pluginManifestHash": "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
-  "skillsDigest": "7fee8a6d67c8517893324c4a992a9c85dc39e45267a92c21b57681bbf0a8dfc4",
-  "hooksDigest": "021f1beb59eeefdafca4748f9bec984b9f48bf6073ba1c86e2068d7d5c51d3f5",
-  "dirtySource": false,
-  "generated": [
-    "plugins/AiCoding/skills",
-    "plugins/AiCoding/BUILDINFO.json"
-  ],
-  "manual": [
-    "plugins/AiCoding/.codex-plugin/plugin.json",
-    "plugins/AiCoding/hooks",
-    "plugins/AiCoding/README.md",
-    "config/aicoding-plugin-pack.json",
-    "scripts/build-plugin.ps1",
-    "scripts/verify-plugin.ps1"
-  ]
+﻿{
+    "pluginName":  "aicoding",
+    "pluginVersion":  "0.1.0",
+    "sourceRepository":  "JiaxI2/Codex-Skills",
+    "sourceCommit":  "f1091c6058b80da0af698cfac9a12d8cd519f9df",
+    "sourceTag":  null,
+    "buildTimestampUtc":  "2026-10-28T02:51:19.0000000Z",
+    "buildInfoModel":  "non-self-referential: sourceCommit is the input HEAD before this generated BUILDINFO is committed; BUILDINFO is excluded from package digests",
+    "packManifestHash":  "221679d0ca6b7ab67b92466264befadf19bf7d5edcbc73b9e5f54d82b7124800",
+    "packInputHashes":  {
+                            "config/aicoding-plugin-pack.json":  "221679d0ca6b7ab67b92466264befadf19bf7d5edcbc73b9e5f54d82b7124800",
+                            "embedded/motorcontrol/skillkit.json":  "53eb77beacec10357aa1ccf485ac7d01e6fade4cfa68fd196618422f96ec49ae"
+                        },
+    "pluginManifestHash":  "c27f26c2d7731a1226902c7b72b04ec91ef87c2630266b709c03d8c8da6afe35",
+    "skillsDigest":  "7d34bd79f2488dcd1e0e23eb01adbc225cc6fffdfd307e41e60a596c91caeb1b",
+    "hooksDigest":  "021f1beb59eeefdafca4748f9bec984b9f48bf6073ba1c86e2068d7d5c51d3f5",
+    "dirtySource":  false,
+    "generated":  [
+                      "plugins/AiCoding/skills",
+                      "plugins/AiCoding/BUILDINFO.json"
+                  ],
+    "manual":  [
+                   "plugins/AiCoding/.codex-plugin/plugin.json",
+                   "plugins/AiCoding/hooks",
+                   "plugins/AiCoding/README.md",
+                   "config/aicoding-plugin-pack.json",
+                   "scripts/build-plugin.ps1",
+                   "scripts/verify-plugin.ps1"
+               ]
 }

@@ -46,7 +46,9 @@
         "assets/ai_task_contract_template_zh.md",
         "assets/architecture_review_template_zh.md",
         "assets/architecture_review_checklist_zh.md",
-        "assets/customer_confirmation_template_zh.md"
+        "assets/customer_confirmation_template_zh.md",
+        "object-model-design/GUIDE.md",
+        "data-model-design/GUIDE.md"
       ]
     },
     {
@@ -80,7 +82,9 @@
       ],
       "depends_on": [
         "references/architecture_principles_zh.md",
-        "references/semantic_layer_model_zh.md"
+        "references/semantic_layer_model_zh.md",
+        "object-model-design/GUIDE.md",
+        "data-model-design/GUIDE.md"
       ]
     },
     {
@@ -108,7 +112,9 @@
         "references/architecture_principles_zh.md",
         "references/semantic_layer_model_zh.md",
         "references/dependency_rules_and_gates_zh.md",
-        "references/architecture_patterns_zh.md"
+        "references/architecture_patterns_zh.md",
+        "object-model-design/GUIDE.md",
+        "data-model-design/GUIDE.md"
       ]
     },
     {
@@ -279,7 +285,9 @@
       ],
       "depends_on": [
         "references/semantic_layer_model_zh.md",
-        "references/dependency_rules_and_gates_zh.md"
+        "references/dependency_rules_and_gates_zh.md",
+        "object-model-design/GUIDE.md",
+        "data-model-design/GUIDE.md"
       ]
     },
     {
@@ -336,6 +344,46 @@
       "title": "客户确认模板",
       "owns": [
         "template-customer-confirmation"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "object-model-design/GUIDE.md",
+      "title": "对象模型设计",
+      "owns": [
+        "object-model-concepts",
+        "object-boundary-reasoning"
+      ],
+      "depends_on": [
+        "object-model-design/references/object_lifecycle_zh.md"
+      ]
+    },
+    {
+      "path": "object-model-design/references/object_lifecycle_zh.md",
+      "title": "对象头与生命周期管理",
+      "owns": [
+        "object-management-contract",
+        "object-lifecycle-details"
+      ],
+      "depends_on": []
+    },
+    {
+      "path": "data-model-design/GUIDE.md",
+      "title": "数据模型设计",
+      "owns": [
+        "data-model-concepts",
+        "field-design-reasoning"
+      ],
+      "depends_on": [
+        "data-model-design/references/field_design_zh.md"
+      ]
+    },
+    {
+      "path": "data-model-design/references/field_design_zh.md",
+      "title": "字段归属与强类型组合",
+      "owns": [
+        "field-representation-details",
+        "data-validity-contract"
       ],
       "depends_on": []
     }

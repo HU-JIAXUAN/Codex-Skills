@@ -1,5 +1,7 @@
 {
-  "skill_name": "aicoding-data-model-design",
+  "skill_name": "aicoding-architecture",
+  "capability_id": "aicoding-data-model-design",
+  "guide": "data-model-design/GUIDE.md",
   "language": "zh-CN",
   "evals": [
     {
@@ -35,7 +37,7 @@
     {
       "id": 7,
       "prompt": "设备职责和启停顺序都已确认，当前只想整理结果数据的单位和访问权限。还要重新做架构和对象模型吗？",
-      "expected_output": "应在已给上下文内直接处理字段语义、类型、读写和有效性，不把三个 Skill 必选串联；只有分析发现系统边界或对象职责本身需要变化时才提出对应协作，并说明为什么。"
+      "expected_output": "应在已给上下文内直接处理字段语义、类型、读写和有效性，不把两个内部指南必选串联；只有分析发现系统边界或对象职责本身需要变化时才提出对应协作，并说明为什么。"
     }
   ]
 }
