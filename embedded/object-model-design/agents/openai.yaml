@@ -1,6 +1,0 @@
-interface:
-  display_name: "对象模型设计"
-  short_description: "从职责、协作和生命周期思考对象边界，按实际需要选择管理与接口形式"
-  default_prompt: "使用 $aicoding-object-model-design 分析当前工程的对象身份、生命周期、管理面与业务面，给出最小对象模型和接线方案。"
-policy:
-  allow_implicit_invocation: true

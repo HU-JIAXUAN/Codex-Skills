@@ -15,16 +15,6 @@
       "enabled": true
     },
     {
-      "source": "embedded/object-model-design",
-      "target": "aicoding-object-model-design",
-      "enabled": true
-    },
-    {
-      "source": "embedded/data-model-design",
-      "target": "aicoding-data-model-design",
-      "enabled": true
-    },
-    {
       "source": "embedded/arm",
       "target": "aicoding-arm",
       "enabled": true

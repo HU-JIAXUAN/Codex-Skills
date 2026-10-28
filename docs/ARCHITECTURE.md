@@ -39,7 +39,7 @@ Generated output:
 
 Generated files are created by `scripts/build-plugin.ps1`. They must not be edited manually. The build writes `plugins/AiCoding/skills/.generated` as a local marker.
 
-The embedded architecture skill at `embedded/architecture/`, exposed as `aicoding-architecture`, owns system responsibilities, module boundaries, stable dependencies, change propagation and platform adaptation. It supports design, review and incremental implementation through project-specific reasoning and proportionate verification.
+The embedded architecture skill at `embedded/architecture/`, exposed as `aicoding-architecture`, owns system responsibilities, module boundaries, stable dependencies, change propagation and platform adaptation. Embedded work involving modularization, platform design or adaptation, or decoupling must load this skill first. It supports design, review and incremental implementation through project-specific reasoning and proportionate verification; loading the entry does not require a full architecture review for every task.
 
 MVP planning, behavior scenarios and documentation synchronization are independently usable skills. Each packages its own template or checklist under its local `references/` directory. The package does not require a separate SDD orchestrator, SDD skill or TDD fallback skill; the project and user request determine the development and test workflow.
 
@@ -47,9 +47,9 @@ The embedded architecture guidance fixes core ideas: clear responsibilities, bus
 
 Skills preserve concepts, invariants and design reasoning. Reliable mechanical checks use existing compiler/lint/test tools; business-specific boundaries, representations and layering decisions remain contextual LLM judgments. Examples explain tradeoffs rather than prescribe universal structures.
 
-The complementary `aicoding-object-model-design` (UI: 对象模型设计) owns object responsibilities, identity, collaboration and lifecycle, including deciding whether unified management is worthwhile. Its canonical source is `embedded/object-model-design/`; the pack manifest generates a separate flat runtime directory. Common object headers, managers and registries are optional representations.
+Object-model design (对象模型设计) is an internal capability at `embedded/architecture/object-model-design/GUIDE.md`. It owns object responsibilities, identity, collaboration and lifecycle, including deciding whether unified management is worthwhile. Common object headers, managers and registries are optional representations.
 
-The complementary `aicoding-data-model-design` (UI: 数据模型设计) owns internal field semantics, types, ownership, storage, access, lifetime and data validity. Its canonical source is `embedded/data-model-design/`. cfg/ctx/data/ops provides vocabulary rather than a fixed layout. All three skills are independently callable; select by the main design question and combine only for substantive gaps, without a mandatory sequence or repeated handoffs.
+Data-model design (数据模型设计) is an internal capability at `embedded/architecture/data-model-design/GUIDE.md`. It owns internal field semantics, types, ownership, storage, access, lifetime and data validity. cfg/ctx/data/ops provides vocabulary rather than a fixed layout. The architecture root is the only runtime Skill entry and selects either guide by the actual design question. Both capabilities retain their own references and evals, without child `SKILL.md` files or child UI metadata. The normal recursive build packages them inside `skills/aicoding-architecture/`; they have no separate flat runtime entries or kit manifest. Load only the guidance needed for the current task, without a mandatory sequence or repeated handoffs.
 
 Engineering work must consider retaining App product flows, state machines, business rules, data models and recovery knowledge, alongside useful services, algorithms, tests and platform adapters. AM-012 supports object/data modeling; AM-013/DR-019 keep asset accumulation lightweight through existing code and records, minimal usage, verification entrypoints and applicable limits. No separate asset grading, ledger or second project is required.
 

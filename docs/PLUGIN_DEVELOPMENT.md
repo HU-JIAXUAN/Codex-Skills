@@ -26,6 +26,8 @@ Manual plugin sources:
 
 Motor-control sources form one nested kit under `embedded/motorcontrol/`. Schema v2 declares one `runtimeSkill` and explicit internal `GUIDE.md` entrypoints; only `aicoding-motor-control/SKILL.md` is registered. Keep child guides and references in their existing relative category paths, omit child UI metadata, and route through the root skill. The root include list packages the complete kit once. The global `config/aicoding-plugin-pack.json` remains the kit selection authority, and BUILDINFO records both manifest hashes. `scripts/test-motor-contract.py --package --self-test` checks the single-entry contract, internal routes, resource equality and negative cases; it is also wired into the repository verification flow.
 
+Architecture sources use one runtime entry, `embedded/architecture/SKILL.md`. Object-model and data-model guidance lives at `object-model-design/GUIDE.md` and `data-model-design/GUIDE.md` beneath that root, together with each topic's references and evals. The ordinary recursive skill build packages these resources into `skills/aicoding-architecture/`; no additional kit schema or separate runtime mapping is needed. Do not add child `SKILL.md` files or child `agents/openai.yaml` metadata. The root skill must route to the guides through relative links, and `document-architecture.json` must declare their Markdown documents and dependencies. Embedded modularization, platform design or adaptation, and decoupling require loading the architecture entry first; the task determines how much guidance and verification to apply.
+
 Generated plugin outputs:
 
 - `plugins/AiCoding/skills/`

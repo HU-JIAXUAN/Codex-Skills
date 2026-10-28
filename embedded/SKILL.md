@@ -7,6 +7,10 @@ description: 嵌入式系统一级入口 skill，覆盖 C99、DSP、ARM、EtherC
 
 默认使用中文回答。先识别主问题，再加载最匹配的二级 skill；领域交叉时只补充确有必要的辅助 skill。
 
+## Skill 类型
+
+属于 `reusable-domain-knowledge`：提供嵌入式问题分类与专项知识路由。
+
 ## 路由
 
 - `c99`：C99 模块、`.c/.h`、内存安全、可移植性、文件编码和底层 C 重构。
@@ -16,12 +20,13 @@ description: 嵌入式系统一级入口 skill，覆盖 C99、DSP、ARM、EtherC
 - `ethercat`：PDO/SDO/CoE/FoE、DC、ESI、对象字典、ESC/PDI 和状态机。
 - `os`：RTOS 任务、调度、中断交接、队列、互斥锁、定时器和裸机 superloop。
 - `motorcontrol`：FOC、SVPWM、控制环、PWM/ADC/Encoder 同步、保护和多轴控制算法。
-- `architecture`：架构分层检查、语义角色归一、依赖方向与公共头纯度、解耦但不过度抽象的边界设计、平台抽象、Bootloader、OTA、量产交付及发布门禁。
+- `architecture`（运行时 `aicoding-architecture`）：模块化、平台化、平台适配与解耦必须调用；负责职责、依赖和边界判断，按需路由内部对象模型与数据模型指南，并支持 Bootloader、OTA、量产交付及发布门禁。
 - `aicoding-git-governance`（路径 `platform/aicoding-git-governance/`）：嵌入式优先、可通用的 Git、GitHub、分支、提交、PR、合并、Tag、Release、README、CHANGELOG、版本文件、固件制品、测试基线、生产基线和客户交付治理。
 
 ## 组合规则
 
 - 任何 C 编码任务必须同时使用 `c99`。
+- 涉及嵌入式模块化、平台化、平台适配或解耦时，必须先加载 `architecture`；任务以其他领域为主时也要结合本入口，按实际问题选最小路径。
 - 电机控制中的定点、滤波或数值问题补充 `dsp`。
 - 架构任务包含控制算法时，按用户主问题选择架构或电机控制为主 skill，另一项只作为辅助。
 - 代码评审任务以 `review` 为主，并补充一个具体领域 skill。

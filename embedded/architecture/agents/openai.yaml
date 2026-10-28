@@ -1,6 +1,6 @@
 interface:
   display_name: "嵌入式架构"
-  short_description: "围绕真实用例判断嵌入式模块边界、稳定依赖与变化传播，兼顾 App 资产沉淀"
-  default_prompt: "使用 $aicoding-architecture 分析当前工程的职责、依赖与变化点，比较最小可行设计及代价，按实际缺口结合对象或数据模型专项，并考虑 App 层成果的保留与复用。"
+  short_description: "模块化、平台适配与解耦的必选入口，按需路由对象及数据模型，兼顾 App 资产沉淀"
+  default_prompt: "使用 $aicoding-architecture 分析当前工程的模块化、平台适配与解耦，比较职责、依赖和最小可行设计及代价；按需读取内部对象模型或数据模型指南，并考虑 App 层成果的保留与复用。"
 policy:
   allow_implicit_invocation: true

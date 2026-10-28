@@ -1,6 +1,0 @@
-interface:
-  display_name: "数据模型设计"
-  short_description: "设计对象内部字段的职责、类型、读写权限、存储与有效期，保持配置和状态边界清楚"
-  default_prompt: "使用 $aicoding-data-model-design 分析当前对象内部的数据模型，梳理字段归属、配置与状态、快照及类型化接口，给出最小改进方案。"
-policy:
-  allow_implicit_invocation: true

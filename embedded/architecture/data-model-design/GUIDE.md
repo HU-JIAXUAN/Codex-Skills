@@ -1,13 +1,13 @@
 ---
-name: data-model-design
-description: 设计和审查嵌入式对象内部字段的语义、类型、所有权、访问、寿命与有效性。用于配置/状态/结果/行为混杂、数据流不清、共享与存储选择、快照和新鲜度问题；提供概念与取舍方法，不预设 cfg/ctx/data/ops 布局。可由 aicoding-architecture 路由，也可独立调用。
+capability_id: aicoding-data-model-design
+description: 嵌入式架构内部的数据模型子指南，覆盖字段语义、类型、所有权、访问、寿命与有效性。用于配置/状态/结果/行为混杂、数据流不清、共享与存储选择、快照和新鲜度问题；不预设 cfg/ctx/data/ops 布局，由 aicoding-architecture 按需路由。
 ---
 
 # 数据模型设计
 
-默认简体中文。回答“字段为什么存在、由谁维护、谁能读取、何时有效”，从业务数据流、变化和目标约束推导具体表示。
+本指南由 `aicoding-architecture` 加载，不注册独立 Skill。默认简体中文。回答“字段为什么存在、由谁维护、谁能读取、何时有效”，从业务数据流、变化和目标约束推导具体表示。
 
-## Skill 类型
+## 指南类型
 
 属于 `reusable-domain-knowledge` 与 `team-expertise`：沉淀数据语义与表示选择的判断方法。
 
@@ -38,7 +38,7 @@ description: 设计和审查嵌入式对象内部字段的语义、类型、所�
 
 具体字段分类、内嵌/指针、共享与只读性、采样快照、ops 互换及教材示例取舍，读取[字段归属与强类型组合](references/field_design_zh.md)。
 
-若问题需要重新确定对象身份、协作或生命周期，可结合 `aicoding-object-model-design`；涉及系统模块职责或依赖变化时，可结合 `aicoding-architecture`。按实际缺口协作，已有上下文足以完成问题时直接处理，不将三个 Skill 必选串联或来回转交。C 实现结合项目规范及 `aicoding-c99-standard-c`。
+若问题需要重新确定对象身份、协作或生命周期，由主入口补读对象模型子指南；涉及模块化、平台适配、解耦或系统模块职责与依赖变化时，必须结合主入口 `aicoding-architecture` 的架构判断。按实际缺口加载，已有上下文足以完成问题时直接处理，不必重复加载或完整执行两个专项。C 实现结合项目规范及 `aicoding-c99-standard-c`。
 
 ## 验证与输出
 

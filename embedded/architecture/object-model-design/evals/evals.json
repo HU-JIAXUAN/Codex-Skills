@@ -1,5 +1,7 @@
 {
-  "skill_name": "aicoding-object-model-design",
+  "skill_name": "aicoding-architecture",
+  "capability_id": "aicoding-object-model-design",
+  "guide": "object-model-design/GUIDE.md",
   "language": "zh-CN",
   "evals": [
     {
@@ -20,12 +22,12 @@
     {
       "id": 4,
       "prompt": "只有几个静态设备，现有启动表能工作。为了对象化，是否要给每个模块都加 cfg/ctx/data/ops 四个 void 指针并单独建任务？",
-      "expected_output": "应先比较当前静态接线与统一管理的真实收益，不因对象化预设线程或裸指针槽位。字段表示成为主要问题时可结合 aicoding-data-model-design，简单概念可直接解释，不必来回转交。收尾必须考虑 App 对象协作与生命周期经验的轻量资产沉淀。"
+      "expected_output": "应先比较当前静态接线与统一管理的真实收益，不因对象化预设线程或裸指针槽位。字段表示成为主要问题时由架构入口补读数据模型子指南，简单概念可直接解释，不必来回转交。收尾必须考虑 App 对象协作与生命周期经验的轻量资产沉淀。"
     },
     {
       "id": 5,
       "prompt": "现有两个模块靠普通函数协作，也没有公共对象头。只想判断是否要把它们拆成独立对象，是否必须先完成架构、数据模型，再建 manager？",
-      "expected_output": "应从用例、变化、独立状态/资源、协作接口与维护成本判断对象边界，已有上下文足够时直接给取舍。三个 Skill 不必顺序执行，对象头和 manager 也不是目标；仅在系统边界或字段设计存在实质缺口时结合对应专项。"
+      "expected_output": "应从用例、变化、独立状态/资源、协作接口与维护成本判断对象边界，已有上下文足够时直接给取舍。主入口按需加载内部指南，无需逐一执行，对象头和 manager 也不是目标；仅在系统边界或字段设计存在实质缺口时结合对应专项。"
     }
   ]
 }

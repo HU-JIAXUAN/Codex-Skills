@@ -4,6 +4,7 @@
 
 ### 更新 / Changed
 
+- **refactor(architecture-routing)**：对象模型与数据模型收为 `embedded/architecture/` 下的内部 `GUIDE.md`，保留各自 references/evals，删除独立运行时入口与子 UI 元数据，由 `aicoding-architecture` 按需路由；嵌入式模块化、平台化/平台适配、解耦必须先加载架构 Skill，按任务选用内容，不强制全套架构流程。 / Consolidates object and data modeling behind the architecture entry and requires that entry for embedded modularization, platform work and decoupling.
 - **build(plugin)**：从已提交的 `53739b7` 源码生成 16 个运行时入口，包含对象/数据模型、通用 DSP 与单入口电机套件；`dirtySource=false`，通过插件、资源一致性和重复构建检查。 / Packages 16 verified runtime skills from committed sources with complete internal motor topics and deterministic output.
 - **fix(buildinfo)**：构建检查按原始中文路径识别生成文件，避免电机专题迁移后的 Git 路径转义被误判为源码未提交。 / Preserves Unicode paths when determining source dirtiness for generated packages.
 - **build(plugin-layout)**：打包清单同步对象/数据模型入口、单入口电机套件和独立开发辅助技能；更新仓库导航与构建说明，生成内容由源码构建维护。 / Aligns the focused plugin manifest, repository navigation and reproducible packaging documentation.

@@ -1,11 +1,17 @@
 ---
 name: architecture
-description: 分析、设计和审查嵌入式系统的职责、模块边界、依赖、变化传播与平台适配。用于 App 解耦、分层决策、跨模块资源与执行关系，以及工程资产沉淀；围绕真实用例比较取舍，不预设层数或框架。对象身份与生命周期、内部字段与数据语义分别按需结合对象模型设计和数据模型设计。
+description: 涉及嵌入式模块化、平台化、平台适配或解耦时必须调用。分析、设计和审查系统职责、模块边界、依赖、变化传播与工程资产沉淀；对象身份、协作与生命周期，内部字段、类型、所有权与有效性由本入口按需路由到对象模型和数据模型子指南。围绕真实用例比较取舍，不预设层数或框架。
 ---
 
 # 嵌入式架构
 
-默认使用简体中文；运行时入口为 `aicoding-architecture`。负责系统和模块之间的设计判断，细部问题按需使用专项知识。
+默认使用简体中文；唯一运行时入口为 `aicoding-architecture`。负责系统和模块之间的设计判断，对象模型与数据模型作为本目录内的子指南按需加载。
+
+## 必须触发的范围
+
+涉及嵌入式模块化、平台化、平台适配或解耦时，必须先加载本 Skill，再开展相应分析、设计、评审或实现；即使任务以 C 编码、电机控制或驱动开发为主，也必须结合本入口判断边界与依赖。这里的平台指目标硬件、OS、工具链或厂商实现的适配与复用。
+
+加载本入口后按当前问题选择最小路径。仅讨论对象或字段时，直接路由到下方子指南；无需为此扩展为全库架构审查、固定分层或新增文档。
 
 ## Skill 类型
 
@@ -27,18 +33,18 @@ description: 分析、设计和审查嵌入式系统的职责、模块边界、�
 
 层级概念和组织示例查[语义模型](references/semantic_layer_model_zh.md)与[参考架构](references/reference_architecture_zh.md)；边界原则查 [DR-017](references/dependency_rules_and_gates_zh.md#DR-017)。对象建模按 [AM-012](references/architecture_methods_zh.md#AM-012)，轻量资产沉淀按 [AM-013](references/architecture_methods_zh.md#AM-013)。
 
-## 专项子 Skill 路由
+## 内部子指南路由
 
 设计时重点思考：什么需要一起变化、谁拥有状态和资源、调用者真正需要什么、当前约束是什么，以及增加边界是否值得。比较适合当前用例的少量方案，给出取舍与最小验证；不把这些问题变成必须填写的新表单。
 
-主 Skill 负责系统职责、依赖与资产积累，按问题调用专项：
+主 Skill 负责系统职责、依赖与资产积累，按问题读取相对路径中的专项指南：
 
-| 问题 | 子 Skill |
+| 问题 | 子指南 |
 |---|---|
-| 对象职责、身份、协作与生命周期，以及是否需要统一管理 | **对象模型设计**（`aicoding-object-model-design`） |
-| 对象内部字段、cfg/ctx/data/ops、类型、存储、读写权限与有效期 | **数据模型设计**（`aicoding-data-model-design`） |
+| 对象职责、身份、协作与生命周期，以及是否需要统一管理 | [对象模型设计](object-model-design/GUIDE.md) |
+| 对象内部字段、cfg/ctx/data/ops、类型、存储、读写权限与有效期 | [数据模型设计](data-model-design/GUIDE.md) |
 
-三个入口都可直接使用。按主要设计问题选入口，只有遇到实质设计缺口时才结合专项，不要求依次执行或来回转交。普通字段整理不扩展为对象框架，身份与生命周期设计不重复维护内部数据细节。
+两个子指南不注册为独立 Skill，不通过旧的 `aicoding-object-model-design` 或 `aicoding-data-model-design` 入口调用。按主要问题加载所需指南，只有遇到实质设计缺口时才补读另一份；不要求依次执行或来回转交。普通字段整理不扩展为对象框架，身份与生命周期设计不重复维护内部数据细节。
 
 ## 如何推进设计
 
@@ -80,8 +86,8 @@ pwsh -File "<SkillRoot>/scripts/check_layering.ps1" -Root "<ProjectRoot>" -Map "
 | 抽象是否值得、固定板级实现是否应保留 | [架构原则 AP-*](references/architecture_principles_zh.md)、[决策矩阵](references/architecture_decision_matrix_zh.md) |
 | 各层概念、厂商目录映射、采集与执行链路 | [语义角色 SL-*](references/semantic_layer_model_zh.md)、[通用参考架构](references/reference_architecture_zh.md) |
 | APP 解耦、依赖方向、公共接口、占位与机器门禁 | [依赖规则 DR-* 与门禁 GATE-*](references/dependency_rules_and_gates_zh.md)，APP 参考 DR-017/GATE-011 |
-| 对象职责、协作与生命周期 | 按需结合 `aicoding-object-model-design`；主架构保留 [AM-012](references/architecture_methods_zh.md#AM-012) 与 DR-018 的边界说明 |
-| 对象内部字段、cfg/ctx/data/ops 与数据有效性 | 按需结合 `aicoding-data-model-design`，按字段语义、类型、所有权和寿命设计 |
+| 对象职责、协作与生命周期 | 读取[对象模型子指南](object-model-design/GUIDE.md)；主架构保留 [AM-012](references/architecture_methods_zh.md#AM-012) 与 DR-018 的边界说明 |
+| 对象内部字段、cfg/ctx/data/ops 与数据有效性 | 读取[数据模型子指南](data-model-design/GUIDE.md)，按字段语义、类型、所有权和寿命设计 |
 | 工程结束后的代码、数据、测试与架构资产 | [方法 AM-013](references/architecture_methods_zh.md#AM-013)，参考 DR-019，重点包括 App 层 |
 | 契约、骨架、切片与渐进迁移 | [方法 AM-*](references/architecture_methods_zh.md)、[模式 PAT-*](references/architecture_patterns_zh.md) |
 | 存量基线与正式架构评估 | [泄漏信号 SIG-*](references/leak_signals_and_baseline_zh.md)、[成熟度 SYN-*](references/architecture_maturity_zh.md) |

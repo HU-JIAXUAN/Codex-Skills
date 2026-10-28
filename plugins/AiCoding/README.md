@@ -4,13 +4,13 @@ AiCoding is the deployable Codex kit for JiaxI2 embedded development. It package
 
 The package exposes focused `aicoding-*` skills. The broad canonical `embedded` router is intentionally not packaged, avoiding overlapping triggers with the C99, architecture, ARM, DSP, EtherCAT, motor-control, OS, and review skills.
 
-Use `aicoding-architecture` for embedded system responsibilities, module boundaries, dependencies, change propagation and platform adaptation. It supports contextual design, review and incremental implementation, with layer count and structure chosen for the project.
+Use `aicoding-architecture` for embedded system responsibilities, module boundaries, dependencies, change propagation and platform adaptation. Embedded modularization, platform design or adaptation, and decoupling must load this entry first. It supports contextual design, review and incremental implementation, with layer count, structure and verification chosen for the task; loading the entry does not require a full architecture review.
 
 MVP planning, behavior scenarios and documentation synchronization remain independently usable, with their templates and checklists included in each skill. Development and testing follow the project and user request without requiring a separate SDD orchestrator, SDD skill or TDD fallback skill.
 
-`aicoding-object-model-design` (对象模型设计) covers object responsibilities, identity, collaboration and lifecycle. Common object headers and managers are options selected for actual management needs.
+Object-model design (对象模型设计) covers object responsibilities, identity, collaboration and lifecycle. Common object headers and managers are options selected for actual management needs. Its internal entry is `skills/aicoding-architecture/object-model-design/GUIDE.md`.
 
-`aicoding-data-model-design` (数据模型设计) handles internal field semantics, types, ownership, access, storage, lifetime and validity. cfg/ctx/data/ops is optional vocabulary. Select any of the three entries directly by the main question, combining only for actual design gaps. Each retains the requirement to consider reusable App knowledge and code, without mandatory asset grades, ledgers or new libraries.
+Data-model design (数据模型设计) handles internal field semantics, types, ownership, access, storage, lifetime and validity. cfg/ctx/data/ops is optional vocabulary. Its internal entry is `skills/aicoding-architecture/data-model-design/GUIDE.md`. Codex discovers only `aicoding-architecture` for these three design areas; the root selects either guide as needed. Both topics retain their references and evals, with no separate runtime Skill or child UI metadata. The guidance continues to require consideration of reusable App knowledge and code, without mandatory asset grades, ledgers or new libraries.
 
 `aicoding-dsp` covers generic DSP numerics, sampling/filtering/spectra, streaming execution and firmware toolchains. Processor and library families are optional references after target identification, rather than separate chip routes; the installed skill does not depend on a personal notes vault.
 
